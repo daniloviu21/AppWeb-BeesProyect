@@ -1,0 +1,57 @@
+.block {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+ion-modal {
+    --height: auto;
+}
+
+.btndirec {
+    --background: rgb(0, 0, 32);
+    --color: white;
+    --border-radius: 10px;
+    --padding-start: 10px;
+    --padding-end: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.btn-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinea el texto al inicio */
+    padding-left: 10px;
+    text-align: left;
+}
+
+.btn-label {
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+}
+
+.btn-address {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.btn-icon {
+    font-size: 24px;
+    margin-right: 10px; /* Ajuste de espacio entre icono y texto */
+}
+
+.btncarrito {
+    position: relative;
+    font-size: 30px;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}

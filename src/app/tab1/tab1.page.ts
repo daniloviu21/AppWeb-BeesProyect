@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Usuario, UsuariosService } from '../services/usuarios.service';
 
 @Component({
   selector: 'app-tab1',
@@ -8,6 +9,19 @@ import { Component } from '@angular/core';
 })
 export class Tab1Page {
 
-  constructor() {}
+  usuario!: Usuario;
+
+  constructor(private userService: UsuariosService) {
+    this.loadUsuario();
+  }
+
+  loadUsuario() {
+    const usuario = this.userService.getUsuario();
+    if (usuario) {
+      this.usuario = usuario;
+    } else {
+      console.error('No hay un usuario autenticado.');
+    }
+  }
 
 }
