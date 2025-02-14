@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab4',
@@ -8,6 +9,10 @@ import { Component } from '@angular/core';
 })
 export class Tab4Page {
 
-  constructor() { }
+  constructor( private navController: NavController ) { }
+
+  navigateToLogin() {
+    this.navController.navigateRoot('/login');
+  }
 
 }

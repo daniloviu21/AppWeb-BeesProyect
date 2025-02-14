@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Usuario } from 'src/app/services/usuarios.service';
+import { Usuario, UsuariosService } from 'src/app/services/usuarios.service';
 
 @Component({
   selector: 'app-card-info',
@@ -9,10 +9,12 @@ import { Usuario } from 'src/app/services/usuarios.service';
 })
 export class CardInfoComponent  implements OnInit {
 
-  @Input() usuario!: Usuario;
+  usuario!: Usuario | null;
 
-  constructor() { }
+  constructor(private usuariosService: UsuariosService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.usuario = this.usuariosService.getUsuario();
+  }
 
 }

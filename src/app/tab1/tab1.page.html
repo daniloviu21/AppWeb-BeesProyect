@@ -5,17 +5,6 @@
   <ion-content class="ion-padding">
     <ion-grid>
       <ion-row class="ion-align-items-center">
-        <!-- Botón de Dirección -->
-        <ion-col size="9">
-          <ion-button class="btndirec" id="open-modal" expand="block">
-            <ion-icon slot="start" name="location-outline" class="btn-icon"></ion-icon>
-            <div class="btn-text">
-              <ion-label class="btn-label">Delivery Address</ion-label>
-              <ion-label class="btn-address">ssasa</ion-label>
-            </div>
-          </ion-button>
-        </ion-col>
-        
         <!-- Botón de Carrito -->
         <ion-col size="3" class="ion-text-center">
           <ion-button class="btncarrito" fill="clear">
@@ -24,13 +13,6 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-  
-    <ion-modal trigger="open-modal" [initialBreakpoint]="1" [breakpoints]="[0, 1]">
-      <ng-template>
-        <div class="block">
-          <app-card-info [usuario]="usuario"></app-card-info>
-        </div>
-      </ng-template>
-    </ion-modal>
+    <app-card-info></app-card-info>
   </ion-content>
 </ion-content>

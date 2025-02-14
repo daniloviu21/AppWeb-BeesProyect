@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { Usuario, UsuariosService } from '../services/usuarios.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { Usuario } from '../services/usuarios.service';
 
 @Component({
   selector: 'app-tab1',
@@ -7,21 +7,12 @@ import { Usuario, UsuariosService } from '../services/usuarios.service';
   styleUrls: ['tab1.page.scss'],
   standalone: false,
 })
-export class Tab1Page {
+export class Tab1Page implements OnInit{
 
-  usuario!: Usuario;
+  @Input() usuario!: Usuario;
 
-  constructor(private userService: UsuariosService) {
-    this.loadUsuario();
-  }
+  constructor() { }
 
-  loadUsuario() {
-    const usuario = this.userService.getUsuario();
-    if (usuario) {
-      this.usuario = usuario;
-    } else {
-      console.error('No hay un usuario autenticado.');
-    }
-  }
+  ngOnInit() {}
 
 }

@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage-angular';
 
 export interface Usuario {
   user: string;
+  contrasenia: string;
   direccion: string;
 }
 
@@ -10,20 +12,30 @@ export interface Usuario {
 })
 export class UsuariosService {
 
+  private _storage: Storage | null = null;
   private usuarios: Usuario[] = [
     {
-      user: 'Juan',
-      direccion: 'Av'
+      user: 'a',
+      contrasenia: "12",
+      direccion: "av 21"
     }
-  ]
-
+  ];
   private usuarioActual: Usuario | null = null;
 
-  authenticate(username: string): Usuario | null {
-    const user = this.usuarios.find(u => u.user === username);
+  constructor(private storage: Storage) {
+    this.init();
+  }
+
+  async init() {
+    this._storage = await this.storage.create();
+    this.loadInitialData();
+  }
+
+  async authenticate(username: string, password: string): Promise<Usuario | null> {
+    const user = this.usuarios.find(u => u.user === username && u.contrasenia === password);
     if (user) {
       this.setUsuario(user);
-      // Guarda el usuario actual en el almacenamiento local
+      await this.saveCurrentUser();
     }
     return user || null;
   }
@@ -36,5 +48,23 @@ export class UsuariosService {
     this.usuarioActual = usuario;
   }
 
-  constructor() { }
+  addUsuario(usuario: Usuario): void {
+    this.usuarios.push(usuario);
+  }
+
+  async loadInitialData(): Promise<void> {
+    await this.loadCurrentUser();
+  }
+
+  async loadCurrentUser(): Promise<void> {
+    if (!this._storage) return;
+    const user = await this._storage.get('currentUser');
+    this.usuarioActual = user ? (user as Usuario) : null;
+  }
+
+  async saveCurrentUser(): Promise<void> {
+    if (this._storage && this.usuarioActual) {
+      await this._storage.set('currentUser', this.usuarioActual);
+    }
+  }
 }
