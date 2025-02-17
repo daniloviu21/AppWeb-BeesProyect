@@ -1,9 +1,71 @@
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage-angular';
+
+export interface Categoria {
+  nombre: string;
+  descripcion: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductosService {
+export class CategoriasService {
 
-  constructor() { }
+  private _storage: Storage | null = null;
+  private categorias: Categoria[] = [
+    { 
+      nombre: 'Sublimación', 
+      descripcion: 'Personalización de tazas, gorras, etc.' 
+    },
+    { 
+      nombre: 'Anuncios', 
+      descripcion: 'Letreros luminosos y en acrílico.' 
+    },
+    { 
+      nombre: 'Impresiones', 
+      descripcion: 'Lonas, viniles y más.' 
+    }
+  ];
+  private categoriaActual: Categoria | null = null;
+
+  constructor(private storage: Storage) {
+    this.init();
+  }
+
+  async init() {
+    this._storage = await this.storage.create();
+    this.loadInitialData();
+  }
+
+  async getCategorias(): Promise<Categoria[]> {
+    return this.categorias;
+  }
+
+  getCategoriaActual(): Categoria | null {
+    return this.categoriaActual;
+  }
+
+  setCategoriaActual(categoria: Categoria) {
+    this.categoriaActual = categoria;
+  }
+
+  addCategoria(categoria: Categoria): void {
+    this.categorias.push(categoria);
+  }
+
+  async loadInitialData(): Promise<void> {
+    await this.loadCurrentCategoria();
+  }
+
+  async loadCurrentCategoria(): Promise<void> {
+    if (!this._storage) return;
+    const categoria = await this._storage.get('currentCategoria');
+    this.categoriaActual = categoria ? (categoria as Categoria) : null;
+  }
+
+  async saveCurrentCategoria(): Promise<void> {
+    if (this._storage && this.categoriaActual) {
+      await this._storage.set('currentCategoria', this.categoriaActual);
+    }
+  }
 }
