@@ -4,6 +4,8 @@ import { Storage } from '@ionic/storage-angular';
 export interface Categoria {
   nombre: string;
   descripcion: string;
+  icon: string;
+  router: string;
 }
 
 @Injectable({
@@ -15,15 +17,21 @@ export class CategoriasService {
   private categorias: Categoria[] = [
     { 
       nombre: 'Sublimación', 
-      descripcion: 'Personalización de tazas, gorras, etc.' 
+      descripcion: 'Personalización de tazas, gorras, etc.',
+      icon: "accessibility-outline",
+      router: "/login"
     },
     { 
       nombre: 'Anuncios', 
-      descripcion: 'Letreros luminosos y en acrílico.' 
+      descripcion: 'Letreros luminosos y en acrílico.',
+      icon: "alarm-outline",
+      router: "/login"
     },
     { 
       nombre: 'Impresiones', 
-      descripcion: 'Lonas, viniles y más.' 
+      descripcion: 'Lonas, viniles y más.',
+      icon: "aperture-outline",
+      router: "/login"
     }
   ];
   private categoriaActual: Categoria | null = null;
