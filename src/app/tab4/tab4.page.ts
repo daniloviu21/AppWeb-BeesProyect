@@ -10,13 +10,13 @@ import { NavController } from '@ionic/angular';
 export class Tab4Page {
   darkMode = false;
 
-  
+  constructor( private navController: NavController ) { }
 
   editarPerfil() {
     console.log("Editar perfil");
   }
 
-  cambiarContraseña() {
+  cambiarContrasena() {
     console.log("Cambiar contraseña");
   }
 
@@ -39,7 +39,7 @@ export class Tab4Page {
   toggleDarkMode() {
     document.body.classList.toggle('dark', this.darkMode);
   }
-  constructor( private navController: NavController ) { }
+  
 
   navigateToLogin() {
     this.navController.navigateRoot('/login');
