@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab4',
@@ -8,41 +8,46 @@ import { NavController } from '@ionic/angular';
   standalone: false
 })
 export class Tab4Page {
-  darkMode = false;
+  editando = false;
+  nombrePerfil = localStorage.getItem('nombrePerfil') || 'Smith Johnson';
+  fotoPerfil = localStorage.getItem('fotoPerfil') || 'https://th.bing.com/th/id/OIP.DkKTae6dc5RumN3Gk0efGgHaH2?w=161&h=180&c=7&r=0&o=5&pid=1.7';
 
-  constructor( private navController: NavController ) { }
+  constructor(private alertCtrl: AlertController) {}
 
   editarPerfil() {
-    console.log("Editar perfil");
+    if (this.editando) {
+      localStorage.setItem('nombrePerfil', this.nombrePerfil);
+    }
+    this.editando = !this.editando;
   }
 
-  cambiarContrasena() {
-    console.log("Cambiar contraseña");
+  async cambiarFoto() {
+    if (!this.editando) return;
+
+    const alert = await this.alertCtrl.create({
+      header: 'Cambiar Foto',
+      inputs: [
+        { name: 'url', type: 'url', placeholder: 'Pega la URL de la nueva imagen' }
+      ],
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Guardar',
+          handler: (data) => {
+            if (data.url) {
+              this.fotoPerfil = data.url;
+              localStorage.setItem('fotoPerfil', data.url);
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
-  metodosPago() {
-    console.log("Métodos de pago");
-  }
-
-  politicaPrivacidad() {
-    console.log("Política de privacidad");
-  }
-
-  terminosCondiciones() {
-    console.log("Términos y condiciones");
-  }
-
-  cerrarSesion() {
-    console.log("Cerrar sesión");
-  }
-
-  toggleDarkMode() {
-    document.body.classList.toggle('dark', this.darkMode);
-  }
-  
-
-  navigateToLogin() {
-    this.navController.navigateRoot('/login');
-  }
-
+  cambiarDireccion() { console.log("Cambiar dirección"); }
+  metodosPago() { console.log("Métodos de pago"); }
+  politicaPrivacidad() { console.log("Política de privacidad"); }
+  terminosCondiciones() { console.log("Términos y condiciones"); }
+  cerrarSesion() { console.log("Cerrar sesión"); }
 }
