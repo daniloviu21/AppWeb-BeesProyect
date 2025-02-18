@@ -1,0 +1,63 @@
+.profile-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .profile-avatar {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #ccc;
+    cursor: pointer;
+  }
+  
+  .edit-icon {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background-color: white;
+    color: #007bff;
+    padding: 5px;
+    border-radius: 50%;
+    font-size: 18px;
+  }
+  
+  h2 {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  
+  .nombre-input {
+    font-size: 20px;
+    text-align: center;
+    border-bottom: 2px solid #007bff;
+    width: 80%;
+    margin: auto;
+  }
+  
+  .profile-list {
+    margin: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  ion-item {
+    --border-color: transparent;
+    --background: white;
+    font-size: 18px;
+    padding: 15px;
+  }
+  
+  .logout-button {
+    margin: 20px;
+    text-align: center;
+    background-color: #b00020;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 15px;
+  }
+  
