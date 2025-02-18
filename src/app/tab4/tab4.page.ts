@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab4',
@@ -12,7 +13,7 @@ export class Tab4Page {
   nombrePerfil = localStorage.getItem('nombrePerfil') || 'Smith Johnson';
   fotoPerfil = localStorage.getItem('fotoPerfil') || 'https://th.bing.com/th/id/OIP.DkKTae6dc5RumN3Gk0efGgHaH2?w=161&h=180&c=7&r=0&o=5&pid=1.7';
 
-  constructor(private alertCtrl: AlertController) {}
+  constructor(private alertCtrl: AlertController, private router: Router) {}
 
   editarPerfil() {
     if (this.editando) {
@@ -49,5 +50,9 @@ export class Tab4Page {
   metodosPago() { console.log("Métodos de pago"); }
   politicaPrivacidad() { console.log("Política de privacidad"); }
   terminosCondiciones() { console.log("Términos y condiciones"); }
-  cerrarSesion() { console.log("Cerrar sesión"); }
+
+  cerrarSesion() {
+    localStorage.removeItem('token'); // Elimina el token de autenticación
+    this.router.navigate(['/login']); // Redirige al login
+  }
 }
