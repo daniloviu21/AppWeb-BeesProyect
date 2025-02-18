@@ -1,13 +1,49 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      tab4
-    </ion-title>
+    <ion-title>Mi Perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-button (click)="navigateToLogin()">
-    <ion-icon slot="icon-only" ios="log-out-outline" md="log-out-outline"></ion-icon>
-  </ion-button>
+<ion-content>
+  <div class="profile-container">
+    <ion-avatar class="profile-avatar" (click)="cambiarFoto()">
+      <img [src]="fotoPerfil" alt="Foto de perfil">
+      <ion-icon *ngIf="editando" class="edit-icon" name="camera-outline"></ion-icon>
+    </ion-avatar>
+
+    <h2 *ngIf="!editando">{{ nombrePerfil }}</h2>
+    <ion-input *ngIf="editando" [(ngModel)]="nombrePerfil" class="nombre-input"></ion-input>
+  </div>
+
+  <ion-list class="profile-list">
+    <ion-item button (click)="editarPerfil()">
+      <ion-icon slot="start" name="create-outline"></ion-icon>
+      <ion-label>{{ editando ? 'Guardar' : 'Editar Perfil' }}</ion-label>
+    </ion-item>
+
+    <ion-item button (click)="cambiarDireccion()">
+      <ion-icon slot="start" name="location-outline"></ion-icon>
+      <ion-label>Cambiar Dirección</ion-label>
+    </ion-item>
+
+    <ion-item button (click)="metodosPago()">
+      <ion-icon slot="start" name="card-outline"></ion-icon>
+      <ion-label>Métodos de Pago</ion-label>
+    </ion-item>
+
+    <ion-item button (click)="politicaPrivacidad()">
+      <ion-icon slot="start" name="shield-checkmark-outline"></ion-icon>
+      <ion-label>Política de Privacidad</ion-label>
+    </ion-item>
+
+    <ion-item button (click)="terminosCondiciones()">
+      <ion-icon slot="start" name="document-text-outline"></ion-icon>
+      <ion-label>Términos y Condiciones</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-item button class="logout-button" color="danger" (click)="cerrarSesion()">
+    <ion-icon slot="start" name="log-out-outline"></ion-icon>
+    <ion-label>Cerrar Sesión</ion-label>
+  </ion-item>
 </ion-content>
