@@ -1,28 +1,45 @@
 <ion-header [translucent]="true">
-
+  <ion-toolbar class="ion-text-center">
+    <ion-title class="login-title">Login here</ion-title>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="floating">usuario</ion-label>
-          <ion-input type="text" [(ngModel)]="usuario"></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="floating">Contraseña </ion-label>
-          <ion-input type="password" [(ngModel)]="password"></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-button expand="full" (click)="login()">Ingresar</ion-button>
+<ion-content [fullscreen]="true" class="login-background">
+  <ion-grid class="login-container">
+    <ion-row class="ion-justify-content-center">
+      <ion-col size-md="6" size-sm="12">
+        <!-- Imagen fuera de la tarjeta -->
+        <div class="login-image">
+          <ion-img src="assets/img/logovanguard.png" alt="Login Banner"></ion-img>
+        </div>
+
+        <div class="login-box">
+          <p class="welcome-text">Bienvenido de nuevo a Vanguard</p>
+
+          <ion-item class="input-field">
+            <ion-input type="email" [(ngModel)]="usuario" placeholder="Correo Electronico"></ion-input>
+          </ion-item>
+
+          <ion-item class="input-field">
+            <ion-input type="password" [(ngModel)]="password" placeholder="Contraseña"></ion-input>
+          </ion-item>
+
+          <p class="forgot-password">
+            <a [routerLink]="'/forgot-password'">¿Olvidaste tu contraseña?</a>
+          </p>
+
+          <ion-button expand="full" (click)="login()" class="login-button">
+            Inicia sesión
+          </ion-button>
+
+          <p class="create-account">Crea una cuenta</p>
+
+          <p class="or-continue">O inicia sesión con:</p>
+          <div class="social-icons">
+            <ion-icon name="logo-google"></ion-icon>
+            <ion-icon name="logo-facebook"></ion-icon>
+          </div>
+        </div>
       </ion-col>
     </ion-row>
   </ion-grid>
