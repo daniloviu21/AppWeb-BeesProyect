@@ -1,5 +1,5 @@
 .login-background {
-    --background: #f8f9fc;
+    --background: #36278d;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -36,17 +36,15 @@
     max-width: 400px;
 }
 
-.welcome-text {
-    font-size: 14px;
-    color: #777;
-    margin-bottom: 20px;
-}
-
 .input-field {
     margin-bottom: 15px;
-    border: 1px solid #ced4da;
-    border-radius: 8px;
-    background: #f4f6fc;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: -10px;
+    text-align: left;
 }
 
 .forgot-password {

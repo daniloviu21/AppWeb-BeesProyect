@@ -1,7 +1,4 @@
 <ion-header [translucent]="true">
-  <ion-toolbar class="ion-text-center">
-    <ion-title class="login-title">Login here</ion-title>
-  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="login-background">
@@ -16,13 +13,19 @@
         <div class="login-box">
           <p class="welcome-text">Bienvenido de nuevo a Vanguard</p>
 
+          <!-- Campo Email -->
           <ion-item class="input-field">
-            <ion-input type="email" [(ngModel)]="usuario" placeholder="Correo Electronico"></ion-input>
+            <ion-label position="floating">Email</ion-label>
+            <ion-input type="email" [(ngModel)]="usuario" (ionBlur)="validarEmail()"></ion-input>
           </ion-item>
+          <p *ngIf="emailError" class="error-message">Ingresa un email válido</p>
 
+          <!-- Campo Contraseña -->
           <ion-item class="input-field">
-            <ion-input type="password" [(ngModel)]="password" placeholder="Contraseña"></ion-input>
+            <ion-label position="floating">Contraseña</ion-label>
+            <ion-input type="password" [(ngModel)]="password" (ionBlur)="validarPassword()"></ion-input>
           </ion-item>
+          <p *ngIf="passwordError" class="error-message">La contraseña debe tener al menos 6 caracteres</p>
 
           <p class="forgot-password">
             <a [routerLink]="'/forgot-password'">¿Olvidaste tu contraseña?</a>
