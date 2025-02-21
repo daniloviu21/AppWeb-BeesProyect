@@ -30,7 +30,7 @@ export class LoginPage {
       return;
     }
     if (this.emailError || this.passwordError) {
-      this.mostrarMensaje('Corrige los errores antes de continuar');
+      this.mostrarMensaje('Correo o Contraseña no valida ');
       return;
     }
 
