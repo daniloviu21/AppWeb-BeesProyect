@@ -5,7 +5,6 @@
   <ion-grid class="login-container">
     <ion-row class="ion-justify-content-center">
       <ion-col size-md="6" size-sm="12">
-        <!-- Imagen fuera de la tarjeta -->
         <div class="login-image">
           <ion-img src="assets/img/logovanguard.png" alt="Login Banner"></ion-img>
         </div>
@@ -13,14 +12,12 @@
         <div class="login-box">
           <p class="welcome-text">Bienvenido de nuevo a Vanguard</p>
 
-          <!-- Campo Email -->
           <ion-item class="input-field">
             <ion-label position="floating">Email</ion-label>
             <ion-input type="email" [(ngModel)]="usuario" (ionBlur)="validarEmail()"></ion-input>
           </ion-item>
           <p *ngIf="emailError" class="error-message">Ingresa un email válido</p>
 
-          <!-- Campo Contraseña -->
           <ion-item class="input-field">
             <ion-label position="floating">Contraseña</ion-label>
             <ion-input type="password" [(ngModel)]="password" (ionBlur)="validarPassword()"></ion-input>
