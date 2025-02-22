@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-terminos-condiciones',
@@ -8,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TerminosCondicionesPage implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) {}
+  ngOnInit(): void {
+    throw new Error('Method not implemented.');
+  }
 
-  ngOnInit() {
+  volverATab4() {
+    this.router.navigate(['/tabs/tab4']);
   }
 
 }

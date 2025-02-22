@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-politica-privacidad',
@@ -8,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PoliticaPrivacidadPage implements OnInit {
 
-  constructor() { }
+ 
 
-  ngOnInit() {
+  constructor(private router: Router) {}
+  ngOnInit(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  volverATab4() {
+    this.router.navigate(['/tab4']);
   }
 
 }
