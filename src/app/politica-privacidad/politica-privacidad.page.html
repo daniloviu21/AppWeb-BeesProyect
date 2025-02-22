@@ -1,13 +1,18 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>politica-privacidad</ion-title>
+    <ion-title>Política de Privacidad</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">politica-privacidad</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Política de Privacidad</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Aquí va la política de privacidad...</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button expand="full" color="primary" (click)="volverATab4()">Regresar</ion-button>
 </ion-content>

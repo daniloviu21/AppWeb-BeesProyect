@@ -17,7 +17,7 @@ export class UsuariosService {
   private usuarios: Usuario[] = [
     {
       user: 'a',
-      contrasenia: "12",
+      contrasenia: "123456",
       direccion: "av 21",
       correo: "ferleza@gmail.com"
     }
