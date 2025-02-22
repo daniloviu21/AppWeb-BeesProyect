@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { UsuariosService } from '../services/usuarios.service';
 import { Router } from '@angular/router';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 @Component({
   selector: 'app-editar-perfil',
@@ -13,25 +12,29 @@ export class EditarPerfilPage {
   nombrePerfil: string = '';
   fotoPerfil: string = '';
   correoPerfil: string = '';
-  nuevaContrasena: string = '';
+  contrasenaPerfil: string = '';
+
+  @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
 
   constructor(private usuarioService: UsuariosService, private router: Router) {
     const usuario = this.usuarioService.getUsuario();
     this.nombrePerfil = usuario?.user || 'Smith Johnson';
     this.fotoPerfil = usuario?.direccion || 'https://th.bing.com/th/id/OIP.DkKTae6dc5RumN3Gk0efGgHaH2?w=161&h=180&c=7&r=0&o=5&pid=1.7';
-    this.correoPerfil = usuario?.correo || 'usuario@email.com';
+    this.correoPerfil = usuario?.correo || '';
   }
 
-  async cambiarFoto() {
-    const image = await Camera.getPhoto({
-      quality: 90,
-      allowEditing: true,
-      resultType: CameraResultType.DataUrl,
-      source: CameraSource.Prompt
-    });
+  seleccionarImagen() {
+    this.fileInput.nativeElement.click();
+  }
 
-    if (image.dataUrl) {
-      this.fotoPerfil = image.dataUrl;
+  cargarImagen(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.fotoPerfil = e.target.result;
+      };
+      reader.readAsDataURL(file);
     }
   }
 
@@ -41,16 +44,15 @@ export class EditarPerfilPage {
       usuario.user = this.nombrePerfil;
       usuario.direccion = this.fotoPerfil;
       usuario.correo = this.correoPerfil;
-      if (this.nuevaContrasena.trim() !== '') {
-        usuario.contrasenia = this.nuevaContrasena;
-      }
+      usuario.contrasenia = this.contrasenaPerfil || usuario.contrasenia;
+
       this.usuarioService.setUsuario(usuario);
       this.usuarioService.saveCurrentUser();
     }
-    this.router.navigateByUrl('/tabs/tab4', { replaceUrl: true });
+    this.router.navigate(['/tabs/tab4']);
   }
 
   navigateToTab4() {
-    this.router.navigateByUrl('/tabs/tab4', { replaceUrl: true });
+    this.router.navigate(['/tabs/tab4']);
   }
 }
