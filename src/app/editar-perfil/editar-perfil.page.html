@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Editar Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label position="floating">Nombre</ion-label>
+    <ion-input [(ngModel)]="nombrePerfil"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Foto de Perfil</ion-label>
+    <ion-input [(ngModel)]="fotoPerfil"></ion-input>
+  </ion-item>
+
+  <img [src]="fotoPerfil" alt="Foto de perfil" style="width: 100px; height: 100px; border-radius: 50%; margin: 10px auto; display: block;">
+
+  <ion-button expand="full" (click)="guardarPerfil()">Guardar Cambios</ion-button>
+  <ion-button expand="full" color="medium" (click)="navigateToTab4()">Cancelar</ion-button>
+</ion-content>

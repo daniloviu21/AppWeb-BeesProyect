@@ -15,23 +15,16 @@ export class Tab4Page {
   nombrePerfil = localStorage.getItem('nombrePerfil') || 'Smith Johnson';
   fotoPerfil = localStorage.getItem('fotoPerfil') || 'https://th.bing.com/th/id/OIP.DkKTae6dc5RumN3Gk0efGgHaH2?w=161&h=180&c=7&r=0&o=5&pid=1.7';
 
-  constructor(private alertCtrl: AlertController, private router: Router, private usuarioService: UsuariosService) {
+  constructor(public alertCtrl: AlertController, private router: Router, private usuarioService: UsuariosService) {
     const usuario = this.usuarioService.getUsuario();
     this.nombrePerfil = usuario?.user || 'Smith Johnson';
     this.fotoPerfil = usuario?.direccion || 'https://th.bing.com/th/id/OIP.DkKTae6dc5RumN3Gk0efGgHaH2?w=161&h=180&c=7&r=0&o=5&pid=1.7';
   }
   
   editarPerfil() {
-    if (this.editando) {
-      let usuario = this.usuarioService.getUsuario();
-      if (usuario) {
-        usuario.user = this.nombrePerfil;
-        this.usuarioService.setUsuario(usuario);
-        this.usuarioService.saveCurrentUser();
-      }
-    }
-    this.editando = !this.editando;
+    this.router.navigate(['/editar-perfil']);
   }
+  
   
 
   async cambiarFoto() {
@@ -61,11 +54,11 @@ export class Tab4Page {
     await alert.present();
   }
   
-
-  cambiarDireccion() { console.log("Cambiar dirección"); }
-  metodosPago() { console.log("Métodos de pago"); }
-  politicaPrivacidad() { console.log("Política de privacidad"); }
-  terminosCondiciones() { console.log("Términos y condiciones"); }
+  cambiarDireccion() { this.router.navigate(['/cambiar-direccion']); }
+  metodosPago() { this.router.navigate(['/metodos-pago']); }
+  politicaPrivacidad() { this.router.navigate(['/politica-privacidad']); }
+  terminosCondiciones() { this.router.navigate(['/terminos-condiciones']); }
+  
   cerrarSesion() {
     this.usuarioService.setUsuario({ user: '', contrasenia: '', direccion: '' }); // Usuario vacío en lugar de null
     this.router.navigate(['/login']);
