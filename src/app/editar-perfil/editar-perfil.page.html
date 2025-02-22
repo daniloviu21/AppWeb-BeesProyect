@@ -5,18 +5,30 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-item>
-    <ion-label position="floating">Nombre</ion-label>
-    <ion-input [(ngModel)]="nombrePerfil"></ion-input>
-  </ion-item>
+  <div class="profile-container">
+    <ion-avatar class="profile-avatar" (click)="cambiarFoto()">
+      <img [src]="fotoPerfil" alt="Foto de perfil">
+      <ion-icon class="edit-icon" name="camera-outline"></ion-icon>
+    </ion-avatar>
+  </div>
 
-  <ion-item>
-    <ion-label position="floating">Foto de Perfil</ion-label>
-    <ion-input [(ngModel)]="fotoPerfil"></ion-input>
-  </ion-item>
+  <ion-list>
+    <ion-item>
+      <ion-label position="floating">Nombre</ion-label>
+      <ion-input [(ngModel)]="nombrePerfil"></ion-input>
+    </ion-item>
 
-  <img [src]="fotoPerfil" alt="Foto de perfil" style="width: 100px; height: 100px; border-radius: 50%; margin: 10px auto; display: block;">
+    <ion-item>
+      <ion-label position="floating">Correo</ion-label>
+      <ion-input type="email" [(ngModel)]="correoPerfil"></ion-input>
+    </ion-item>
 
-  <ion-button expand="full" (click)="guardarPerfil()">Guardar Cambios</ion-button>
-  <ion-button expand="full" color="medium" (click)="navigateToTab4()">Cancelar</ion-button>
+    <ion-item>
+      <ion-label position="floating">Nueva Contraseña</ion-label>
+      <ion-input type="password" [(ngModel)]="nuevaContrasena"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="full" color="primary" (click)="guardarPerfil()">Guardar</ion-button>
+  <ion-button expand="full" color="light" (click)="navigateToTab4()">Cancelar</ion-button>
 </ion-content>

@@ -5,6 +5,7 @@ export interface Usuario {
   user: string;
   contrasenia: string;
   direccion: string;
+  correo: string;
 }
 
 @Injectable({
@@ -17,7 +18,8 @@ export class UsuariosService {
     {
       user: 'a',
       contrasenia: "12",
-      direccion: "av 21"
+      direccion: "av 21",
+      correo: "ferleza@gmail.com"
     }
   ];
   private usuarioActual: Usuario | null = null;

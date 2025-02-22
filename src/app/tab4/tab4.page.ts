@@ -60,7 +60,7 @@ export class Tab4Page {
   terminosCondiciones() { this.router.navigate(['/terminos-condiciones']); }
   
   cerrarSesion() {
-    this.usuarioService.setUsuario({ user: '', contrasenia: '', direccion: '' }); // Usuario vacío en lugar de null
+    this.usuarioService.setUsuario({ user: '', contrasenia: '', direccion: '', correo: '' }); // Usuario vacío en lugar de null
     this.router.navigate(['/login']);
   }
   
