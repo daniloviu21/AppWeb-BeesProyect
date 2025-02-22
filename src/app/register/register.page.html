@@ -1,5 +1,8 @@
+// register.page.html
 <ion-header [translucent]="true">
-
+  <ion-toolbar>
+    <ion-title>Registro</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="register-background">
@@ -10,13 +13,30 @@
           <ion-img src="assets/img/logovanguard.png" alt="Login Banner"></ion-img>
         </div>
         <div class="register-box">
-
           <h2 class="title">Crear cuenta</h2>
-          <p class="subtitle">Unete a Vanguard y conoce nuestros prod</p>
+          <p class="subtitle">Únete a Vanguard y conoce nuestros productos</p>
+
+          <!-- Nombre -->
+          <ion-item class="input-field">
+            <ion-label position="floating">Nombre</ion-label>
+            <ion-input type="text" [(ngModel)]="firstName"></ion-input>
+          </ion-item>
+
+          <!-- Apellido -->
+          <ion-item class="input-field">
+            <ion-label position="floating">Apellido</ion-label>
+            <ion-input type="text" [(ngModel)]="lastName"></ion-input>
+          </ion-item>
+
+          <!-- Teléfono -->
+          <ion-item class="input-field">
+            <ion-label position="floating">Teléfono</ion-label>
+            <ion-input type="tel" [(ngModel)]="phone"></ion-input>
+          </ion-item>
 
           <!-- Email -->
           <ion-item class="input-field">
-            <ion-label position="floating">Correo Electronico</ion-label>
+            <ion-label position="floating">Correo Electrónico</ion-label>
             <ion-input type="email" [(ngModel)]="email" (ionBlur)="validarEmail()"></ion-input>
           </ion-item>
           <p *ngIf="emailError" class="error-message">Ingresa un correo electrónico válido</p>
@@ -40,7 +60,7 @@
           </ion-button>
 
           <p class="already-account">
-            <a href="/login">¿Ya tienes cuenta?</a>
+            <a routerLink="/login">¿Ya tienes cuenta?</a>
           </p>
 
           <p class="or-continue">O ingresa con :</p>
