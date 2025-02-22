@@ -1,28 +1,50 @@
 <ion-header [translucent]="true">
-
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="floating">Username</ion-label>
-          <ion-input type="text" [(ngModel)]="username"></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="floating">Password</ion-label>
-          <ion-input type="password" [(ngModel)]="password"></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-button expand="full" (click)="login()">Login</ion-button>
+<ion-content [fullscreen]="true" class="login-background">
+  <ion-grid class="login-container">
+    <ion-row class="ion-justify-content-center">
+      <ion-col size-md="6" size-sm="12">
+        <!-- Imagen fuera de la tarjeta -->
+        <div class="login-image">
+          <ion-img src="assets/img/logovanguard.png" alt="Login Banner"></ion-img>
+        </div>
+
+        <div class="login-box">
+          <p class="welcome-text">Bienvenido de nuevo a Vanguard</p>
+
+          <!-- Campo Email -->
+          <ion-item class="input-field">
+            <ion-label position="floating">Email</ion-label>
+            <ion-input type="email" [(ngModel)]="usuario" (ionBlur)="validarEmail()"></ion-input>
+          </ion-item>
+          <p *ngIf="emailError" class="error-message">Ingresa un email válido</p>
+
+          <!-- Campo Contraseña -->
+          <ion-item class="input-field">
+            <ion-label position="floating">Contraseña</ion-label>
+            <ion-input type="password" [(ngModel)]="password" (ionBlur)="validarPassword()"></ion-input>
+          </ion-item>
+          <p *ngIf="passwordError" class="error-message">La contraseña debe tener al menos 6 caracteres</p>
+
+          <p class="forgot-password">
+            <a [routerLink]="'/forgot-password'">¿Olvidaste tu contraseña?</a>
+          </p>
+
+          <ion-button expand="full" (click)="login()" class="login-button">
+            Inicia sesión
+          </ion-button>
+
+          <p class="create-account">
+            <a [routerLink]="'/register'">Crear cuenta</a>
+          </p>
+
+          <p class="or-continue">O inicia sesión con:</p>
+          <div class="social-icons">
+            <ion-icon name="logo-google"></ion-icon>
+            <ion-icon name="logo-facebook"></ion-icon>
+          </div>
+        </div>
       </ion-col>
     </ion-row>
   </ion-grid>

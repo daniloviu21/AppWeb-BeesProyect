@@ -1,13 +1,54 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>register</ion-title>
-  </ion-toolbar>
+
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">register</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="register-background">
+  <ion-grid class="register-container">
+    <ion-row class="ion-justify-content-center">
+      <ion-col size-md="6" size-sm="12">
+        <div class="login-image">
+          <ion-img src="assets/img/logovanguard.png" alt="Login Banner"></ion-img>
+        </div>
+        <div class="register-box">
+
+          <h2 class="title">Crear cuenta</h2>
+          <p class="subtitle">Unete a Vanguard y conoce nuestros prod</p>
+
+          <!-- Email -->
+          <ion-item class="input-field">
+            <ion-label position="floating">Correo Electronico</ion-label>
+            <ion-input type="email" [(ngModel)]="email" (ionBlur)="validarEmail()"></ion-input>
+          </ion-item>
+          <p *ngIf="emailError" class="error-message">Ingresa un correo electrónico válido</p>
+
+          <!-- Password -->
+          <ion-item class="input-field">
+            <ion-label position="floating">Contraseña</ion-label>
+            <ion-input type="password" [(ngModel)]="password" (ionBlur)="validarPassword()"></ion-input>
+          </ion-item>
+          <p *ngIf="passwordError" class="error-message">La contraseña debe tener al menos 6 caracteres</p>
+
+          <!-- Confirm Password -->
+          <ion-item class="input-field">
+            <ion-label position="floating">Confirmar Contraseña</ion-label>
+            <ion-input type="password" [(ngModel)]="confirmPassword" (ionBlur)="validarConfirmPassword()"></ion-input>
+          </ion-item>
+          <p *ngIf="confirmPasswordError" class="error-message">Las contraseñas no coinciden</p>
+
+          <ion-button expand="full" (click)="register()" class="register-button">
+            Crear cuenta
+          </ion-button>
+
+          <p class="already-account">
+            <a href="/login">¿Ya tienes cuenta?</a>
+          </p>
+
+          <p class="or-continue">O ingresa con :</p>
+          <div class="social-icons">
+            <ion-icon name="logo-google"></ion-icon>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

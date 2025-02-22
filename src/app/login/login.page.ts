@@ -1,41 +1,50 @@
-import { Component, OnInit } from '@angular/core';
-import { Usuario, UsuariosService } from '../services/usuarios.service';
-import { NavController } from '@ionic/angular';
+import { Component } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  standalone: false
+  standalone: false,
 })
-export class LoginPage implements OnInit {
-
-  username: string = '';
+export class LoginPage {
+  usuario: string = '';
   password: string = '';
+  emailError: boolean = false;
+  passwordError: boolean = false;
 
-  usuario!: Usuario | null;
+  constructor(private toastController: ToastController) { }
 
-  constructor( private usuariosService: UsuariosService, private navCtrl: NavController ) {}
+  validarEmail() {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    this.emailError = !emailPattern.test(this.usuario) && this.usuario !== '';
+  }
 
-  ngOnInit() {
+  validarPassword() {
+    this.passwordError = this.password.length > 0 && this.password.length < 6;
   }
 
   async login() {
-    if (!this.username || !this.password) {
-      console.log("Ingrese algoooooooo");
+    if (!this.usuario || !this.password) {
+      this.mostrarMensaje('Todos los campos son obligatorios');
       return;
     }
-  
-    const user = await this.usuariosService.authenticate(this.username, this.password);
-  
-    if (user) {
-      console.log('Inicio de sesión exitoso', user);
-      this.usuariosService.setUsuario(user);
-      this.navCtrl.navigateForward('/tabs');
-    } else {
-      console.log('Credenciales incorrectas');
+    if (this.emailError || this.passwordError) {
+      this.mostrarMensaje('Correo o Contraseña no valida ');
+      return;
     }
-  }
-  
 
+    // Aquí iría la lógica de autenticación
+    this.mostrarMensaje('Inicio de sesión exitoso');
+  }
+
+  async mostrarMensaje(mensaje: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 2000,
+      position: 'top',
+      color: 'danger',
+    });
+    toast.present();
+  }
 }
