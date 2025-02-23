@@ -19,14 +19,25 @@
     </ion-item>
 
     <ion-item>
+      <ion-label position="stacked">Apellido paterno</ion-label>
+      <ion-input [(ngModel)]="paternoPerfil"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Apellido materno</ion-label>
+      <ion-input [(ngModel)]="maternoPerfil"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Telefono</ion-label>
+      <ion-input [(ngModel)]="telefonoPerfil" type="password"></ion-input>
+    </ion-item>
+
+    <ion-item>
       <ion-label position="stacked">Correo</ion-label>
       <ion-input [(ngModel)]="correoPerfil" type="email"></ion-input>
     </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Nueva Contraseña</ion-label>
-      <ion-input [(ngModel)]="contrasenaPerfil" type="password"></ion-input>
-    </ion-item>
   </ion-list>
 
   <ion-button expand="full" (click)="guardarPerfil()">Guardar Cambios</ion-button>

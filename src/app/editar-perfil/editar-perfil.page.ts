@@ -44,7 +44,6 @@ export class EditarPerfilPage {
       usuario.user = this.nombrePerfil;
       usuario.direccion = this.fotoPerfil;
       usuario.correo = this.correoPerfil;
-      usuario.contrasenia = this.contrasenaPerfil || usuario.contrasenia;
 
       this.usuarioService.setUsuario(usuario);
       this.usuarioService.saveCurrentUser();

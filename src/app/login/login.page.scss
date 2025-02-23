@@ -76,11 +76,13 @@ ion-item.input-field {
 }
 
 .login-button {
-    background: #1a43cd !important;
+    --background: #FFC107 !important;
     color: white !important;
     font-weight: bold;
     border: none;
-    transition: background 0.3s ease-in-out;
+    --background-hover: #d8a305 !important;
+    --background-activated: #d8a305 !important;
+    --background-focused: #d8a305 !important;
 }
 
 .create-account {

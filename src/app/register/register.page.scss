@@ -69,13 +69,16 @@ ion-item.input-field {
 
 .register-button {
     border-radius: 50px;
-    --background: #1a43cd !important;
+    --background: #FFC107 !important;
     --color: white !important;
     font-weight: bold;
     padding: 12px 0;
     border-radius: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     transition: background 0.3s ease-in-out;
+    --background-hover: #d8a305 !important;
+    --background-activated: #d8a305 !important;
+    --background-focused: #d8a305 !important;
   
     .register-button:hover {
       --background: #14339d !important;
