@@ -36,6 +36,14 @@
     max-width: 400px;
 }
 
+input{
+    color: black;
+}
+
+input:hover{
+    color: black;
+}
+
 ion-item.input-field {
     --background: #ffffff !important; 
     --color: #000000 !important;  
@@ -68,7 +76,7 @@ ion-item.input-field {
 }
 
 .login-button {
-    background: #007bff !important;
+    background: #1a43cd !important;
     color: white !important;
     font-weight: bold;
     border: none;
