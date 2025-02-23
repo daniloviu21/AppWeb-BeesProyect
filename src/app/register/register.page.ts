@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -8,6 +9,9 @@ import { ToastController } from '@ionic/angular';
   standalone: false,
 })
 export class RegisterPage {
+  firstName: string = '';
+  lastName: string = '';
+  phone: string = '';
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
@@ -15,7 +19,7 @@ export class RegisterPage {
   passwordError: boolean = false;
   confirmPasswordError: boolean = false;
 
-  constructor(private toastController: ToastController) { }
+  constructor(private toastController: ToastController, private router: Router) { }
 
   validarEmail() {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -31,7 +35,7 @@ export class RegisterPage {
   }
 
   async register() {
-    if (!this.email || !this.password || !this.confirmPassword) {
+    if (!this.firstName || !this.lastName || !this.phone || !this.email || !this.password || !this.confirmPassword) {
       this.mostrarMensaje('Todos los campos son obligatorios');
       return;
     }
@@ -41,6 +45,7 @@ export class RegisterPage {
     }
 
     this.mostrarMensaje('Registro exitoso');
+    this.router.navigate(['/tabs/tab1']);
   }
 
   async mostrarMensaje(mensaje: string) {

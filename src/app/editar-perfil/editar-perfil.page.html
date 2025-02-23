@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Editar Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="profile-container">
+    <ion-avatar class="profile-avatar" (click)="seleccionarImagen()">
+      <img [src]="fotoPerfil" alt="Foto de perfil">
+    </ion-avatar>
+    <p class="image-hint">Toca la imagen para cambiarla</p>
+    <input type="file" (change)="cargarImagen($event)" accept="image/*" hidden #fileInput>
+  </div>
+  <ion-list>
+    <ion-item>
+      <ion-label position="stacked">Nombre</ion-label>
+      <ion-input [(ngModel)]="nombrePerfil"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Correo</ion-label>
+      <ion-input [(ngModel)]="correoPerfil" type="email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Nueva Contraseña</ion-label>
+      <ion-input [(ngModel)]="contrasenaPerfil" type="password"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="full" (click)="guardarPerfil()">Guardar Cambios</ion-button>
+  <ion-button expand="full" color="danger" (click)="navigateToTab4()">Cancelar</ion-button>
+</ion-content>

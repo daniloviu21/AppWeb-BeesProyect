@@ -5,6 +5,7 @@ export interface Usuario {
   user: string;
   contrasenia: string;
   direccion: string;
+  correo: string;
 }
 
 @Injectable({
@@ -16,8 +17,9 @@ export class UsuariosService {
   private usuarios: Usuario[] = [
     {
       user: 'a',
-      contrasenia: "12",
-      direccion: "av 21"
+      contrasenia: "123456",
+      direccion: "av 21",
+      correo: "ferleza@gmail.com"
     }
   ];
   private usuarioActual: Usuario | null = null;
