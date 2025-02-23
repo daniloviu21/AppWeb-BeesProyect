@@ -1,0 +1,6 @@
+<ion-list [inset]="true" *ngFor="let categoria of categorias">
+  <ion-item detail="true" [button]="true" [href]="categoria.router">
+    <ion-icon slot="start" [name]="categoria.icon" size="large"></ion-icon>
+    <ion-label>{{categoria.nombre}}</ion-label>
+  </ion-item>
+</ion-list>
