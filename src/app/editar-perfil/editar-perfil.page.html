@@ -12,34 +12,38 @@
     <p class="image-hint">Toca la imagen para cambiarla</p>
     <input type="file" (change)="cargarImagen($event)" accept="image/*" hidden #fileInput>
   </div>
+
+  <ion-button expand="full" (click)="habilitarEdicion()" class="edit-button">Editar Perfil</ion-button>
+
   <ion-list>
     <ion-item>
       <ion-label position="stacked">Nombre</ion-label>
-      <ion-input [(ngModel)]="nombrePerfil"></ion-input>
+      <ion-input [(ngModel)]="nombrePerfil" [disabled]="!modoEdicion"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">Apellido paterno</ion-label>
-      <ion-input [(ngModel)]="paternoPerfil"></ion-input>
+      <ion-label position="stacked">Apellido Paterno</ion-label>
+      <ion-input [(ngModel)]="apellidoPaterno" [disabled]="!modoEdicion"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">Apellido materno</ion-label>
-      <ion-input [(ngModel)]="maternoPerfil"></ion-input>
+      <ion-label position="stacked">Apellido Materno</ion-label>
+      <ion-input [(ngModel)]="apellidoMaterno" [disabled]="!modoEdicion"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">Telefono</ion-label>
-      <ion-input [(ngModel)]="telefonoPerfil" type="password"></ion-input>
+      <ion-label position="stacked">Teléfono</ion-label>
+      <ion-input [(ngModel)]="telefonoPerfil" type="tel" [disabled]="!modoEdicion"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">Correo</ion-label>
-      <ion-input [(ngModel)]="correoPerfil" type="email"></ion-input>
+      <ion-input [(ngModel)]="correoPerfil" type="email" [disabled]="!modoEdicion"></ion-input>
     </ion-item>
-
   </ion-list>
 
-  <ion-button expand="full" (click)="guardarPerfil()">Guardar Cambios</ion-button>
-  <ion-button expand="full" color="danger" (click)="navigateToTab4()">Cancelar</ion-button>
+  <div class="button-container">
+    <ion-button expand="full" (click)="guardarPerfil()" [disabled]="!modoEdicion" class="save-button">Guardar Cambios</ion-button>
+    <ion-button expand="full" (click)="navigateToTab4()" class="cancel-button">Cancelar</ion-button>
+  </div>
 </ion-content>

@@ -13,4 +13,40 @@
   .image-hint {
     font-size: 14px;
     color: gray;
+    text-align: center;
+  }
+
+  .edit-button {
+    height: auto;
+    width: 40%;
+    margin: 15px auto;
+    --background: #FFC107 !important;
+    --background-hover: #d8a305 !important;
+    --background-activated: #d8a305 !important;
+    --background-focused: #d8a305 !important;
+  }
+
+  .button-container {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin: auto;
+  }
+
+  .save-button{
+    margin-bottom: 10px;
+    --background: #FFC107 !important;
+    --background-hover: #d8a305 !important;
+    --background-activated: #d8a305 !important;
+    --background-focused: #d8a305 !important;
+  }
+  
+  .cancel-button {
+    margin-bottom: 10px;
+    --background: #142145 !important;
+  }
+
+  .cancel-button :hover{
+    --background: #142145 !important;
   }

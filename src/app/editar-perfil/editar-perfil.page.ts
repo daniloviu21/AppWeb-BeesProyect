@@ -10,15 +10,21 @@ import { Router } from '@angular/router';
 })
 export class EditarPerfilPage {
   nombrePerfil: string = '';
+  apellidoPaterno: string = '';
+  apellidoMaterno: string = '';
+  telefonoPerfil: string = '';
   fotoPerfil: string = '';
   correoPerfil: string = '';
-  contrasenaPerfil: string = '';
+  modoEdicion: boolean = false;
 
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
 
   constructor(private usuarioService: UsuariosService, private router: Router) {
     const usuario = this.usuarioService.getUsuario();
     this.nombrePerfil = usuario?.user || 'Smith Johnson';
+    this.apellidoPaterno = usuario?.apellidoPaterno || '';
+    this.apellidoMaterno = usuario?.apellidoMaterno || '';
+    this.telefonoPerfil = usuario?.telefono || '';
     this.fotoPerfil = usuario?.direccion || 'https://th.bing.com/th/id/OIP.DkKTae6dc5RumN3Gk0efGgHaH2?w=161&h=180&c=7&r=0&o=5&pid=1.7';
     this.correoPerfil = usuario?.correo || '';
   }
@@ -38,16 +44,24 @@ export class EditarPerfilPage {
     }
   }
 
+  habilitarEdicion() {
+    this.modoEdicion = !this.modoEdicion;
+  }
+
   guardarPerfil() {
     let usuario = this.usuarioService.getUsuario();
     if (usuario) {
       usuario.user = this.nombrePerfil;
+      usuario.apellidoPaterno = this.apellidoPaterno;
+      usuario.apellidoMaterno = this.apellidoMaterno;
+      usuario.telefono = this.telefonoPerfil;
       usuario.direccion = this.fotoPerfil;
       usuario.correo = this.correoPerfil;
 
       this.usuarioService.setUsuario(usuario);
       this.usuarioService.saveCurrentUser();
     }
+    this.modoEdicion = false;
     this.router.navigate(['/tabs/tab4']);
   }
 
