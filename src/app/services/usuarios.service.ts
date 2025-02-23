@@ -3,9 +3,12 @@ import { Storage } from '@ionic/storage-angular';
 
 export interface Usuario {
   user: string;
-  contrasenia: string;
-  direccion: string;
+  apellidoPaterno?: string;
+  apellidoMaterno?: string;
+  telefono?: string;
+  direccion?: string;
   correo: string;
+  contrasenia?: string;
 }
 
 @Injectable({
@@ -17,8 +20,6 @@ export class UsuariosService {
   private usuarios: Usuario[] = [
     {
       user: 'a',
-      contrasenia: "123456",
-      direccion: "av 21",
       correo: "ferleza@gmail.com"
     }
   ];
