@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Cambiar Dirección</ion-title>
+    <ion-title>Mis Direcciones</ion-title>
     <ion-buttons slot="start">
       <ion-button (click)="volverAInicio()">Volver</ion-button>
     </ion-buttons>
@@ -10,48 +10,27 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Cambiar Dirección</ion-title>
+      <ion-title size="large">Mis Direcciones</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <ion-list>
-    <ion-item>
-      <ion-label position="floating">Dirección</ion-label>
-      <ion-input [(ngModel)]="direccion.direccion"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Número Interior</ion-label>
-      <ion-input [(ngModel)]="direccion.numInterior"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Número Exterior</ion-label>
-      <ion-input [(ngModel)]="direccion.numExterior"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Código Postal</ion-label>
-      <ion-input [(ngModel)]="direccion.codigoPostal"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Localidad</ion-label>
-      <ion-input [(ngModel)]="direccion.localidad"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Teléfono</ion-label>
-      <ion-input [(ngModel)]="direccion.telefono"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Agregar órdenes de entrega</ion-label>
-      <ion-textarea [(ngModel)]="direccion.ordenesEntrega"></ion-textarea>
-    </ion-item>
+  <ion-list *ngIf="direccionesGuardadas.length > 0">
+    <ion-card *ngFor="let direccion of direccionesGuardadas">
+      <ion-card-header>
+        <ion-card-title>Dirección Guardada</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Dirección:</strong> {{ direccion.direccion }}</p>
+        <p><strong>Teléfono:</strong> {{ direccion.telefono }}</p>
+      </ion-card-content>
+    </ion-card>
   </ion-list>
 
-  <ion-button expand="full" color="primary" (click)="agregarDireccion()">
+  <ion-item *ngIf="direccionesGuardadas.length === 0">
+    <ion-label>No hay direcciones guardadas</ion-label>
+  </ion-item>
+
+  <ion-button expand="full" color="primary" (click)="irAAgregarDireccion()">
     Agregar Dirección
   </ion-button>
 </ion-content>
