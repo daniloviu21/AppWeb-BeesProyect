@@ -1,25 +1,6 @@
-<ion-list>
-  <ion-item *ngFor="let categoria of categorias">
-    
+<ion-list [inset]="true" *ngFor="let categoria of categorias">
+  <ion-item detail="true" [button]="true" [href]="categoria.router">
+    <ion-icon slot="start" [name]="categoria.icon" size="large"></ion-icon>
+    <ion-label>{{categoria.nombre}}</ion-label>
   </ion-item>
 </ion-list>
-
-<!-- <ion-list>
-  <ion-item *ngFor="let categoria of categorias">
-    <ion-card>
-      <ion-card-content>
-        <ion-grid>
-          <ion-row>
-            <ion-col size="auto">
-              <ion-icon [name]="'pricetag-outline'" style="font-size: 24px;"></ion-icon>
-            </ion-col>
-            <ion-col>
-              <ion-label>{{ categoria.nombre }}</ion-label>
-              <p>{{ categoria.descripcion }}</p>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card-content>
-    </ion-card>
-  </ion-item>
-</ion-list> -->
