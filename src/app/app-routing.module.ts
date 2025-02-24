@@ -18,7 +18,8 @@ const routes: Routes = [
   {
     path: 'register',
     loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
-  },  {
+  },
+  {
     path: 'cambiar-direccion',
     loadChildren: () => import('./cambiar-direccion/cambiar-direccion.module').then( m => m.CambiarDireccionPageModule)
   },
@@ -42,7 +43,10 @@ const routes: Routes = [
     path: 'agregar-direccion',
     loadChildren: () => import('./agregar-direccion/agregar-direccion.module').then( m => m.AgregarDireccionPageModule)
   },
-
+  {
+    path: 'categorias-layout',
+    loadChildren: () => import('./pages/categorias-layout/categorias-layout.component').then( m => m.CategoriasLayoutComponent)
+  },
   
 ];
 @NgModule({

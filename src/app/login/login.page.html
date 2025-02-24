@@ -11,8 +11,8 @@
           <p class="welcome-text">Bienvenido de nuevo a Vanguard</p>
 
           <ion-item class="input-field">
-            <ion-label position="floating">Correo electrónico</ion-label>
-            <ion-input type="email" [(ngModel)]="usuario" (ionBlur)="validarEmail()"></ion-input>
+            <ion-label position="floating">Usuario</ion-label>
+            <ion-input type="text" [(ngModel)]="username"></ion-input>
           </ion-item>
           <p *ngIf="emailError" class="error-message">Ingresa un correo válido</p>
 
