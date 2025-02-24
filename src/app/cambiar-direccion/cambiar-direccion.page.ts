@@ -19,18 +19,16 @@ export class CambiarDireccionPage implements OnInit {
   }
 
   async cargarDirecciones() {
-    const usuario = this.usuariosService.getUsuario();
-    if (usuario && usuario.direccion) {
-      this.direccionesGuardadas.push({
-        direccion: usuario.direccion,
-        telefono: usuario.telefono || 'Sin teléfono'
-      });
+    const savedDireccion = localStorage.getItem('direccionGuardada');
+    if (savedDireccion) {
+      this.direccionesGuardadas.push(JSON.parse(savedDireccion));
     }
   }
 
   irAAgregarDireccion() {
-    this.router.navigate(['/agregar-direccion']); // Redirige a la pantalla de agregar dirección
+    this.router.navigate(['/agregar-direccion']);
   }
+
   volverAInicio() {
     this.router.navigate(['/tabs/tab4']);
   }
