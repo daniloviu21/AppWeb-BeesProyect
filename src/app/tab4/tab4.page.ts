@@ -66,7 +66,8 @@ export class Tab4Page {
       telefono: '',
       direccion: '',
       correo: '',
-      contrasenia: '' }); // Usuario vacío en lugar de null
+      contrasenia: '',
+      metodospago: [] }); // Usuario vacío en lugar de null
     this.router.navigate(['/login']);
   }
   

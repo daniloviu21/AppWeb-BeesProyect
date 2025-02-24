@@ -9,6 +9,14 @@ export interface Usuario {
   direccion: string;
   correo: string;
   contrasenia: string;
+  metodospago: MetodosPago[];
+}
+
+export interface MetodosPago {
+  tipo: string;
+  numero: string;
+  fechav: string;
+  cvv: string;
 }
 
 @Injectable({
@@ -25,7 +33,15 @@ export class UsuariosService {
       telefono: '2711764235',
       direccion: 'av 21',
       correo: "ferleza@gmail.com",
-      contrasenia: '123456'
+      contrasenia: '123456',
+      metodospago: [
+        {
+          tipo: 'Mastercard',
+          numero: '4169141698436543',
+          fechav: '01/2024',
+          cvv: '526'
+        }
+      ]
     }
   ];
   private usuarioActual: Usuario | null = null;

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Usuario } from '../services/usuarios.service';
 
 @Component({
   selector: 'app-metodos-pago',
@@ -8,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MetodosPagoPage implements OnInit {
 
+  usuario!: Usuario | null;
+
   constructor() { }
 
   ngOnInit() {
+    
   }
 
 }

@@ -1,13 +1,18 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>metodos-pago</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Métodos de pago</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">metodos-pago</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-list [inset]="true" *ngFor="let mpago of usuario?.metodospago">
+    <ion-item detail="true" [button]="true">
+      <ion-icon slot="start" name="card-outline" size="large"></ion-icon>
+      <ion-label>{{mpago.tipo}}</ion-label>
+      <ion-label>{{mpago.numero.substring(12,16)}}</ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
