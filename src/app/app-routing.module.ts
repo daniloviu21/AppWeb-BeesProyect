@@ -19,6 +19,34 @@ const routes: Routes = [
     path: 'register',
     loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
   },
+  {
+    path: 'cambiar-direccion',
+    loadChildren: () => import('./cambiar-direccion/cambiar-direccion.module').then( m => m.CambiarDireccionPageModule)
+  },
+  {
+    path: 'metodos-pago',
+    loadChildren: () => import('./metodos-pago/metodos-pago.module').then( m => m.MetodosPagoPageModule)
+  },
+  {
+    path: 'politica-privacidad',
+    loadChildren: () => import('./politica-privacidad/politica-privacidad.module').then( m => m.PoliticaPrivacidadPageModule)
+  },
+  {
+    path: 'terminos-condiciones',
+    loadChildren: () => import('./terminos-condiciones/terminos-condiciones.module').then( m => m.TerminosCondicionesPageModule)
+  },
+  {
+    path: 'editar-perfil',
+    loadChildren: () => import('./editar-perfil/editar-perfil.module').then( m => m.EditarPerfilPageModule)
+  },
+  {
+    path: 'agregar-direccion',
+    loadChildren: () => import('./agregar-direccion/agregar-direccion.module').then( m => m.AgregarDireccionPageModule)
+  },
+  {
+    path: 'categorias-layout',
+    loadChildren: () => import('./pages/categorias-layout/categorias-layout.component').then( m => m.CategoriasLayoutComponent)
+  },
   
 ];
 @NgModule({

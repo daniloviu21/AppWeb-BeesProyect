@@ -1,63 +1,82 @@
+ion-toolbar {
+  --background: white;
+  --color: black;
+  font-weight: bold;
+  text-align: center;
+}
+
 .profile-container {
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .profile-avatar {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    margin: 0 auto;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 3px solid #ccc;
-    cursor: pointer;
-  }
-  
-  .edit-icon {
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-    background-color: white;
-    color: #007bff;
-    padding: 5px;
-    border-radius: 50%;
-    font-size: 18px;
-  }
-  
-  h2 {
-    margin-top: 10px;
-    font-weight: bold;
-  }
-  
-  .nombre-input {
-    font-size: 20px;
-    text-align: center;
-    border-bottom: 2px solid #007bff;
-    width: 80%;
-    margin: auto;
-  }
-  
-  .profile-list {
-    margin: 10px;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  
-  ion-item {
-    --border-color: transparent;
-    --background: white;
-    font-size: 18px;
-    padding: 15px;
-  }
-  
-  .logout-button {
-    margin: 20px;
-    text-align: center;
-    background-color: #b00020;
-    color: white;
-    font-weight: bold;
-    border-radius: 10px;
-    padding: 15px;
-  }
-  
+  text-align: center;
+  padding: 20px;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  display: block;
+  margin: 0 auto;
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.edit-icon {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 6px;
+  border-radius: 50%;
+  font-size: 18px;
+}
+
+.profile-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.nombre-input {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.profile-list ion-item {
+  --background: white;
+  --border-color: #ddd;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  width: 90%;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 10px auto;
+}
+
+.logout-button {
+  width: 90%;
+  --background: #FFC107;
+  --background-hover: #d8a305 !important;
+  --background-activated: #d8a305 !important;
+  --background-focused: #d8a305 !important;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 14px;
+  margin: 20px auto;
+  display: block;
+}
+
+.logout-button:hover {
+  --background: #dfa906;
+}
