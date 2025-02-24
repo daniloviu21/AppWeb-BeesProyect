@@ -19,7 +19,7 @@ export class CategoriasService {
       nombre: 'Sublimación', 
       descripcion: 'Personalización de tazas, gorras, etc.',
       icon: "color-palette-outline", 
-      router: "/login"
+      router: "/categorias-layout"
     },
     { 
       nombre: 'Anuncios', 
