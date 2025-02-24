@@ -45,6 +45,9 @@
   .cancel-button {
     margin-bottom: 10px;
     --background: #142145 !important;
+    --background-hover: #121e3f !important;
+    --background-activated: #121e3f !important;
+    --background-focused: #121e3f !important;
   }
 
   .cancel-button :hover{
