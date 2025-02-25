@@ -17,24 +17,20 @@
   </ion-toolbar>
 
   <!--Categorias (en pequeño)-->
-  <ion-list>
+  <ion-list class="categories-container">
     <ion-item lines="none">
-      <ion-label class="title">Todas las categorias</ion-label>
+      <ion-label class="title">Todas las categorías</ion-label>
       <ion-button fill="clear" class="see-all" routerLink="/tabs/tab2">Ver todo</ion-button>
     </ion-item>
   
-    <ion-grid>
-      <ion-row>
-        <ion-col size="6" size-md="3" *ngFor="let category of categories">
-          <ion-card class="category-card">
-            <ion-card-content>
-              <ion-icon [name]="category.icon" class="category-icon"></ion-icon>
-              <p class="category-title">{{ category.nombre }}</p>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+    <div class="categories-wrapper">
+      <div class="categories-grid">
+        <div class="category-card" *ngFor="let category of categories">
+          <ion-icon [name]="category.icon" class="category-icon"></ion-icon>
+          <p class="category-title">{{ category.nombre }}</p>
+        </div>
+      </div>
+    </div>
   </ion-list>
   
 </ion-content>
