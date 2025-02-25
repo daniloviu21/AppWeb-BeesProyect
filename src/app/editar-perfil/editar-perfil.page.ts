@@ -25,7 +25,7 @@ export class EditarPerfilPage {
     this.apellidoPaterno = usuario?.apellidoPaterno || '';
     this.apellidoMaterno = usuario?.apellidoMaterno || '';
     this.telefonoPerfil = usuario?.telefono || '';
-    this.fotoPerfil = usuario?.direccion || 'https://th.bing.com/th/id/OIP.DkKTae6dc5RumN3Gk0efGgHaH2?w=161&h=180&c=7&r=0&o=5&pid=1.7';
+    this.fotoPerfil = usuario?.user || 'https://th.bing.com/th/id/OIP.DkKTae6dc5RumN3Gk0efGgHaH2?w=161&h=180&c=7&r=0&o=5&pid=1.7';
     this.correoPerfil = usuario?.correo || '';
   }
 
@@ -55,7 +55,7 @@ export class EditarPerfilPage {
       usuario.apellidoPaterno = this.apellidoPaterno;
       usuario.apellidoMaterno = this.apellidoMaterno;
       usuario.telefono = this.telefonoPerfil;
-      usuario.direccion = this.fotoPerfil;
+      usuario.user = this.fotoPerfil;
       usuario.correo = this.correoPerfil;
 
       this.usuarioService.setUsuario(usuario);

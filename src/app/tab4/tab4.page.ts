@@ -18,7 +18,7 @@ export class Tab4Page {
   constructor(public alertCtrl: AlertController, private router: Router, private usuarioService: UsuariosService) {
     const usuario = this.usuarioService.getUsuario();
     this.nombrePerfil = usuario?.user || 'Smith Johnson';
-    this.fotoPerfil = usuario?.direccion || 'https://th.bing.com/th/id/OIP.DkKTae6dc5RumN3Gk0efGgHaH2?w=161&h=180&c=7&r=0&o=5&pid=1.7';
+    this.fotoPerfil = usuario?.user || 'https://th.bing.com/th/id/OIP.DkKTae6dc5RumN3Gk0efGgHaH2?w=161&h=180&c=7&r=0&o=5&pid=1.7';
   }
   
   editarPerfil() {
@@ -64,9 +64,10 @@ export class Tab4Page {
       apellidoPaterno: '',
       apellidoMaterno: '',
       telefono: '',
-      direccion: '',
+      direccion: [],
       correo: '',
-      contrasenia: '' }); // Usuario vacío en lugar de null
+      contrasenia: '',
+      metodospago: [] }); // Usuario vacío en lugar de null
     this.router.navigate(['/login']);
   }
   
