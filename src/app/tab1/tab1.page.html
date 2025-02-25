@@ -33,6 +33,7 @@
     </div>
   </ion-list>
 
+  <div>
   <h2 class="categoria">Servicios</h2>
   <div class="carousel-container">
     <div class="carousel">
@@ -44,5 +45,19 @@
       </div>
     </div>
   </div>
-  
+  </div>
+
+  <div>
+    <h2 class="categoria">Productos</h2>
+  <div class="carousel-container">
+    <div class="carousel">
+      <div class="slide-content" *ngFor="let producto of productos">
+        <img [src]="producto.image" class="slide-image" />
+        <p class="slide-title">{{ producto.title }}</p>
+        <p class="slide-description">{{ producto.description }}</p>
+        <button class="cote-button">Cotizar</button>
+      </div>
+    </div>
+  </div>
+  </div>
 </ion-content>
