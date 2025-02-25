@@ -13,6 +13,14 @@ export class Tab1Page implements OnInit {
 
   currentIndexServ: number = 0;
 
+  productos = [
+    { image: 'assets/carrusel/producto1.jpg', title:'Anuncios Luminosos', description:'Anuncios brillantes y llamativos' },
+    { image: 'assets/carrusel/producto2.jpg', title:'Letras 3D', description:'Letras tridimensionales para darle un toque de modernidad y elegancia a la señalización de tu negocio.' },
+    { image: 'assets/carrusel/producto3.png', title:'Señalética', description:'Señales viales o publicitarias de acuerdo a las necesidades del cliente.' },
+    { image: 'assets/carrusel/producto4.jpg', title:'Estructuras', description:'Todo tipo de estructuras publicitarias a tus necesidades.' },
+    { image: 'assets/carrusel/producto5.jpg', title:'Preciadores y tarifarios', description:'Estructuras publicitarias independientes que destacan en cualquier entorno.' },
+    { image: 'assets/carrusel/producto6.jpg', title:'Estación De Servicio', description:'Señalización y anuncios específicos para estaciones de servicio y gasolineras.' }
+  ];
   servicios = [
     { image: 'assets/carrusel/servicio1.jpg', title: 'Corte y Grabado Láser', description: 'Precisión y detalle en cada corte y grabado para personalizar tus anuncios.' },
     { image: 'assets/carrusel/servicio2.jpg', title:'Impresión', description:'Impresión de alta calidad para todos tus materiales publicitarios.' },
