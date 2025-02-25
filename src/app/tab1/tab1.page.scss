@@ -1,0 +1,56 @@
+.delivery {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  .address-info {
+    flex-grow: 1;
+    margin-left: 10px;
+  }
+  
+  .title {
+    font-size: 14px;
+    color: gray;
+  }
+  
+  .address {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .cart-container {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+  }
+  
+  .cart-icon {
+    position: relative;
+    width: 40px;
+  }
+  
+  ion-icon {
+    width: 40px;
+  }
+  
+  .cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }

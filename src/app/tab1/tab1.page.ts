@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Usuario } from '../services/usuarios.service';
 import { Platform } from '@ionic/angular';
+import { CategoriasService } from '../services/productos.service';
+import { Categoria } from '../services/productos.service'; 
 
 @Component({
   selector: 'app-tab1',
@@ -8,18 +9,27 @@ import { Platform } from '@ionic/angular';
   styleUrls: ['tab1.page.scss'],
   standalone: false,
 })
-export class Tab1Page implements OnInit{
+export class Tab1Page implements OnInit {
 
-  @Input() address: string = 'Cordoba México';
+  @Input() address: string = 'Cordoba Veracruz';
   @Input() cartCount: number = 0;
+  categories: Categoria[] = [];
 
-  constructor(private platform: Platform) {}
+  constructor(
+    private platform: Platform,
+    private categoriasService: CategoriasService
+  ) {}
+
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    this.loadCategories();
+  }
+
+  async loadCategories() {
+    this.categories = await this.categoriasService.getCategorias();
   }
 
   openMaps() {
-    const mapsUrl = `https://www.google.com/maps/dir/18.8142666,-96.7253164/18.92019,-96.96397/@18.8674233,-97.0139553,11z/data=!3m1!4b1!4m4!4m3!1m1!4e1!1m0?entry=ttu&g_ep=EgoyMDI1MDIyMy4xIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D`;
+    const mapsUrl = `https://www.google.com/maps/dir//18.92019,-96.96397/@18.920255,-97.0051276,13z?entry=ttu&g_ep=EgoyMDI1MDIxOS4xIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D`;
     window.open(mapsUrl, '_blank');
   }
 }

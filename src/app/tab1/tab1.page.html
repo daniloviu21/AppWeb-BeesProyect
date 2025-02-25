@@ -5,14 +5,16 @@
     <div class="delivery">
       <ion-icon name="location-outline"></ion-icon>
       <div class="address-info">
-        <p class="title">Delivery Address</p>
+        <p class="title">Nuestra ubicación</p>
         <p class="address">{{ address }}</p>
+        <ion-icon name="chevron-forward-outline" (click)="openMaps()"></ion-icon>
       </div>
-      <ion-icon name="chevron-forward-outline" (click)="openMaps()"></ion-icon>
       <div class="cart-icon">
         <ion-icon name="cart-outline"></ion-icon>
         <span *ngIf="cartCount > 0" class="cart-count">{{ cartCount }}</span>
       </div>
     </div>
   </ion-toolbar>
+
+  
 </ion-content>
