@@ -18,6 +18,9 @@ ion-img{
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    width: 100%;
+    padding: 20px;
+    max-width: 360px;
 }
 
 .register-box {
@@ -26,8 +29,7 @@ ion-img{
     border-radius: 15px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
-    width: 100%;
-    max-width: 400px;
+    width: 360px;
 }
 
 .title {
@@ -42,7 +44,7 @@ ion-img{
     margin-bottom: 20px;
 }
 
-ion-item.input-field {
+ion-item {
     height: 65px;
     --background: #ffffff !important; 
     --color: #000000 !important;  
@@ -57,6 +59,7 @@ ion-item.input-field {
 }
 
 .input-field {
+    width: 100%;
     margin-bottom: 15px;
 }
 
@@ -68,7 +71,8 @@ ion-item.input-field {
 }
 
 .register-button {
-    border-radius: 50px;
+    width: 100%;
+    border-radius: 8px;
     --background: #FFC107 !important;
     --color: white !important;
     font-weight: bold;
@@ -80,12 +84,7 @@ ion-item.input-field {
     --background-activated: #d8a305 !important;
     --background-focused: #d8a305 !important;
   
-    .register-button:hover {
-      --background: #14339d !important;
-    }
   }
-  
-
 
 .already-account {
     font-size: 14px;
