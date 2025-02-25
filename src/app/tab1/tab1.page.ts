@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Usuario } from '../services/usuarios.service';
+import { Categoria, CategoriasService } from '../services/productos.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab1',
@@ -9,10 +10,30 @@ import { Usuario } from '../services/usuarios.service';
 })
 export class Tab1Page implements OnInit{
 
-  @Input() usuario!: Usuario;
+  direccion: string = 'Selecciona tu dirección';
+  cantidadCarrito: number = 0;
 
-  constructor() { }
+  categorias: Categoria[] = [];
+  
+  constructor(private categoriasService: CategoriasService, private router: Router) {}
+  
+  async ngOnInit() {
+    this.categorias = await this.categoriasService.getCategorias();
+  }
 
-  ngOnInit() {}
+  async obtenerDireccion() {
+    this.direccion = '2118 Thornridge California';
+  }
 
+  async obtenerCantidadCarrito() {
+    this.cantidadCarrito = 1;
+  }
+
+  seleccionarDireccion() {
+    console.log('Seleccionar dirección');
+  }
+
+  irAlCarrito() {
+    this.router.navigate(['/carritocompras']);
+  }
 }

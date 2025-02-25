@@ -2,17 +2,28 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-content class="ion-padding">
-    <ion-grid>
-      <ion-row class="ion-align-items-center">
-        <!-- Botón de Carrito -->
-        <ion-col size="3" class="ion-text-center">
-          <ion-button class="btncarrito" fill="clear">
-            <ion-icon name="cart-outline" size="large"></ion-icon>
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-    <app-card-info></app-card-info>
-  </ion-content>
+  <div class="top-bar">
+    <div class="address" (click)="seleccionarDireccion()">
+      <ion-icon name="location-outline" class="address-icon"></ion-icon>
+      <div class="address-text">
+        <p class="label">Delivery Address</p>
+        <p class="value">{{ direccion }}</p>
+      </div>
+      <ion-icon name="chevron-down-outline" class="chevron-icon"></ion-icon>
+    </div>
+
+    <div class="cart-container" (click)="irAlCarrito()">
+      <ion-icon name="cart-outline" class="cart-icon"></ion-icon>
+    </div>
+  </div>
+
+  <ion-card *ngFor="let cat of categorias">
+    <ion-card-header>
+      <ion-card-title>{{ cat.nombre }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ cat.descripcion }}</p>
+      <ion-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2O5v2RiGs2qqCUx3KE-2EVqs_Zkc4Bbrhbw&s"></ion-img>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

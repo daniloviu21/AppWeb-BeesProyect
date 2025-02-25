@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Categoria, CategoriasService, Producto } from 'src/app/services/productos.service';
 
 @Component({
@@ -12,8 +12,9 @@ export class ProductosPage implements OnInit {
 
   categoriaSeleccionada: string = '';
   productos: Producto[] = [];
+  carrito: Producto[] = [];
 
-  constructor(private route: ActivatedRoute,private categoriasService: CategoriasService) {}
+  constructor(private route: ActivatedRoute,private categoriasService: CategoriasService,private router: Router) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -29,5 +30,15 @@ export class ProductosPage implements OnInit {
     if (categoria) {
       this.productos = categoria.productos;
     }
+  }
+
+  agregarAlCarrito(producto: Producto) {
+    this.carrito.push(producto);
+    console.log('Producto agregado al carrito:', producto);
+  }
+  
+  irAlCarrito() {
+    // Navegar a la página del carrito y pasar los productos del carrito
+    this.router.navigate(['/carritocompras'], { state: { carrito: this.carrito } });
   }
 }
