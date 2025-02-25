@@ -21,22 +21,22 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Número Interior</ion-label>
+      <ion-label position="floating">Referencias</ion-label>
       <ion-input [(ngModel)]="direccion.numInterior"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Número Exterior</ion-label>
+      <ion-label position="floating">Código Postal</ion-label>
       <ion-input [(ngModel)]="direccion.numExterior"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Código Postal</ion-label>
+      <ion-label position="floating">Estado</ion-label>
       <ion-input [(ngModel)]="direccion.codigoPostal"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Localidad</ion-label>
+      <ion-label position="floating">Ciudad</ion-label>
       <ion-input [(ngModel)]="direccion.localidad"></ion-input>
     </ion-item>
 
@@ -45,10 +45,10 @@
       <ion-input [(ngModel)]="direccion.telefono"></ion-input>
     </ion-item>
 
-    <ion-item>
+    <!-- <ion-item>
       <ion-label position="floating">Agregar órdenes de entrega</ion-label>
       <ion-textarea [(ngModel)]="direccion.ordenesEntrega"></ion-textarea>
-    </ion-item>
+    </ion-item> -->
   </ion-list>
 
   <ion-button expand="full" color="success" (click)="agregarDireccion()">
