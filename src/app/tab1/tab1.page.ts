@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Usuario } from '../services/usuarios.service';
 
 @Component({
   selector: 'app-tab1',
@@ -6,8 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['tab1.page.scss'],
   standalone: false,
 })
-export class Tab1Page {
+export class Tab1Page implements OnInit{
 
-  constructor() {}
+  @Input() usuario!: Usuario;
+
+  constructor() { }
+
+  ngOnInit() {}
 
 }

@@ -1,0 +1,33 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Mis Direcciones</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="volverAInicio()">Volver</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Mis Direcciones</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list *ngFor="let direccion of usuario?.direccion">
+    <ion-card>
+      <ion-card-content>
+        <p><strong>Dirección:</strong> {{ direccion.direccion }}</p>
+        <p><strong>Teléfono:</strong> {{ direccion.telefono }}</p>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
+  <!-- <ion-item *ngIf="direccionesGuardadas.length === 0">
+    <ion-label>No hay direcciones guardadas</ion-label>
+  </ion-item> -->
+
+  <ion-button expand="full" color="primary" (click)="irAAgregarDireccion()">
+    Agregar Dirección
+  </ion-button>
+</ion-content>

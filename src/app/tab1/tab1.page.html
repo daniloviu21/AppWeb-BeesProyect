@@ -1,17 +1,18 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
-  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+  <ion-content class="ion-padding">
+    <ion-grid>
+      <ion-row class="ion-align-items-center">
+        <!-- Botón de Carrito -->
+        <ion-col size="3" class="ion-text-center">
+          <ion-button class="btncarrito" fill="clear">
+            <ion-icon name="cart-outline" size="large"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <app-card-info></app-card-info>
+  </ion-content>
 </ion-content>
