@@ -45,12 +45,13 @@ input:hover{
 }
 
 ion-item.input-field {
+    height: 75px;
     --background: #ffffff !important; 
     --color: #000000 !important;  
     --placeholder-color: #bebababb;
     border-radius: 10px; 
     border: 1px solid #ccc;
-    padding: 5px;
+    padding: 10px;
 }
 
 .item-native{
@@ -83,6 +84,7 @@ ion-item.input-field {
     --background-hover: #d8a305 !important;
     --background-activated: #d8a305 !important;
     --background-focused: #d8a305 !important;
+    margin-bottom: 20px;
 }
 
 .create-account {
