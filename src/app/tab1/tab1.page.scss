@@ -56,26 +56,43 @@
   }
 
   /*List categoria*/
-  ion-card-title{
+  .title {
+    font-weight: bold;
+    font-size: 18px;
+  }
+  
+  .see-all {
     font-size: 14px;
+    color: #007aff;
+    text-transform: none;
   }
-
-  p{
-    font-size: 10px;
-  }
-
-  ion-col{
-    height: 50%;
-  }
-
-  ion-card{
-    height: 160px;
-  }
-
-  ion-card-content{
+  
+  .category-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     height: 120px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
   }
-
-  ion-icon{
-    height: 30px;
+  
+  .category-card ion-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+  
+  .category-icon {
+    font-size: 40px;
+    color: #007aff; /* Azul estilo iOS */
+  }
+  
+  .category-title {
+    font-size: 12px;
+    margin-top: 8px;
+    color: #333;
   }
