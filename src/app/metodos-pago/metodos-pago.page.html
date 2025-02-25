@@ -12,7 +12,12 @@
     <ion-item detail="true" [button]="true">
       <ion-icon slot="start" name="card-outline" size="large"></ion-icon>
       <ion-label>{{mpago.tipo}}</ion-label>
-      <ion-label>{{mpago.numero.substring(12,16)}}</ion-label>
+      <ion-label><strong>•••• </strong>{{mpago.numero.substring(12,16)}}</ion-label>
     </ion-item>
   </ion-list>
+
+  <ion-button expand="full" color="warning" (click)="agregarMetodo()">
+    <ion-icon slot="start" name="add-outline"></ion-icon>
+    Agrega un método de pago
+  </ion-button>
 </ion-content>

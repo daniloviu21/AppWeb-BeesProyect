@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UsuariosService } from '../services/usuarios.service';
+import { Usuario, UsuariosService } from '../services/usuarios.service';
 
 @Component({
   selector: 'app-cambiar-direccion',
@@ -10,20 +10,22 @@ import { UsuariosService } from '../services/usuarios.service';
 })
 export class CambiarDireccionPage implements OnInit {
 
+  usuario!: Usuario | null;
+
   direccionesGuardadas: any[] = [];
 
-  constructor(private router: Router, private usuariosService: UsuariosService) { }
+  constructor(private router: Router, private usuarioService: UsuariosService) { }
 
   ngOnInit() {
-    this.cargarDirecciones();
+    this.usuario = this.usuarioService.getUsuario();
   }
 
-  async cargarDirecciones() {
-    const savedDireccion = localStorage.getItem('direccionGuardada');
-    if (savedDireccion) {
-      this.direccionesGuardadas.push(JSON.parse(savedDireccion));
-    }
-  }
+  // async cargarDirecciones() {
+  //   const savedDireccion = localStorage.getItem('direccionGuardada');
+  //   if (savedDireccion) {
+  //     this.direccionesGuardadas.push(JSON.parse(savedDireccion));
+  //   }
+  // }
 
   irAAgregarDireccion() {
     this.router.navigate(['/agregar-direccion']);

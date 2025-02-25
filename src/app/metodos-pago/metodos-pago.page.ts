@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Usuario } from '../services/usuarios.service';
+import { Usuario, UsuariosService } from '../services/usuarios.service';
 
 @Component({
   selector: 'app-metodos-pago',
@@ -11,9 +11,14 @@ export class MetodosPagoPage implements OnInit {
 
   usuario!: Usuario | null;
 
-  constructor() { }
+  constructor(private usuarioService: UsuariosService) { }
 
   ngOnInit() {
+    this.usuario = this.usuarioService.getUsuario();
+  }
+
+  agregarMetodo(){
+    console.log("Todavia no se puede...");
     
   }
 
