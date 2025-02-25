@@ -10,12 +10,14 @@ import { Usuario, UsuariosService } from '../services/usuarios.service';
   standalone: false,
 })
 export class LoginPage {
-  username: string = '';
+  validarEmail() {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    this.emailError = !emailPattern.test(this.usuario);
+  }
+  usuario: string = '';
   password: string = '';
   emailError: boolean = false;
   passwordError: boolean = false;
-
-  usuario!: Usuario | null;
 
   constructor(private toastController: ToastController, private router: Router, private usuariosService: UsuariosService) { }
 
@@ -24,7 +26,7 @@ export class LoginPage {
   }
 
   async login() {
-    if (!this.username || !this.password) {
+    if (!this.usuario || !this.password) {
       this.mostrarMensaje('Todos los campos son obligatorios');
       return;
     }
@@ -33,7 +35,7 @@ export class LoginPage {
       return;
     }
 
-    const user = await this.usuariosService.authenticate(this.username, this.password);
+    const user = await this.usuariosService.authenticate(this.usuario, this.password);
   
     if (user) {
       console.log('Inicio de sesión exitoso', user);
@@ -41,10 +43,11 @@ export class LoginPage {
       this.router.navigate(['/tabs/tab1']);
     } else {
       console.log('Credenciales incorrectas');
+      this.mostrarMensaje('Credenciales incorrectas');
     }
 
-    // this.mostrarMensaje('Inicio de sesión exitoso');
-    // this.router.navigate(['/tabs/tab1']);
+    this.mostrarMensaje('Inicio de sesión exitoso');
+    this.router.navigate(['/tabs/tab1']);
   }
 
   async mostrarMensaje(mensaje: string) {

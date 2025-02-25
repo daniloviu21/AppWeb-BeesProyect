@@ -12,9 +12,7 @@ import { CambiarDireccionPage } from './cambiar-direccion.page';
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule,
-    CambiarDireccionPageRoutingModule
-  ],
+    IonicModule,  ],
   declarations: [CambiarDireccionPage]
 })
 export class CambiarDireccionPageModule {}

@@ -68,6 +68,14 @@ export class Tab4Page {
       correo: '',
       contrasenia: '',
       metodospago: [] }); // Usuario vacío en lugar de null
+    this.usuarioService.setUsuario({
+      user: '', contrasenia: '', direccion: [], correo: '',
+      apellidoPaterno: '',
+      apellidoMaterno: '',
+      telefono: '',
+      metodospago: []
+    }); // Usuario vacío en lugar de null
+
     this.router.navigate(['/login']);
   }
   

@@ -26,6 +26,10 @@ export interface Direccion {
   estado: string;
   ciudad: string;
   telefono: string;
+  apellidoPaterno?: string;
+  apellidoMaterno?: string;
+  correo: string;
+  contrasenia?: string;
 }
 
 @Injectable({
@@ -49,7 +53,8 @@ export class UsuariosService {
           cp: '03100',
           estado: 'Ciudad de México',
           ciudad: 'Benito Juárez',
-          telefono: '5512345678'
+          telefono: '5512345678',
+          correo: ''
         },
         {
           direccion: 'Calle 16 de Septiembre #45, Col. Centro',
@@ -57,7 +62,8 @@ export class UsuariosService {
           cp: '91700',
           estado: 'Veracruz',
           ciudad: 'Cordoba',
-          telefono: '2298765432'
+          telefono: '2298765432',
+          correo: ''
         }
       ],
       metodospago: [

@@ -26,6 +26,7 @@ export class EditarPerfilPage {
     this.apellidoMaterno = usuario?.apellidoMaterno || '';
     this.telefonoPerfil = usuario?.telefono || '';
     this.fotoPerfil = usuario?.user || 'https://th.bing.com/th/id/OIP.DkKTae6dc5RumN3Gk0efGgHaH2?w=161&h=180&c=7&r=0&o=5&pid=1.7';
+
     this.correoPerfil = usuario?.correo || '';
   }
 
@@ -55,7 +56,19 @@ export class EditarPerfilPage {
       usuario.apellidoPaterno = this.apellidoPaterno;
       usuario.apellidoMaterno = this.apellidoMaterno;
       usuario.telefono = this.telefonoPerfil;
-      usuario.user = this.fotoPerfil;
+usuario.user = this.fotoPerfil;
+
+// Assuming you have a valid Direccion object to assign
+usuario.direccion = [{
+  direccion: '',
+  referencias: '',
+  cp: '',
+  estado: '',
+  ciudad: '',
+  telefono: '',
+  correo: ''
+}];
+
       usuario.correo = this.correoPerfil;
 
       this.usuarioService.setUsuario(usuario);

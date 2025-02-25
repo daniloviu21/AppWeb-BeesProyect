@@ -1,4 +1,3 @@
-
 <ion-content [fullscreen]="true" class="login-background">
   <ion-grid class="login-container">
     <ion-row class="ion-justify-content-center">
@@ -11,8 +10,8 @@
           <p class="welcome-text">Bienvenido de nuevo a Vanguard</p>
 
           <ion-item class="input-field">
-            <ion-label position="floating">Usuario</ion-label>
-            <ion-input type="text" [(ngModel)]="username"></ion-input>
+            <ion-label position="floating">Correo electrónico</ion-label>
+            <ion-input type="email" [(ngModel)]="usuario" (ionBlur)="validarEmail()"></ion-input>
           </ion-item>
           <p *ngIf="emailError" class="error-message">Ingresa un correo válido</p>
 
@@ -30,9 +29,11 @@
             Inicia sesión
           </ion-button>
 
-          <p class="create-account">
-            <a [routerLink]="'/register'">Crear cuenta</a>
-          </p>
+          <div>
+            <p class="create-account">
+              ¿No tienes cuenta? <a [routerLink]="'/register'">Crear cuenta</a>
+            </p>
+          </div>
 
           <p class="or-continue">O inicia sesión con:</p>
           <div class="social-icons">

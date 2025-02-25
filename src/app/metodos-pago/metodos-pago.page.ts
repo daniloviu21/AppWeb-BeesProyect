@@ -10,7 +10,7 @@ import { ModalController } from '@ionic/angular';
 })
 export class MetodosPagoPage implements OnInit {
 
-  usuario!: Usuario | null;
+  usuario: Usuario | null = null;
 
   metodo: MetodosPago = {
     tipo: '',
@@ -22,7 +22,6 @@ export class MetodosPagoPage implements OnInit {
   constructor(private usuarioService: UsuariosService, private modalCtrl: ModalController) { }
 
   ngOnInit() {
-    this.usuario = this.usuarioService.getUsuario();
   }
 
   cerrarModal() {
@@ -30,7 +29,7 @@ export class MetodosPagoPage implements OnInit {
   }
 
   formatCaducidad(event: any) {
-    const value = event.target.value.replace(/\D/g, ''); // Solo acepta numeros
+    const value = event.target.value.replace(/\D/g, ''); // Solo acepta números
     if (value.length >= 2) {
       this.metodo.fechav = value.slice(0, 2) + '/' + value.slice(2, 4);
     } else {
@@ -40,13 +39,15 @@ export class MetodosPagoPage implements OnInit {
 
   validateNumber(event: KeyboardEvent) {
     const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab'];
-    const isNumber = /^[0-9]$/;
-  
-    if (!allowedKeys.includes(event.key) && !isNumber.test(event.key)) {
+    if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
       event.preventDefault();
     }
   }
-  
+
+  validateFecha(fechav: string): boolean {
+    const regex = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
+    return regex.test(fechav);
+  }
 
   async agregarMetodoPago() {
     const { numero, fechav, cvv } = this.metodo;
@@ -55,7 +56,7 @@ export class MetodosPagoPage implements OnInit {
       alert('Ingrese un número de tarjeta válido (16 dígitos)');
       return;
     }
-    if (!fechav || fechav.length !== 5) {
+    if (!fechav || !this.validateFecha(fechav)) {
       alert('Ingrese una fecha de caducidad válida (MM/YY)');
       return;
     }
@@ -64,17 +65,15 @@ export class MetodosPagoPage implements OnInit {
       return;
     }
 
-    const usuario = this.usuarioService.getUsuario();
-    if (usuario) {
+    if (this.usuario) {
       this.metodo.tipo = numero.startsWith('4') ? 'Visa' : 'Mastercard';
-      usuario.metodospago.push({ ...this.metodo }); // Guardar método de pago en el usuario
-      await this.usuarioService.saveCurrentUser(); // Guardar usuario en el storage
+      this.usuario.metodospago.push({ ...this.metodo }); // Agregar el nuevo método de pago
+      await this.usuarioService.saveCurrentUser(); // Guardar cambios en el storage
       this.modalCtrl.dismiss();
       alert('Método de pago agregado exitosamente');
-      this.metodo = { tipo: 'Tarjeta', numero: '', fechav: '', cvv: '' };
+      this.metodo = { tipo: '', numero: '', fechav: '', cvv: '' };
     } else {
       alert('No hay usuario autenticado');
     }
   }
-
 }
