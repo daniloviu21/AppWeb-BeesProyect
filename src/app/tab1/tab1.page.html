@@ -16,5 +16,25 @@
     </div>
   </ion-toolbar>
 
-  
+  <ion-list>
+    <a expand="full" routerLink="/tabs/tab2">
+      Ver las categorías
+    </a>
+
+      <ion-grid>
+      <ion-row>
+        <ion-col size="6" size-md="4" *ngFor="let category of categories">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>{{ category.nombre }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-icon [name]="category.icon" size="large"></ion-icon>
+              <p>{{ category.descripcion }}</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-list>
 </ion-content>
