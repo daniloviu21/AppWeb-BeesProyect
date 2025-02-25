@@ -16,25 +16,25 @@
     </div>
   </ion-toolbar>
 
+  <!--Categorias (en pequeño)-->
   <ion-list>
-    <a expand="full" routerLink="/tabs/tab2">
-      Ver las categorías
-    </a>
-
-      <ion-grid>
+    <ion-item lines="none">
+      <ion-label class="title">Todas las categorias</ion-label>
+      <ion-button fill="clear" class="see-all" routerLink="/tabs/tab2">Ver todo</ion-button>
+    </ion-item>
+  
+    <ion-grid>
       <ion-row>
-        <ion-col size="6" size-md="4" *ngFor="let category of categories">
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>{{ category.nombre }}</ion-card-title>
-            </ion-card-header>
+        <ion-col size="6" size-md="3" *ngFor="let category of categories">
+          <ion-card class="category-card">
             <ion-card-content>
-              <ion-icon [name]="category.icon" size="large"></ion-icon>
-              <p>{{ category.descripcion }}</p>
+              <ion-icon [name]="category.icon" class="category-icon"></ion-icon>
+              <p class="category-title">{{ category.nombre }}</p>
             </ion-card-content>
           </ion-card>
         </ion-col>
       </ion-row>
     </ion-grid>
   </ion-list>
+  
 </ion-content>
