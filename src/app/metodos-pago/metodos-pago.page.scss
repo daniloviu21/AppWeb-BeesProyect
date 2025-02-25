@@ -1,0 +1,20 @@
+ion-item {
+    --border-radius: 20px; 
+    --inner-padding-end: 12px;
+    margin-bottom: 10px;
+  }
+  
+  .custom-input {
+    --padding-start: 15px;
+    --padding-end: 15px;
+  }
+  
+  .flex-container {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .half-width {
+    width: 50%;
+  }
+  

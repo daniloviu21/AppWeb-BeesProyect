@@ -35,7 +35,7 @@ export class AgregarDireccionPage implements OnInit {
   async agregarDireccion() {
     let usuario = this.usuariosService.getUsuario();
     if (usuario) {
-      usuario.direccion = this.direccion.direccion;
+      usuario.direccion = usuario.direccion || [];
       usuario.telefono = this.direccion.telefono;
       await this.usuariosService.saveCurrentUser();
       
