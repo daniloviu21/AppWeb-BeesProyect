@@ -1,29 +1,61 @@
-<ion-header [translucent]="true">
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <div class="top-bar">
-    <div class="address" (click)="seleccionarDireccion()">
-      <ion-icon name="location-outline" class="address-icon"></ion-icon>
-      <div class="address-text">
-        <p class="label">Delivery Address</p>
-        <p class="value">{{ direccion }}</p>
+  <ion-toolbar>
+    <div class="delivery">
+      <ion-icon name="location-outline"></ion-icon>
+      <div class="address-info">
+        <p class="title">Nuestra ubicación</p>
+        <p class="address">{{ address }}</p>
+        <ion-icon name="chevron-forward-outline" (click)="openMaps()"></ion-icon>
       </div>
-      <ion-icon name="chevron-down-outline" class="chevron-icon"></ion-icon>
+      <div class="cart-icon">
+        <ion-icon name="cart-outline"></ion-icon>
+        <span *ngIf="cartCount > 0" class="cart-count">{{ cartCount }}</span>
+      </div>
     </div>
+  </ion-toolbar>
 
-    <div class="cart-container" (click)="irAlCarrito()">
-      <ion-icon name="cart-outline" class="cart-icon"></ion-icon>
+  <!--Categorias (en pequeño)-->
+  <ion-list class="categories-container">
+    <ion-item lines="none">
+      <ion-label class="title">Todas las categorías</ion-label>
+      <ion-button fill="clear" class="see-all" routerLink="/tabs/tab2">Ver todo</ion-button>
+    </ion-item>
+  
+    <div class="categories-wrapper">
+      <div class="categories-grid">
+        <div class="category-card" *ngFor="let category of categories">
+          <ion-icon [name]="category.icon" class="category-icon"></ion-icon>
+          <p class="category-title">{{ category.nombre }}</p>
+        </div>
+      </div>
+    </div>
+  </ion-list>
+
+  <div>
+  <h2 class="categoria">Servicios</h2>
+  <div class="carousel-container">
+    <div class="carousel">
+      <div class="slide-content" *ngFor="let servicio of servicios">
+        <img [src]="servicio.image" class="slide-image" />
+        <p class="slide-title">{{ servicio.title }}</p>
+        <p class="slide-description">{{ servicio.description }}</p>
+        <button class="cote-button">Cotizar</button>
+      </div>
     </div>
   </div>
+  </div>
 
-  <ion-card *ngFor="let cat of categorias">
-    <ion-card-header>
-      <ion-card-title>{{ cat.nombre }}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>{{ cat.descripcion }}</p>
-      <ion-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2O5v2RiGs2qqCUx3KE-2EVqs_Zkc4Bbrhbw&s"></ion-img>
-    </ion-card-content>
-  </ion-card>
+  <div>
+    <h2 class="categoria">Productos</h2>
+  <div class="carousel-container">
+    <div class="carousel">
+      <div class="slide-content" *ngFor="let producto of productos">
+        <img [src]="producto.image" class="slide-image" />
+        <p class="slide-title">{{ producto.title }}</p>
+        <p class="slide-description">{{ producto.description }}</p>
+        <button class="cote-button">Cotizar</button>
+      </div>
+    </div>
+  </div>
+  </div>
 </ion-content>
