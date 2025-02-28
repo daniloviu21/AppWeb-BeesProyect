@@ -14,6 +14,11 @@ export interface Producto {
   precio: number;
 }
 
+export interface CarritoItem {
+  producto: Producto;
+  cantidad: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
