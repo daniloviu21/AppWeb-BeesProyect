@@ -38,6 +38,14 @@ export class MetodosPagoPage implements OnInit {
     }
   }
 
+  getCardImage(numero: string): string {
+    if (numero.startsWith('4')) {
+      return 'assets/img/visa.png';
+    } else {
+      return 'assets/img/mastercard.png';
+    }
+  }
+
   validateNumber(event: KeyboardEvent) {
     const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab'];
     const isNumber = /^[0-9]$/;

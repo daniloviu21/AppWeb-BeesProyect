@@ -69,4 +69,12 @@ export class RealizarpedidoPage implements OnInit {
     }
     console.log("Proceso de pago aún no implementado");
   }
+
+  getCardImage(numero: string): string {
+    if (numero.startsWith('4')) {
+      return 'assets/img/visa.png';
+    } else {
+      return 'assets/img/mastercard.png';
+    }
+  }
 }
