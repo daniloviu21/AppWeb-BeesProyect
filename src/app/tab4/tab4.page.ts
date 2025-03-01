@@ -61,26 +61,24 @@ export class Tab4Page {
   metodosPago() { this.router.navigate(['/metodos-pago']); }
   politicaPrivacidad() { this.router.navigate(['/politica-privacidad']); }
   terminosCondiciones() { this.router.navigate(['/terminos-condiciones']); }
-  
   cerrarSesion() {
-    this.usuarioService.setUsuario({ user: '',
+    this.usuarioService.setUsuario({
+      usuario: '',  // Agregar la propiedad faltante
+      user: '',
       apellidoPaterno: '',
       apellidoMaterno: '',
       telefono: '',
       direccion: [],
       correo: '',
       contrasenia: '',
-      metodospago: [] }); // Usuario vacío en lugar de null
-    this.usuarioService.setUsuario({
-      user: '', contrasenia: '', direccion: [], correo: '',
-      apellidoPaterno: '',
-      apellidoMaterno: '',
-      telefono: '',
-      metodospago: []
-    }); // Usuario vacío en lugar de null
-
+      metodospago: [],
+      fotoPerfil: 'https://th.bing.com/th?q=Pepe+Foto+De+Perfil&w=120&h=120&c=1&rs=1&qlt=90&cb=1&pid=InlineBlock&mkt=es-MX&cc=MX&setlang=es&adlt=moderate&t=1&mw=247' // Agregar para evitar posibles errores
+    });
+  
+    this.usuarioService.saveCurrentUser(); // Guardar cambios en almacenamiento
     this.router.navigate(['/login']);
   }
+  
   
   
   
