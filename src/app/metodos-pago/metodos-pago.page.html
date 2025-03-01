@@ -10,7 +10,7 @@
 <ion-content [fullscreen]="true">
   <ion-list [inset]="true" *ngFor="let mpago of usuario?.metodospago">
     <ion-item detail="true" [button]="true">
-      <ion-icon slot="start" name="card-outline" size="large"></ion-icon>
+      <img [src]="getCardImage(mpago.numero)" alt="Card Logo" class="card-logo"/>
       <ion-label>{{mpago.tipo}}</ion-label>
       <ion-label><strong>•••• </strong>{{mpago.numero.substring(12,16)}}</ion-label>
     </ion-item>

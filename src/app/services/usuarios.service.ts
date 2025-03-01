@@ -74,6 +74,72 @@ export class UsuariosService {
           cvv: '168'
         }
       ]
+    },
+    {
+      user: 'juanperez',
+      apellidoPaterno: 'Pérez',
+      apellidoMaterno: 'Gómez',
+      telefono: '5551234567',
+      correo: "juanperez@gmail.com",
+      contrasenia: '654321',
+      direccion: [
+        {
+          direccion: 'Calle Reforma #789, Col. Juárez',
+          referencias: 'Cerca del monumento a la independencia',
+          cp: '06600',
+          estado: 'Ciudad de México',
+          ciudad: 'Cuauhtémoc',
+          telefono: '5559876543'
+        }
+      ],
+      metodospago: [
+        {
+          tipo: 'Visa',
+          numero: '4929123456789012',
+          fechav: '12/2025',
+          cvv: '123'
+        }
+      ]
+    },
+    {
+      user: 'mariagarcia',
+      apellidoPaterno: 'García',
+      apellidoMaterno: 'López',
+      telefono: '5558765432',
+      correo: "mariagarcia@gmail.com",
+      contrasenia: '987654',
+      direccion: [
+        {
+          direccion: 'Av. Hidalgo #456, Col. Centro',
+          referencias: 'Frente al teatro principal',
+          cp: '58000',
+          estado: 'Michoacán',
+          ciudad: 'Morelia',
+          telefono: '4431234567'
+        },
+        {
+          direccion: 'Calle Allende #321, Col. San Miguel',
+          referencias: 'Junto al mercado municipal',
+          cp: '58200',
+          estado: 'Michoacán',
+          ciudad: 'Morelia',
+          telefono: '4439876543'
+        }
+      ],
+      metodospago: [
+        {
+          tipo: 'American Express',
+          numero: '378282246310005',
+          fechav: '06/2026',
+          cvv: '4567'
+        },
+        {
+          tipo: 'Mastercard',
+          numero: '5555555555554444',
+          fechav: '09/2024',
+          cvv: '789'
+        }
+      ]
     }
   ];
   private usuarioActual: Usuario | null = null;

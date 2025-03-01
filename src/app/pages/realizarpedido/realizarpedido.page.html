@@ -8,40 +8,6 @@
 </ion-header>
 
 <ion-content>
-  <!-- Dirección de Envío -->
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Dirección de Envío</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <div *ngIf="tieneDirecciones; else sinDireccion">
-        <p>{{ direccionSeleccionada.direccion }}, {{ direccionSeleccionada.ciudad }}, {{ direccionSeleccionada.estado }}</p>
-        <ion-button expand="full" (click)="cambiarDireccion()">Cambiar Dirección</ion-button>
-      </div>
-      <ng-template #sinDireccion>
-        <p>No tienes una dirección registrada.</p>
-        <ion-button expand="full" (click)="cambiarDireccion()">Agregar Dirección</ion-button>
-      </ng-template>
-    </ion-card-content>
-  </ion-card>
-
-  <!-- Método de Pago -->
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Método de Pago</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <div *ngIf="tieneMetodosPago; else sinMetodoPago">
-        <p>{{ metodoPagoSeleccionado.tipo }} - {{ metodoPagoSeleccionado.numero | slice:-4 }}</p>
-        <ion-button expand="full" (click)="cambiarTarjeta()">Cambiar Tarjeta</ion-button>
-      </div>
-      <ng-template #sinMetodoPago>
-        <p>No tienes un método de pago registrado.</p>
-        <ion-button expand="full" (click)="cambiarTarjeta()">Agregar Método de Pago</ion-button>
-      </ng-template>
-    </ion-card-content>
-  </ion-card>
-
   <!-- Resumen del Pedido -->
   <ion-card>
     <ion-card-header>
@@ -63,6 +29,39 @@
       </ion-item>
     </ion-card-content>
   </ion-card>
+
+
+  <ion-item [routerLink]="['/cambiar-direccion']" detail="true" [button]="true">
+    <ion-icon slot="start" name="location-outline"></ion-icon>
+    <ion-label>
+      <p class="label-title">Envío a domicilio</p>
+      <p class="address-text">{{ direccionSeleccionada.direccion.substring(0,35) }}</p>
+    </ion-label>
+  </ion-item>
+  
+
+  <!-- Método de Pago -->
+  <ion-item [routerLink]="['/metodos-pago']" detail="true" [button]="true">
+    <img [src]="getCardImage(metodoPagoSeleccionado.numero)" alt="Card Logo" class="card-logo"/>
+    <ion-label>{{metodoPagoSeleccionado.tipo}}</ion-label>
+    <ion-label><strong>•••• </strong>{{metodoPagoSeleccionado.numero.substring(12,16)}}</ion-label>
+  </ion-item>
+  <!-- <ion-card>
+    <ion-card-header>
+      <ion-card-title>Método de Pago</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div *ngIf="tieneMetodosPago; else sinMetodoPago">
+        <p>{{ metodoPagoSeleccionado.tipo }} - {{ metodoPagoSeleccionado.numero | slice:-4 }}</p>
+        <ion-button expand="full" (click)="cambiarTarjeta()">Cambiar Tarjeta</ion-button>
+      </div>
+      <ng-template #sinMetodoPago>
+        <p>No tienes un método de pago registrado.</p>
+        <ion-button expand="full" (click)="cambiarTarjeta()">Agregar Método de Pago</ion-button>
+      </ng-template>
+    </ion-card-content>
+  </ion-card> -->
+
 
   <!-- Botón de Pagar -->
   <ion-button expand="full" color="success" (click)="pagar()" [disabled]="!tieneDirecciones || !tieneMetodosPago">
