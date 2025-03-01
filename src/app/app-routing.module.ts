@@ -60,6 +60,10 @@ const routes: Routes = [
     path: 'carritocompras',
     loadChildren: () => import('./pages/carritocompras/carritocompras.module').then( m => m.CarritocomprasPageModule)
   },
+  {
+    path: 'realizarpedido',
+    loadChildren: () => import('./pages/realizarpedido/realizarpedido.module').then( m => m.RealizarpedidoPageModule)
+  },
 ];
 @NgModule({
   imports: [

@@ -9,7 +9,7 @@ import { UsuariosService } from 'src/app/services/usuarios.service';
   styleUrls: ['./carritocompras.page.scss'],
   standalone: false
 })
-export class CarritocomprasPage implements OnInit {
+export class CarritocomprasPage {
 
   carrito: CarritoItem[] = [];
   usuarioActual: any;
@@ -20,7 +20,7 @@ export class CarritocomprasPage implements OnInit {
     private usuariosService: UsuariosService
   ) {}
 
-  async ngOnInit() {
+  async ionViewWillEnter() {
     this.usuarioActual = this.usuariosService.getUsuario();
     if (this.usuarioActual) {
       this.carrito = await this.carritoService.obtenerCarrito(this.usuarioActual.user);
@@ -47,4 +47,5 @@ export class CarritocomprasPage implements OnInit {
   calcularTotal() {
     this.total = this.carrito.reduce((sum, item) => sum + (item.producto.precio * item.cantidad), 0);
   }
+  
 }
