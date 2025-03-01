@@ -31,7 +31,6 @@ export class Tab1Page implements OnInit {
   ];
 
 
-
   prevSlideServ() {
     this.currentIndexServ = (this.currentIndexServ - 1 + this.servicios.length) % this.servicios.length;
   }
@@ -62,3 +61,4 @@ export class Tab1Page implements OnInit {
     window.open(mapsUrl, '_blank');
   }
 }
+

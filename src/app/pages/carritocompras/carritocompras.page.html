@@ -3,21 +3,18 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Productos - {{ categoriaSeleccionada }}</ion-title>
+    <ion-title>Tu carrito</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-list>
-    <ion-item *ngFor="let producto of productos">
+    <ion-item *ngFor="let producto of carrito">
       <ion-label>
         <h2>{{ producto.nombre }}</h2>
         <p>{{ producto.descripcion }}</p>
         <p><strong>{{ producto.precio | currency }}</strong></p>
       </ion-label>
-      <ion-button fill="clear" (click)="agregarAlCarrito(producto)">
-        <ion-icon slot="icon-only" name="cart-outline"></ion-icon>
-      </ion-button>
     </ion-item>
   </ion-list>
 </ion-content>

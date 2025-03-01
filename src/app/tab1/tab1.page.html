@@ -37,7 +37,7 @@
   <div class="carousel-container">
     <div class="carousel">
       <div class="slide-content" *ngFor="let servicio of servicios">
-        <img [src]="servicio.image" class="slide-image" />
+        <img [src]="servicio.image" class="slide-image" alt="{{ servicio.title }}" />
         <p class="slide-title">{{ servicio.title }}</p>
         <p class="slide-description">{{ servicio.description }}</p>
         <button class="cote-button">Cotizar</button>
@@ -51,7 +51,7 @@
   <div class="carousel-container">
     <div class="carousel">
       <div class="slide-content" *ngFor="let producto of productos">
-        <img [src]="producto.image" class="slide-image" />
+        <img [src]="producto.image" class="slide-image" alt="{{ producto.title}}" />
         <p class="slide-title">{{ producto.title }}</p>
         <p class="slide-description">{{ producto.description }}</p>
         <button class="cote-button">Cotizar</button>
