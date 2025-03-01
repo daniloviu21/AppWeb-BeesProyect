@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { CarritoLayoutComponent } from './pages/carrito-layout/carrito-layout.component';
 
 const routes: Routes = [
   {
@@ -51,7 +52,18 @@ const routes: Routes = [
     path: 'productos/:categoria',
     loadChildren: () => import('./pages/productos/productos.module').then( m => m.ProductosPageModule)
   },
-  
+  {
+    path: 'carrito',
+    component: CarritoLayoutComponent
+  },
+  {
+    path: 'carritocompras',
+    loadChildren: () => import('./pages/carritocompras/carritocompras.module').then( m => m.CarritocomprasPageModule)
+  },
+  {
+    path: 'realizarpedido',
+    loadChildren: () => import('./pages/realizarpedido/realizarpedido.module').then( m => m.RealizarpedidoPageModule)
+  },
 ];
 @NgModule({
   imports: [
