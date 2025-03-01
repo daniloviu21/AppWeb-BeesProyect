@@ -68,9 +68,11 @@ const routes: Routes = [
 {
   path: 'agregar-direccion',
   loadChildren: () => import('./agregar-direccion/agregar-direccion.module').then( m => m.AgregarDireccionPageModule)
-}
-
-
+},
+  {
+    path: 'realizarpedido',
+    loadChildren: () => import('./pages/realizarpedido/realizarpedido.module').then( m => m.RealizarpedidoPageModule)
+  },
 ];
 @NgModule({
   imports: [
