@@ -30,10 +30,6 @@ export class EditarPerfilPage {
     this.correoPerfil = usuario?.correo || '';
   }
 
-  seleccionarImagen() {
-    this.fileInput.nativeElement.click();
-  }
-
   async tomarFoto() {
     const image = await Camera.getPhoto({
       quality: 90,
@@ -45,6 +41,10 @@ export class EditarPerfilPage {
     if (image.dataUrl) {
       this.fotoPerfil = image.dataUrl;
     }
+  }
+
+  seleccionarImagen() {
+    this.fileInput.nativeElement.click();
   }
 
   cargarImagen(event: any) {
