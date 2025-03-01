@@ -50,9 +50,10 @@ const routes: Routes = [
     loadChildren: () => import('./cambiar-direccion/cambiar-direccion.module').then( m => m.CambiarDireccionPageModule)
   },
   {
-    path: 'terminos-condiciones',
-    loadChildren: () => import('./terminos-condiciones/terminos-condiciones.module').then( m => m.TerminosCondicionesPageModule)
-  }
+    path: 'politica-privacidad',
+    loadChildren: () => import('./politica-privacidad/politica-privacidad.module').then( m => m.PoliticaPrivacidadPageModule)
+  },
+  
   
 ];
 @NgModule({
