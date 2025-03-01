@@ -53,8 +53,11 @@ export class Tab4Page {
     });
     await alert.present();
   }
-  
-  cambiarDireccion() { this.router.navigate(['/cambiar-direccion']); }
+ cambiarDireccion() { this.router.navigate(['/cambiar-direccion']); }
+
+
+
+
   metodosPago() { this.router.navigate(['/metodos-pago']); }
   politicaPrivacidad() { this.router.navigate(['/politica-privacidad']); }
   terminosCondiciones() { this.router.navigate(['/terminos-condiciones']); }

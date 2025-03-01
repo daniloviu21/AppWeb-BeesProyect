@@ -22,12 +22,12 @@ export class CambiarDireccionPage implements OnInit {
     this.usuario = this.usuarioService.getUsuario();
   }
 
-  // async cargarDirecciones() {
-  //   const savedDireccion = localStorage.getItem('direccionGuardada');
-  //   if (savedDireccion) {
-  //     this.direccionesGuardadas.push(JSON.parse(savedDireccion));
-  //   }
-  // }
+  async cargarDirecciones() {
+     const savedDireccion = localStorage.getItem('direccionGuardada');
+     if (savedDireccion) {
+       this.direccionesGuardadas.push(JSON.parse(savedDireccion));
+     }
+   }
 
   irAAgregarDireccion() {
     this.router.navigate(['/agregar-direccion']);
