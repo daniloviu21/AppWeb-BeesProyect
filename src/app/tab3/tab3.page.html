@@ -1,17 +1,26 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Historial
-    </ion-title>
+    <ion-title>Mis Pedidos</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Pedidos</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <ion-list *ngIf="pedidos.length > 0; else noPedidos">
+    <ion-item *ngFor="let pedido of pedidos">
+      <ion-label>
+        <h2>Pedido #{{ pedido.id }}</h2>
+        <p>Fecha: {{ pedido.fecha | date:'medium' }}</p>
+        <p>Total: {{ pedido.total | currency }}</p>
+        <p>Estado: {{ pedido.estado }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 
-  <ion-label>Aun no hay nada aqui, vuelve pronto</ion-label>
+  <ng-template #noPedidos>
+    <div class="no-pedidos">
+      <ion-icon name="cart-outline" class="icono"></ion-icon>
+      <p>No tienes pedidos realizados.</p>
+      <p>¡Vuelve más tarde!</p>
+    </div>
+  </ng-template>
 </ion-content>
