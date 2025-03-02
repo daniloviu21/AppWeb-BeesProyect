@@ -30,6 +30,7 @@
     "@ionic/angular": "^8.0.0",
     "@ionic/storage-angular": "^4.0.0",
     "ionicons": "^7.0.0",
+    "jspdf": "^3.0.0",
     "rxjs": "~7.8.0",
     "storage-angular": "^0.0.1",
     "tslib": "^2.3.0",
