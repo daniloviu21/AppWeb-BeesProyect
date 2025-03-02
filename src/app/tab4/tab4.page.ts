@@ -53,23 +53,31 @@ export class Tab4Page {
     });
     await alert.present();
   }
-  
-  cambiarDireccion() { this.router.navigate(['/cambiar-direccion']); }
+ cambiarDireccion() { this.router.navigate(['/cambiar-direccion']); }
+
+
+
+
   metodosPago() { this.router.navigate(['/metodos-pago']); }
   politicaPrivacidad() { this.router.navigate(['/politica-privacidad']); }
   terminosCondiciones() { this.router.navigate(['/terminos-condiciones']); }
-  
   cerrarSesion() {
-    this.usuarioService.setUsuario({ user: '',
+    this.usuarioService.setUsuario({
+      user: '',
       apellidoPaterno: '',
       apellidoMaterno: '',
       telefono: '',
       direccion: [],
       correo: '',
       contrasenia: '',
-      metodospago: [] }); // Usuario vacío en lugar de null
+      metodospago: [],
+      fotoPerfil: 'https://th.bing.com/th?q=Pepe+Foto+De+Perfil&w=120&h=120&c=1&rs=1&qlt=90&cb=1&pid=InlineBlock&mkt=es-MX&cc=MX&setlang=es&adlt=moderate&t=1&mw=247' // Agregar para evitar posibles errores
+    });
+  
+    this.usuarioService.saveCurrentUser(); // Guardar cambios en almacenamiento
     this.router.navigate(['/login']);
   }
+  
   
   
   

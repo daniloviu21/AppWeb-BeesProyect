@@ -16,15 +16,23 @@ export class AgregarDireccionPage implements OnInit {
     codigoPostal: '',
     localidad: '',
     telefono: '',
-    ordenesEntrega: ''
+    ordenesEntrega: '',
+    referencias: '',
+    cp: '',
+    estado: '',
+    ciudad: '',
+    correo: ''
   };
+  editando = false;
 
-  constructor(private router: Router, private usuariosService: UsuariosService) { }
+  constructor(private router: Router, private usuariosService: UsuariosService) {}
 
   ngOnInit(): void {
-    const savedDireccion = localStorage.getItem('direccionGuardada');
-    if (savedDireccion) {
-      this.direccion = JSON.parse(savedDireccion);
+    const direccionAEditar = localStorage.getItem('direccionAEditar');
+    if (direccionAEditar) {
+      this.direccion = JSON.parse(direccionAEditar);
+      this.editando = true;
+      localStorage.removeItem('direccionAEditar'); // Limpiamos para evitar interferencias
     }
   }
 
@@ -32,17 +40,21 @@ export class AgregarDireccionPage implements OnInit {
     this.router.navigate(['/cambiar-direccion']);
   }
 
-  async agregarDireccion() {
+  async guardarDireccion() {
     let usuario = this.usuariosService.getUsuario();
     if (usuario) {
       usuario.direccion = usuario.direccion || [];
-      usuario.telefono = this.direccion.telefono;
+      
+      // Revisamos si estamos editando una dirección existente
+      const index = usuario.direccion.findIndex(dir => dir.direccion === this.direccion.direccion);
+      if (index !== -1) {
+        usuario.direccion[index] = { ...this.direccion }; // Editamos la dirección existente
+      } else {
+        usuario.direccion.push({ ...this.direccion }); // Agregamos una nueva dirección
+      }
+
       await this.usuariosService.saveCurrentUser();
-      
-      // Guardar en localStorage
-      localStorage.setItem('direccionGuardada', JSON.stringify(this.direccion));
-      
-      alert('Dirección guardada exitosamente');
+      alert(this.editando ? 'Dirección actualizada' : 'Dirección guardada');
       this.router.navigate(['/cambiar-direccion']);
     } else {
       alert('No hay usuario autenticado');

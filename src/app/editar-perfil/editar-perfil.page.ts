@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { UsuariosService } from '../services/usuarios.service';
 import { Router } from '@angular/router';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 @Component({
   selector: 'app-editar-perfil',
@@ -27,6 +28,19 @@ export class EditarPerfilPage {
     this.telefonoPerfil = usuario?.telefono || '';
     this.fotoPerfil = usuario?.user || 'https://th.bing.com/th/id/OIP.DkKTae6dc5RumN3Gk0efGgHaH2?w=161&h=180&c=7&r=0&o=5&pid=1.7';
     this.correoPerfil = usuario?.correo || '';
+  }
+
+  async tomarFoto() {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: true,
+      resultType: CameraResultType.DataUrl,
+      source: CameraSource.Camera
+    });
+
+    if (image.dataUrl) {
+      this.fotoPerfil = image.dataUrl;
+    }
   }
 
   seleccionarImagen() {
@@ -57,7 +71,6 @@ export class EditarPerfilPage {
       usuario.telefono = this.telefonoPerfil;
       usuario.user = this.fotoPerfil;
       usuario.correo = this.correoPerfil;
-
       this.usuarioService.setUsuario(usuario);
       this.usuarioService.saveCurrentUser();
     }

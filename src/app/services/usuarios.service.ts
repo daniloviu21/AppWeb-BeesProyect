@@ -10,6 +10,7 @@ export interface Usuario {
   correo: string;
   contrasenia: string;
   metodospago: MetodosPago[];
+  fotoPerfil?: string;
 }
 
 export interface MetodosPago {
@@ -26,13 +27,14 @@ export interface Direccion {
   estado: string;
   ciudad: string;
   telefono: string;
+  contrasenia?: string;
+  
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuariosService {
-
   private _storage: Storage | null = null;
   private usuarios: Usuario[] = [
     {
@@ -40,7 +42,7 @@ export class UsuariosService {
       apellidoPaterno: 'b',
       apellidoMaterno: 'c',
       telefono: '2711764235',
-      correo: "ferleza@gmail.com",
+      correo: 'ferleza@gmail.com',
       contrasenia: '123456',
       direccion: [
         {
@@ -150,7 +152,7 @@ export class UsuariosService {
 
   async init() {
     this._storage = await this.storage.create();
-    this.loadInitialData();
+    await this.loadInitialData();
   }
 
   async authenticate(username: string, password: string): Promise<Usuario | null> {
@@ -172,16 +174,32 @@ export class UsuariosService {
 
   addUsuario(usuario: Usuario): void {
     this.usuarios.push(usuario);
+    this.saveUsuarios(); // Guarda la lista de usuarios en el almacenamiento
+  }
+
+  async saveUsuarios(): Promise<void> {
+    if (this._storage) {
+      await this._storage.set('usuarios', this.usuarios);
+    }
   }
 
   async loadInitialData(): Promise<void> {
+    await this.loadUsuarios();
     await this.loadCurrentUser();
+  }
+
+  async loadUsuarios(): Promise<void> {
+    if (!this._storage) return;
+    const storedUsers = await this._storage.get('usuarios');
+    if (storedUsers) {
+      this.usuarios = storedUsers;
+    }
   }
 
   async loadCurrentUser(): Promise<void> {
     if (!this._storage) return;
     const user = await this._storage.get('currentUser');
-    this.usuarioActual = user ? (user as Usuario) : null;
+    this.usuarioActual = user ?? null; // Si no hay usuario guardado, deja `null`
   }
 
   async saveCurrentUser(): Promise<void> {
