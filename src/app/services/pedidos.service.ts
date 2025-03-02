@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
 
 export interface Pedido {
   id: string;
@@ -28,5 +29,10 @@ export class PedidosService {
   obtenerPedidosUsuario(usuarioId: string): Pedido[] {
     const pedidosGuardados = localStorage.getItem(`pedidos_${usuarioId}`);
     return pedidosGuardados ? JSON.parse(pedidosGuardados) : [];
+  }
+
+  obtenerPedidoPorId(usuarioId: string, pedidoId: string): Pedido | undefined {
+    const pedidos = this.obtenerPedidosUsuario(usuarioId);
+    return pedidos.find((pedido) => pedido.id.toString() === pedidoId.toString());
   }
 }

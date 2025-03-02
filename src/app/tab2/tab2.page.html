@@ -2,15 +2,20 @@
   <ion-toolbar>
     <ion-title>
       Categorías
+
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
+
   <ion-list [inset]="true" *ngFor="let categoria of categorias">
     <ion-item [routerLink]="['/productos', categoria.nombre]" detail="true" [button]="true">
       <ion-icon slot="start" [name]="categoria.icon" size="large"></ion-icon>
       <ion-label>{{categoria.nombre}}</ion-label>
     </ion-item>
   </ion-list>
+
+  <app-card-categories></app-card-categories>
+
 </ion-content>

@@ -18,6 +18,9 @@ ion-img{
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    width: 100%;
+    padding: 20px;
+    max-width: 360px;
 }
 
 .register-box {
@@ -58,6 +61,7 @@ ion-item.input-field {
 }
 
 .input-field {
+    width: 100%;
     margin-bottom: 15px;
 }
 
@@ -70,6 +74,8 @@ ion-item.input-field {
 
 .register-button {
     border-radius: 50px;
+    width: 100%;
+    border-radius: 8px;
     --background: #FFC107 !important;
     --color: white !important;
     font-weight: bold;
@@ -87,7 +93,7 @@ ion-item.input-field {
   }
   
 
-
+  
 .already-account {
     font-size: 14px;
     margin-top: 15px;

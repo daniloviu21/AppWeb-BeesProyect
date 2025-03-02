@@ -115,6 +115,12 @@ export class RealizarpedidoPage implements OnInit {
     // Guardar el pedido usando el servicio
     this.pedidosService.agregarPedido(nuevoPedido);
     this.router.navigate(['/tabs/tab3']);
+
+    if (this.usuario) {
+      this.carritoService.limpiarCarrito(this.usuario.user);
+      this.carrito = [];
+      this.total = 0;
+    }
   }
 
   getCardImage(numero: string): string {

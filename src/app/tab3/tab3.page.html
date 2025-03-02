@@ -6,7 +6,7 @@
 
 <ion-content>
   <ion-list *ngIf="pedidos.length > 0; else noPedidos">
-    <ion-item *ngFor="let pedido of pedidos">
+    <ion-item *ngFor="let pedido of pedidos" [routerLink]="['/detallespedido', pedido.id]" detail="true" [button]="true">
       <ion-label>
         <h2>Pedido #{{ pedido.id }}</h2>
         <p>Fecha: {{ pedido.fecha | date:'medium' }}</p>
