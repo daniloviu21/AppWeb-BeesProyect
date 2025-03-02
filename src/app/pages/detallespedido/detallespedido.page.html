@@ -28,6 +28,8 @@
     </ion-list>
   </div>
 
+  <ion-button expand="full" color="primary" (click)="generarPDF()">Descargar Recibo PDF</ion-button>
+
   <div *ngIf="!pedido">
     <p>No se encontró el pedido. Contacta a soporte</p>
   </div>
