@@ -27,7 +27,7 @@
     <ion-label slot="end">{{ total | currency }}</ion-label>
   </ion-item>
 
-  <ion-button expand="full" routerLink="/realizarpedido">Continuar</ion-button>
+  <ion-button expand="full" routerLink="/realizarpedido" [disabled]="!tienecarro">Continuar</ion-button>
 
-  <ion-button expand="full" (click)="limpiarCarrito()">Limpiar Carrito</ion-button>
+  <ion-button expand="full" (click)="limpiarCarrito()" [disabled]="!tienecarro">Limpiar Carrito</ion-button>
 </ion-content>
