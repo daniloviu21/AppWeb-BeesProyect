@@ -2,47 +2,94 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .profile-avatar {
-  width: 120px;
-  height: 120px;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 2px solid #313030ab;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
 }
 
 .button-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 70%;
+  margin-top: 15px;
+}
+
+.edit-icon {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background-color: white;
+  border-radius: 50%;
+  padding: 5px;
+  font-size: 20px;
+  color: #d8a305;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.edit-button {
+  margin-top: 5px;
   width: 100%;
-  margin-top: 10px;
-}
-
-.camera-button, .gallery-button {
-  width: 80%;
-  margin: 5px 0;
-}
-
-.camera-button {
-  --background: #28a745 !important; /* Verde */
-}
-
-.gallery-button {
-  --background: #007bff !important; /* Azul */
-}
-
-.save-button {
-  margin-bottom: 10px;
+  border-radius: 25px;
+  font-weight: bold;
   --background: #FFC107 !important;
   --background-hover: #d8a305 !important;
   --background-activated: #d8a305 !important;
   --background-focused: #d8a305 !important;
+  --color: white;
+}
+
+.info-container {
+  padding: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+ion-list {
+  width: 100%;
+}
+
+ion-item {
+  --border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.save-button, .cancel-button {
+  width: 48%;
+  border-radius: 25px;
+  font-weight: bold;
+}
+
+.save-button {
+  --background: #FFC107 !important;
+  --background-hover: #d8a305 !important;
+  --background-activated: #d8a305 !important;
+  --background-focused: #d8a305 !important;
+  --color: black;
 }
 
 .cancel-button {
-  margin-bottom: 10px;
   --background: #142145 !important;
   --background-hover: #121e3f !important;
   --background-activated: #121e3f !important;
   --background-focused: #121e3f !important;
+  --color: white;
 }

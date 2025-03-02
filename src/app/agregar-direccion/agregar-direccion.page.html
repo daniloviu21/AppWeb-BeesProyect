@@ -27,23 +27,31 @@
 
     <ion-item>
       <ion-label position="floating">Código Postal</ion-label>
-      <ion-input [(ngModel)]="direccion.numExterior"></ion-input>
+      <ion-input type="text" [(ngModel)]="direccion.cp" pattern="[0-9]*" maxlength="5" (ngModelChange)="validarCP()"></ion-input>
     </ion-item>
+    <ion-text color="danger" *ngIf="errorCP">
+      El código postal debe contener exactamente 5 números.
+    </ion-text>
 
     <ion-item>
       <ion-label position="floating">Estado</ion-label>
-      <ion-input [(ngModel)]="direccion.codigoPostal"></ion-input>
+      <ion-input [(ngModel)]="direccion.estado"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="floating">Ciudad</ion-label>
-      <ion-input [(ngModel)]="direccion.localidad"></ion-input>
+      <ion-input [(ngModel)]="direccion.ciudad"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="floating">Teléfono</ion-label>
-      <ion-input [(ngModel)]="direccion.telefono"></ion-input>
+      <ion-input type="tel" [(ngModel)]="direccion.telefono" pattern="[0-9]*" maxlength="10" (ngModelChange)="validarTelefono()"></ion-input>
     </ion-item>
+    <ion-text color="danger" *ngIf="errorTelefono">
+      El teléfono debe contener exactamente 10 números.
+    </ion-text>
+    
+    
   </ion-list>
 
   <ion-button expand="full" color="success" (click)="guardarDireccion()">

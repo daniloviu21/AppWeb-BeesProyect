@@ -23,7 +23,10 @@ export class AgregarDireccionPage implements OnInit {
     ciudad: '',
     correo: ''
   };
+
   editando = false;
+  errorCP: boolean = false;
+  errorTelefono: boolean = false;
 
   constructor(private router: Router, private usuariosService: UsuariosService) {}
 
@@ -32,7 +35,7 @@ export class AgregarDireccionPage implements OnInit {
     if (direccionAEditar) {
       this.direccion = JSON.parse(direccionAEditar);
       this.editando = true;
-      localStorage.removeItem('direccionAEditar'); // Limpiamos para evitar interferencias
+      localStorage.removeItem('direccionAEditar');
     }
   }
 
@@ -40,17 +43,48 @@ export class AgregarDireccionPage implements OnInit {
     this.router.navigate(['/cambiar-direccion']);
   }
 
+  telefonoValido(telefono: string): boolean {
+    return /^\d{10}$/.test(telefono);
+  }
+
+  codigoPostalValido(cp: string): boolean {
+    return /^\d{5}$/.test(cp);
+  }
+
+  // Funciones de validación
+  validarTelefono() {
+    this.errorTelefono = !this.telefonoValido(this.direccion.telefono);
+  }
+
+  validarCP() {
+    this.errorCP = !this.codigoPostalValido(this.direccion.cp);
+  }
+
+  // Función para guardar la dirección
   async guardarDireccion() {
+    this.validarTelefono();
+    this.validarCP();
+
+    if (this.errorTelefono) {
+      alert('El teléfono debe contener exactamente 10 números.');
+      return;
+    }
+
+    if (this.errorCP) {
+      alert('El código postal debe contener exactamente 5 números.');
+      return;
+    }
+
     let usuario = this.usuariosService.getUsuario();
     if (usuario) {
       usuario.direccion = usuario.direccion || [];
-      
+
       // Revisamos si estamos editando una dirección existente
       const index = usuario.direccion.findIndex(dir => dir.direccion === this.direccion.direccion);
       if (index !== -1) {
-        usuario.direccion[index] = { ...this.direccion }; // Editamos la dirección existente
+        usuario.direccion[index] = { ...this.direccion };
       } else {
-        usuario.direccion.push({ ...this.direccion }); // Agregamos una nueva dirección
+        usuario.direccion.push({ ...this.direccion });
       }
 
       await this.usuariosService.saveCurrentUser();
