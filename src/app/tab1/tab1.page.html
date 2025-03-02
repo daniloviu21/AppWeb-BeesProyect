@@ -1,9 +1,10 @@
+
 <ion-content [fullscreen]="true">
   <ion-toolbar>
     <div class="delivery">
       <!-- <ion-icon name="location-outline"></ion-icon>
       <div class="address-info">
-        <p class="title">Nuestra ubicación</p>
+        <p class="title">Nuestra ubicación</p>
         <p class="address">{{ address }}</p>
         <ion-icon name="chevron-forward-outline" (click)="openMaps()"></ion-icon>
       </div> -->
@@ -14,10 +15,10 @@
     </div>
   </ion-toolbar>
 
-  <!--Categorias (en pequeño)-->
+  <!--Categorias (en pequeño)-->
   <ion-list class="categories-container">
     <ion-item lines="none">
-      <ion-label class="title">Todas las categorías</ion-label>
+      <ion-label class="title">Todas las categorías</ion-label>
       <ion-button fill="clear" class="see-all" routerLink="/tabs/tab2">Ver todo</ion-button>
     </ion-item>
   
@@ -36,7 +37,7 @@
   <div class="carousel-container">
     <div class="carousel">
       <div class="slide-content" *ngFor="let servicio of servicios">
-        <img [src]="servicio.image" class="slide-image" />
+        <img [src]="servicio.image" class="slide-image" alt="{{ servicio.title }}" />
         <p class="slide-title">{{ servicio.title }}</p>
         <p class="slide-description">{{ servicio.description }}</p>
         <button class="cote-button">Cotizar</button>
@@ -50,7 +51,7 @@
   <div class="carousel-container">
     <div class="carousel">
       <div class="slide-content" *ngFor="let producto of productos">
-        <img [src]="producto.image" class="slide-image" />
+        <img [src]="producto.image" class="slide-image" alt="{{ producto.title}}" />
         <p class="slide-title">{{ producto.title }}</p>
         <p class="slide-description">{{ producto.description }}</p>
         <button class="cote-button">Cotizar</button>
@@ -58,4 +59,5 @@
     </div>
   </div>
   </div>
+
 </ion-content>

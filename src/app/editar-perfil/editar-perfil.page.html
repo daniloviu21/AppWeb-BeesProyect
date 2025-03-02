@@ -6,10 +6,22 @@
 
 <ion-content>
   <div class="profile-container">
-    <ion-avatar class="profile-avatar" (click)="seleccionarImagen()">
+    <ion-avatar class="profile-avatar">
       <img [src]="fotoPerfil" alt="Foto de perfil">
     </ion-avatar>
-    <p class="image-hint">Toca la imagen para cambiarla</p>
+
+    <div class="button-container">
+      <ion-button expand="full" (click)="tomarFoto()" class="camera-button">
+        <ion-icon slot="start" name="camera-outline"></ion-icon>
+        Tomar Foto
+      </ion-button>
+
+      <ion-button expand="full" (click)="seleccionarImagen()" class="gallery-button">
+        <ion-icon slot="start" name="image-outline"></ion-icon>
+        Seleccionar de Galería
+      </ion-button>
+    </div>
+
     <input type="file" (change)="cargarImagen($event)" accept="image/*" hidden #fileInput>
   </div>
 
@@ -43,7 +55,11 @@
   </ion-list>
 
   <div class="button-container">
-    <ion-button expand="full" (click)="guardarPerfil()" [disabled]="!modoEdicion" class="save-button">Guardar Cambios</ion-button>
-    <ion-button expand="full" (click)="navigateToTab4()" class="cancel-button">Cancelar</ion-button>
+    <ion-button expand="full" (click)="guardarPerfil()" [disabled]="!modoEdicion" class="save-button">
+      Guardar Cambios
+    </ion-button>
+    <ion-button expand="full" (click)="navigateToTab4()" class="cancel-button">
+      Cancelar
+    </ion-button>
   </div>
 </ion-content>
