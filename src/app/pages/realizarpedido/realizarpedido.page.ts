@@ -52,6 +52,10 @@ export class RealizarpedidoPage implements OnInit {
     }
   }
 
+  ionViewWillEnter() {
+    this.ngOnInit();
+  }
+
   calcularTotal() {
     this.total = this.carrito.reduce((sum, item) => sum + (item.producto.precio * item.cantidad), 0);
   }

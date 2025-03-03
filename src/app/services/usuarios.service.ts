@@ -207,4 +207,13 @@ export class UsuariosService {
       await this._storage.set('currentUser', this.usuarioActual);
     }
   }
+
+  actualizarDireccionPrincipal(user: string, nuevaDireccion: Direccion): void {
+    const usuario = this.usuarios.find(u => u.user === user);
+    if (usuario) {
+      usuario.direccion = usuario.direccion.filter(d => d !== nuevaDireccion);
+      usuario.direccion.unshift(nuevaDireccion);
+      this.saveUsuarios();
+    }
+  }
 }
