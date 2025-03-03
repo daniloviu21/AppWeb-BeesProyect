@@ -34,6 +34,14 @@ export class CarritocomprasPage {
     }
   }
 
+  async aumentarCantidad(producto: CarritoItem) {
+    if (this.usuarioActual) {
+      await this.carritoService.agregarProducto(this.usuarioActual.user, producto.producto);
+      this.carrito = await this.carritoService.obtenerCarrito(this.usuarioActual.user);
+      this.calcularTotal();
+    }
+  }
+
   async eliminarProducto(producto: CarritoItem) {
     if (this.usuarioActual) {
       await this.carritoService.eliminarProducto(this.usuarioActual.user, producto.producto);
