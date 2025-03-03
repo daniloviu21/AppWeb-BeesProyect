@@ -30,7 +30,15 @@
 
     <div class="button-container">
       <ion-button class="next-shop" expand="block" routerLink="/realizarpedido">Continuar</ion-button>
-      <ion-button class="clean-car" expand="block" (click)="limpiarCarrito()">Limpiar Carrito</ion-button>
+
+      <ion-button class="clean-car" expand="block" id="present-alert" (click)="limpiarCarrito()">Limpiar Carrito</ion-button>
+<ion-alert
+  trigger="present-alert"
+  header="Limpiar carrito"
+  message="¿Deseas eliminar los objetos del carrito?"
+  [buttons]="alertButtons"
+></ion-alert>
+
     </div>
   </div>
 </ion-content>

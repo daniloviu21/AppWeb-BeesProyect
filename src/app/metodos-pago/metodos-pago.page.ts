@@ -10,6 +10,9 @@ import { ModalController } from '@ionic/angular';
 })
 export class MetodosPagoPage implements OnInit {
 
+  alertButtons = ['Aceptar'];
+
+
   usuario!: Usuario | null;
 
   metodo: MetodosPago = {

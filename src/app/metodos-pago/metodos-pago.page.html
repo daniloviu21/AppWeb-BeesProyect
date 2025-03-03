@@ -66,7 +66,12 @@
           </div>
         </ion-list>
   
-        <ion-button expand="block" color="warning" (click)="agregarMetodoPago()">Agregar</ion-button>
+        <ion-button id="present-alert" expand="block" color="warning" (click)="agregarMetodoPago()">Agregar</ion-button>
+        <ion-alert
+  trigger="Método de pago guardado"
+  header="A Short Title Is Best"
+  [buttons]="alertButtons"
+></ion-alert>
       </ion-content>
     </ng-template>
   </ion-modal>

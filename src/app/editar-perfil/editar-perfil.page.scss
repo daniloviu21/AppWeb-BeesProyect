@@ -66,6 +66,9 @@ ion-item {
 }
 
 .button-group {
+
+  margin-top: 20px;
+
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -94,8 +97,10 @@ ion-item {
   --background-activated: #121e3f !important;
   --background-focused: #121e3f !important;
   --color: white;
+
 }
 .error-field {
   --border-color: red;
   --border-width: 2px;
+
 }
