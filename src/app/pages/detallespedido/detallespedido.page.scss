@@ -1,6 +1,5 @@
 .recibo {
   padding: 16px;
-  background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 16px;
@@ -12,4 +11,15 @@ h2, h3 {
 
 p {
   margin: 8px 0;
+}
+
+ion-button{
+  width: 80%;
+  margin-left: 36px;
+  font-weight: bold;
+  color: white;
+  --background: #FFC107 !important;
+  --background-hover: #d8a305 !important;
+  --background-activated: #d8a305 !important;
+  --background-focused: #d8a305 !important;
 }
