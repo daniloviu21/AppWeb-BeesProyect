@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Pedido, PedidosService } from 'src/app/services/pedidos.service';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { jsPDF } from 'jspdf';
+import { AlertController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-detallespedido',
@@ -17,7 +18,9 @@ export class DetallespedidoPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private pedidosService: PedidosService,
-    private usuariosService: UsuariosService
+    private usuariosService: UsuariosService,
+    private alertCtrl: AlertController,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
@@ -34,6 +37,31 @@ export class DetallespedidoPage implements OnInit {
     } else {
       console.error('Usuario no autenticado o ID de pedido no proporcionado');
     }
+  }
+
+  async pdf() {
+    const alert = await this.alertCtrl.create({
+      header: 'Generar PDF',
+      message: 'El recibo PDF se guardara en tu dispositivo. ¿Deseas continuar?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancelado');
+          }
+        },
+        {
+          text: 'Continuar',
+          handler: () => {
+            this.generarPDF();
+            this.presentToast();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   generarPDF() {
@@ -57,5 +85,16 @@ export class DetallespedidoPage implements OnInit {
     doc.text('Gracias por tu compra en Vanguard. Vuelve pronto', 10, y + 40);
     
     doc.save(`recibo_${this.pedido.id}.pdf`);
+  }
+
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'PDF generado con exito!',
+      duration: 2400,
+      position: 'bottom',
+      color: 'success'
+    });
+
+    await toast.present();
   }
 }
