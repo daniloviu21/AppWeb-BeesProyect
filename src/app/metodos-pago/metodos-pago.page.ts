@@ -55,7 +55,24 @@ export class MetodosPagoPage implements OnInit {
       event.preventDefault();
     }
   }
+
+  isFechaValida(fechav: string): boolean {
+    const [mes, anio] = fechav.split('/');
+    const fechaActual = new Date();
+    const anioActual = fechaActual.getFullYear() % 100;
+    const mesActual = fechaActual.getMonth() + 1;
   
+    const mesTarjeta = parseInt(mes, 10);
+    const anioTarjeta = parseInt(anio, 10);
+  
+    if (anioTarjeta > anioActual) {
+      return true;
+    } else if (anioTarjeta === anioActual && mesTarjeta >= mesActual) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   async agregarMetodoPago() {
     const { numero, fechav, cvv } = this.metodo;
@@ -70,6 +87,11 @@ export class MetodosPagoPage implements OnInit {
     }
     if (!cvv || cvv.length !== 3) {
       alert('Ingrese un CVV válido (3 dígitos)');
+      return;
+    }
+
+    if (!this.isFechaValida(fechav)) {
+      alert('Fecha de caducidad inválida');
       return;
     }
 
