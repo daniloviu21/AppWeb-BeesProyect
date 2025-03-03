@@ -69,7 +69,9 @@ ion-item {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-left: 40px;
+  height: 70px;
+  width: 80%;
 }
 
 .save-button, .cancel-button {

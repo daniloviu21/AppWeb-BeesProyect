@@ -1,60 +1,56 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>{{ editando ? 'Editar Dirección' : 'Agregar Dirección' }}</ion-title>
     <ion-buttons slot="start">
-      <ion-button (click)="navigateToCambiarDireccion()">Cancelar</ion-button>
+      <ion-button fill="clear" (click)="navigateToCambiarDireccion()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
     </ion-buttons>
+    <ion-title>{{ editando ? 'Editar Dirección' : 'Agregar Dirección' }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">{{ editando ? 'Editar Dirección' : 'Agregar Dirección' }}</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="form-container">
+    <ion-list lines="none">
+      <ion-item>
+        <ion-label position="stacked">Dirección</ion-label>
+        <ion-input [(ngModel)]="direccion.direccion" placeholder="Ingrese su dirección"> </ion-input>
+      </ion-item>
 
-  <ion-list>
-    <ion-item>
-      <ion-label position="floating">Dirección</ion-label>
-      <ion-input [(ngModel)]="direccion.direccion"></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Referencias</ion-label>
+        <ion-input [(ngModel)]="direccion.numInterior" placeholder="Ej. Cerca del parque"> </ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Referencias</ion-label>
-      <ion-input [(ngModel)]="direccion.numInterior"></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Código Postal</ion-label>
+        <ion-input type="text" [(ngModel)]="direccion.cp" maxlength="5" placeholder="00000" (ngModelChange)="validarCP()"> </ion-input>
+      </ion-item>
+      <ion-text color="danger" *ngIf="errorCP">
+        El código postal debe contener exactamente 5 números.
+      </ion-text>
 
-    <ion-item>
-      <ion-label position="floating">Código Postal</ion-label>
-      <ion-input type="text" [(ngModel)]="direccion.cp" pattern="[0-9]*" maxlength="5" (ngModelChange)="validarCP()"></ion-input>
-    </ion-item>
-    <ion-text color="danger" *ngIf="errorCP">
-      El código postal debe contener exactamente 5 números.
-    </ion-text>
+      <ion-item>
+        <ion-label position="stacked">Estado</ion-label>
+        <ion-input [(ngModel)]="direccion.estado" placeholder="Ingrese su estado"> </ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Estado</ion-label>
-      <ion-input [(ngModel)]="direccion.estado"></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Ciudad</ion-label>
+        <ion-input [(ngModel)]="direccion.ciudad" placeholder="Ingrese su ciudad"> </ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Ciudad</ion-label>
-      <ion-input [(ngModel)]="direccion.ciudad"></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Teléfono</ion-label>
+        <ion-input type="tel" [(ngModel)]="direccion.telefono" maxlength="10" placeholder="Ej. 5512345678" (ngModelChange)="validarTelefono()"> </ion-input>
+      </ion-item>
+      <ion-text color="danger" *ngIf="errorTelefono">
+        El teléfono debe contener exactamente 10 números.
+      </ion-text>
+    </ion-list>
 
-    <ion-item>
-      <ion-label position="floating">Teléfono</ion-label>
-      <ion-input type="tel" [(ngModel)]="direccion.telefono" pattern="[0-9]*" maxlength="10" (ngModelChange)="validarTelefono()"></ion-input>
-    </ion-item>
-    <ion-text color="danger" *ngIf="errorTelefono">
-      El teléfono debe contener exactamente 10 números.
-    </ion-text>
-    
-    
-  </ion-list>
-
-  <ion-button expand="full" color="success" (click)="guardarDireccion()">
-    {{ editando ? 'Actualizar Dirección' : 'Guardar Dirección' }}
-  </ion-button>
+    <ion-button expand="block" class="save-button" (click)="guardarDireccion()">
+      {{ editando ? 'Actualizar Dirección' : 'Guardar Dirección' }}
+    </ion-button>
+  </div>
 </ion-content>

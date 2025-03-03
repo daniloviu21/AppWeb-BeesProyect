@@ -14,25 +14,30 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-list *ngIf="usuario?.direccion?.length ?? 0 > 0; else noDirecciones">
-    <ion-card *ngFor="let direccion of usuario?.direccion">
-      <ion-card-content>
-        <p><strong>Dirección:</strong> {{ direccion.direccion }}</p>
-        <p><strong>Teléfono:</strong> {{ direccion.telefono }}</p>
-      </ion-card-content>
-      <ion-button expand="full" color="warning" (click)="editarDireccion(direccion)">
-        Editar
-      </ion-button>
-    </ion-card>
-  </ion-list>
+  <div class="direction-container">
+    <ion-list *ngIf="usuario?.direccion?.length ?? 0 > 0; else noDirecciones">
+      <ion-card *ngFor="let direccion of usuario?.direccion" class="direccion-card">
+        <ion-card-header>
+          <ion-card-title>{{ direccion.direccion }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p><strong>Dirección:</strong> {{ direccion.direccion }}</p>
+          <p><strong>Teléfono:</strong> {{ direccion.telefono }}</p>
+        </ion-card-content>
+        <ion-button class="edit-direc" expand="full" (click)="editarDireccion(direccion)">
+          Editar
+        </ion-button>
+      </ion-card>
+    </ion-list>
 
-  <ng-template #noDirecciones>
-    <ion-item>
-      <ion-label>No hay direcciones guardadas</ion-label>
-    </ion-item>
-  </ng-template>
+    <ng-template #noDirecciones>
+      <ion-item>
+        <ion-label>No hay direcciones guardadas</ion-label>
+      </ion-item>
+    </ng-template>
 
-  <ion-button expand="full" color="primary" (click)="irAAgregarDireccion()">
-    Agregar Dirección
-  </ion-button>
+    <ion-button  class="agg-direc" expand="block" (click)="irAAgregarDireccion()">
+      Agregar Dirección
+    </ion-button>
+  </div>
 </ion-content>
