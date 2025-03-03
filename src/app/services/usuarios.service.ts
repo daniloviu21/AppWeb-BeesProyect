@@ -216,4 +216,13 @@ export class UsuariosService {
       this.saveUsuarios();
     }
   }
+
+  actualizarMetodoPagoPrincipal(user: string, metodo: MetodosPago): void {
+    const usuario = this.usuarios.find(u => u.user === user);
+    if (usuario) {
+      usuario.metodospago = usuario.metodospago.filter(mpago => mpago !== metodo);
+      usuario.metodospago.unshift(metodo);
+      this.saveUsuarios();
+    }
+  }
 }
