@@ -42,9 +42,6 @@
   height: 32px;
 }
 
-ion-list{
-  
-}
 
 .cart-count {
   position: absolute;
@@ -126,7 +123,6 @@ ion-list{
 .category-title {
   font-size: 12px;
   margin-top: 5px;
-  -webkit-line-clamp: 3;
 }
 
 h2 {
@@ -177,7 +173,6 @@ h2 {
   height: 65px;;
   font-size: 0.9em;
   flex-grow: 1;
-  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   display: -webkit-box;
   overflow: hidden;
@@ -188,9 +183,9 @@ h2 {
   color: white !important;
   font-weight: bold;
   border: none;
-  background-hover: #d8a305 !important;
-  background-activated: #d8a305 !important;
-  background-focused: #d8a305 !important;
+  --background-hover: #d8a305 !important;
+  --background-activated: #d8a305 !important;
+  --background-focused: #d8a305 !important;
   margin-bottom: 20px;  color: white;
   padding: 10px;
   width: 70%;

@@ -11,6 +11,8 @@ import { UsuariosService } from 'src/app/services/usuarios.service';
 })
 export class CarritocomprasPage {
 
+  alertButtons = ['Aceptar'];
+
   carrito: CarritoItem[] = [];
   usuarioActual: any;
   total: number = 0;
