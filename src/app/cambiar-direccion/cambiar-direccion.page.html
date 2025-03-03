@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-title>Cambiar dirección</ion-title>
   </ion-toolbar>
@@ -13,6 +13,15 @@
       <ion-title size="large">Mis Direcciones</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-item>
+    <ion-label>Seleccionar Dirección</ion-label>
+    <ion-select [(ngModel)]="direccionSeleccionada" (ionChange)="guardarDireccionPrincipal()">
+      <ion-select-option *ngFor="let direccion of usuario?.direccion" [value]="direccion">
+        {{ direccion.direccion }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
 
   <div class="direction-container">
     <ion-list *ngIf="usuario?.direccion?.length ?? 0 > 0; else noDirecciones">

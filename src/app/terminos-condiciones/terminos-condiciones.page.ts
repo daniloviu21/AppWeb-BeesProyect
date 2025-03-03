@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { Usuario, UsuariosService } from '../services/usuarios.service';
 
 @Component({
   selector: 'app-terminos-condiciones',
@@ -8,15 +9,16 @@ import { AlertController } from '@ionic/angular';
   standalone: false
 })
 export class TerminosCondicionesPage implements OnInit {
+usuario!: Usuario | null;
 correo: string = '';
 mensaje: string = '';
 
 router: any;
 
-constructor(private alertCtrl: AlertController) {}
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
-  }
+constructor(private alertCtrl: AlertController, private usuariosService: UsuariosService) {}
+ngOnInit() {
+  this.usuario = this.usuariosService.getUsuario();
+}
 async enviarMensaje() {
   if (!this.correo || !this.mensaje) {
     const alert = await this.alertCtrl.create({

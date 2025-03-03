@@ -10,10 +10,8 @@ import { ModalController } from '@ionic/angular';
 })
 export class MetodosPagoPage implements OnInit {
 
-  alertButtons = ['Aceptar'];
-
-
   usuario!: Usuario | null;
+  metodoSeleccionado!: MetodosPago;
 
   metodo: MetodosPago = {
     tipo: '',
@@ -85,6 +83,12 @@ export class MetodosPagoPage implements OnInit {
       this.metodo = { tipo: 'Tarjeta', numero: '', fechav: '', cvv: '' };
     } else {
       alert('No hay usuario autenticado');
+    }
+  }
+
+  guardarMetodoPrincipal() {
+    if (this.usuario && this.metodoSeleccionado) {
+      this.usuarioService.actualizarMetodoPagoPrincipal(this.usuario.user, this.metodoSeleccionado);
     }
   }
 
