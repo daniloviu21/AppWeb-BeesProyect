@@ -78,20 +78,20 @@ export class MetodosPagoPage implements OnInit {
     const { numero, fechav, cvv } = this.metodo;
 
     if (!numero || numero.length !== 16) {
-      alert('Ingrese un número de tarjeta válido (16 dígitos)');
+      this.mostrarToast('Tarjeta invalida (16 dígitos)');
       return;
     }
     if (!fechav || fechav.length !== 5) {
-      alert('Ingrese una fecha de caducidad válida (MM/YY)');
+      this.mostrarToast('Fecha de caducidad inválida');
       return;
     }
     if (!cvv || cvv.length !== 3) {
-      alert('Ingrese un CVV válido (3 dígitos)');
+      this.mostrarToast('CVV inválido (3 dígitos)');
       return;
     }
-
+  
     if (!this.isFechaValida(fechav)) {
-      alert('Fecha de caducidad inválida');
+      this.mostrarToast('Fecha de caducidad inválida');
       return;
     }
 
@@ -101,7 +101,7 @@ export class MetodosPagoPage implements OnInit {
       usuario.metodospago.push({ ...this.metodo }); // Guardar método de pago en el usuario
       await this.usuarioService.saveCurrentUser(); // Guardar usuario en el storage
       this.modalCtrl.dismiss();
-      alert('Método de pago agregado exitosamente');
+      this.mostrarToast('Método de pago agregado exitosamente', 'success');
       this.metodo = { tipo: 'Tarjeta', numero: '', fechav: '', cvv: '' };
     } else {
       alert('No hay usuario autenticado');
@@ -111,18 +111,17 @@ export class MetodosPagoPage implements OnInit {
   guardarMetodoPrincipal() {
     if (this.usuario && this.metodoSeleccionado) {
       this.usuarioService.actualizarMetodoPagoPrincipal(this.usuario.user, this.metodoSeleccionado);
-      this.presentToast();
+      this.mostrarToast('Método de pago principal cambiado correctamente', 'success');
     }
   }
 
-  async presentToast() {
+  async mostrarToast(mensaje: string, color: string = 'danger', duracion: number = 2000) {
     const toast = await this.toastController.create({
-      message: 'Metodo de pago principal cambiado correctamente',
-      duration: 2400,
+      message: mensaje,
+      duration: duracion,
       position: 'bottom',
-      color: 'success'
+      color: color
     });
-
     await toast.present();
   }
 
