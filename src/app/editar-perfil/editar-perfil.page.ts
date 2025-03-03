@@ -150,6 +150,20 @@ export class EditarPerfilPage {
     });
     await alert.present();
   }
+  validarTelefono(event: any) {
+    let valor = event.detail.value;
+    
+    // Remover caracteres no numéricos
+    valor = valor.replace(/\D/g, '');
+  
+    // Limitar a 10 caracteres
+    if (valor.length > 10) {
+      valor = valor.substring(0, 10);
+    }
+  
+    this.telefonoPerfil = valor;
+  }
+  
   
   navigateToTab4() {
     this.router.navigate(['/tabs/tab4']);
