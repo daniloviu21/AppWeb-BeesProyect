@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MetodosPago, Usuario, UsuariosService } from '../services/usuarios.service';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-metodos-pago',
@@ -20,7 +20,7 @@ export class MetodosPagoPage implements OnInit {
     cvv: ''
   };
 
-  constructor(private usuarioService: UsuariosService, private modalCtrl: ModalController) { }
+  constructor(private usuarioService: UsuariosService, private modalCtrl: ModalController, private toastController: ToastController) { }
 
   ngOnInit() {
     this.usuario = this.usuarioService.getUsuario();
@@ -89,7 +89,19 @@ export class MetodosPagoPage implements OnInit {
   guardarMetodoPrincipal() {
     if (this.usuario && this.metodoSeleccionado) {
       this.usuarioService.actualizarMetodoPagoPrincipal(this.usuario.user, this.metodoSeleccionado);
+      this.presentToast();
     }
+  }
+
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'Metodo de pago principal cambiado correctamente',
+      duration: 2400,
+      position: 'bottom',
+      color: 'success'
+    });
+
+    await toast.present();
   }
 
 }

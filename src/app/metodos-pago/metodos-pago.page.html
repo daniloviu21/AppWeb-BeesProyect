@@ -12,7 +12,7 @@
     <ion-label>Seleccionar Método de Pago Principal</ion-label>
     <ion-select [(ngModel)]="metodoSeleccionado" (ionChange)="guardarMetodoPrincipal()">
       <ion-select-option *ngFor="let mpago of usuario?.metodospago" [value]="mpago">
-        {{ mpago.tipo }} **•••• {{ mpago.numero.substring(12, 16) }}
+        {{ mpago.tipo }} •••• {{ mpago.numero.substring(12, 16) }}
       </ion-select-option>
     </ion-select>
   </ion-item>
