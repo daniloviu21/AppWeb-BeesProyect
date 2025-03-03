@@ -49,6 +49,7 @@
   }
   
   .button-container {
+    color: white;
     width: 80%;
     margin-left: 30px;
     margin-top: 16px;
@@ -59,6 +60,7 @@
   }
 
   .next-shop{
+    font-weight: 600;
     --background: #FFC107 !important;
     --background-hover: #d8a305 !important;
     --background-activated: #d8a305 !important;
@@ -66,6 +68,7 @@
   }
   
   .clean-car{
+    font-weight: 600;
     --background: #142145 !important;
     --background-hover: #121e3f !important;
     --background-activated: #121e3f !important;
