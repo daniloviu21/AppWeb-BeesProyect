@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Detalles del Pedido</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="pedido" class="recibo">
+    <h2>Recibo del Pedido #{{ pedido.id }}</h2>
+    <p><strong>Fecha:</strong> {{ pedido.fecha | date:'medium' }}</p>
+    <p><strong>Total:</strong> {{ pedido.total | currency }}</p>
+    <p><strong>Estado:</strong> {{ pedido.estado }}</p>
+    <p><strong>Dirección de entrega:</strong> {{ pedido.direccion }}</p>
+    <p><strong>Método de pago:</strong> {{ pedido.metodoPago }}</p>
+
+    <h3>Productos:</h3>
+    <ion-list>
+      <ion-item *ngFor="let producto of pedido.productos">
+        <ion-label>
+          <h4>{{ producto.nombre }}</h4>
+          <p>Cantidad: {{ producto.cantidad }}</p>
+          <p>Precio: {{ producto.precio | currency }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <ion-button expand="block" (click)="generarPDF()">Descargar Recibo PDF</ion-button>
+
+  <div *ngIf="!pedido">
+    <p>No se encontró el pedido. Contacta a soporte</p>
+  </div>
+</ion-content>

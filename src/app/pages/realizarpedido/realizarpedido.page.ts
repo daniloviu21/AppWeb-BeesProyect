@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 import { CarritoService } from 'src/app/services/carrito.service';
+import { Pedido, PedidosService } from 'src/app/services/pedidos.service';
 import { Direccion, MetodosPago, Usuario, UsuariosService } from 'src/app/services/usuarios.service';
 
 @Component({
@@ -21,7 +23,9 @@ export class RealizarpedidoPage implements OnInit {
   constructor(
     private carritoService: CarritoService,
     private usuariosService: UsuariosService,
-    private router: Router
+    private router: Router,
+    private alertController: AlertController,
+    private pedidosService: PedidosService
   ) {}
 
   async ngOnInit() {
@@ -29,7 +33,7 @@ export class RealizarpedidoPage implements OnInit {
     if (this.usuario) {
       this.carrito = await this.carritoService.obtenerCarrito(this.usuario.user);
       this.calcularTotal();
-
+  
       // Verificar si el usuario tiene direcciones
       if (this.usuario.direccion && this.usuario.direccion.length > 0) {
         this.tieneDirecciones = true;
@@ -37,7 +41,7 @@ export class RealizarpedidoPage implements OnInit {
       } else {
         this.tieneDirecciones = false;
       }
-
+  
       // Verificar si el usuario tiene métodos de pago
       if (this.usuario.metodospago && this.usuario.metodospago.length > 0) {
         this.tieneMetodosPago = true;
@@ -62,11 +66,68 @@ export class RealizarpedidoPage implements OnInit {
     this.router.navigate(['/metodos-pago']); // Redirige a la página para agregar método de pago
   }
 
-  pagar() {
-    if (!this.tieneDirecciones || !this.tieneMetodosPago) {
-      console.log("Debes agregar una dirección y un método de pago antes de continuar.");
+  async pagar() {
+    const alert = await this.alertController.create({
+      header: 'Confirmar Pedido',
+      message: '¿Estás seguro de que deseas realizar este pedido?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Pedido cancelado');
+          }
+        },
+        {
+          text: 'Continuar',
+          handler: () => {
+            console.log('Pedido confirmado');
+            this.generarPedido();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  generarPedido() {
+    if (!this.usuario) {
+      console.error('Usuario no autenticado');
       return;
     }
-    console.log("Proceso de pago aún no implementado");
+    
+    const nuevoPedido: Pedido = {
+      id: Math.random().toString(36).substring(2), // Generar un ID único
+      usuarioId: this.usuario.user, // Vincular el pedido al usuario actual
+      fecha: new Date(),
+      productos: this.carrito.map(item => ({
+        nombre: item.producto.nombre,
+        cantidad: item.cantidad,
+        precio: item.producto.precio
+      })),
+      total: this.total,
+      direccion: this.direccionSeleccionada.direccion,
+      metodoPago: `${this.metodoPagoSeleccionado.tipo} (•••• ${this.metodoPagoSeleccionado.numero.substring(12, 16)})`,
+      estado: 'En proceso'
+    };
+  
+    // Guardar el pedido usando el servicio
+    this.pedidosService.agregarPedido(nuevoPedido);
+    this.router.navigate(['/tabs/tab3']);
+
+    if (this.usuario) {
+      this.carritoService.limpiarCarrito(this.usuario.user);
+      this.carrito = [];
+      this.total = 0;
+    }
+  }
+
+  getCardImage(numero: string): string {
+    if (numero.startsWith('4')) {
+      return 'assets/img/visa.png';
+    } else {
+      return 'assets/img/mastercard.png';
+    }
   }
 }

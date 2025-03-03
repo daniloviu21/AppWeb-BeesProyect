@@ -8,26 +8,29 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item *ngFor="let item of carrito">
-      <ion-label>
-        <h2>{{ item.producto.nombre }}</h2>
-        <p>{{ item.producto.descripcion }}</p>
-        <p><strong>{{ item.producto.precio | currency }}</strong></p>
-        <p>Cantidad: {{ item.cantidad }}</p>
-      </ion-label>
-      <ion-button fill="clear" (click)="eliminarProducto(item)">
-        <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
-      </ion-button>
+  <div class="shop-container">
+    <ion-list>
+      <ion-item class="cart-item" *ngFor="let item of carrito">
+        <ion-label>
+          <h2 class="product-name">{{ item.producto.nombre }}</h2>
+          <p class="product-description">{{ item.producto.descripcion }}</p>
+          <p class="product-price"><strong>{{ item.producto.precio | currency }}</strong></p>
+          <p class="product-quantity">Cantidad: {{ item.cantidad }}</p>
+        </ion-label>
+        <ion-button fill="clear" (click)="eliminarProducto(item)">
+          <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+
+    <ion-item class="total-container">
+      <ion-label class="total-label">Total:</ion-label>
+      <ion-label slot="end" class="total-price">{{ total | currency }}</ion-label>
     </ion-item>
-  </ion-list>
 
-  <ion-item>
-    <ion-label>Total:</ion-label>
-    <ion-label slot="end">{{ total | currency }}</ion-label>
-  </ion-item>
-
-  <ion-button expand="full" routerLink="/realizarpedido">Continuar</ion-button>
-
-  <ion-button expand="full" (click)="limpiarCarrito()">Limpiar Carrito</ion-button>
+    <div class="button-container">
+      <ion-button class="next-shop" expand="block" routerLink="/realizarpedido">Continuar</ion-button>
+      <ion-button class="clean-car" expand="block" (click)="limpiarCarrito()">Limpiar Carrito</ion-button>
+    </div>
+  </div>
 </ion-content>

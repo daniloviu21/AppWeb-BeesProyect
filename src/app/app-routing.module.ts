@@ -73,6 +73,10 @@ const routes: Routes = [
     path: 'realizarpedido',
     loadChildren: () => import('./pages/realizarpedido/realizarpedido.module').then( m => m.RealizarpedidoPageModule)
   },
+  {
+    path: 'detallespedido/:id',
+    loadChildren: () => import('./pages/detallespedido/detallespedido.module').then( m => m.DetallespedidoPageModule)
+  },
 ];
 @NgModule({
   imports: [

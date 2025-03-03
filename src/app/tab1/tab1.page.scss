@@ -4,7 +4,6 @@
   justify-content: space-between;
   padding: 10px;
   border-radius: 8px;
-  background: #fff;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   position: relative;
 }
@@ -17,6 +16,7 @@
 .title {
   font-size: 14px;
   color: gray;
+  font-weight: bold;
 }
 
 .address {
@@ -42,6 +42,10 @@
   height: 32px;
 }
 
+ion-list{
+  
+}
+
 .cart-count {
   position: absolute;
   top: -5px;
@@ -57,199 +61,145 @@
   justify-content: center;
 }
 
+/* Lista de categorías */
 .categories-container {
-  background-color: #ffffff;
   padding: 10px;
 }
 
-.delivery {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    border-radius: 8px;
-    background: #fff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    position: relative;
-  }
-  
-  .address-info {
-    flex-grow: 1;
-    margin-left: 10px;
-  }
-  
-  .title {
-    font-size: 14px;
-    color: gray;
-  }
-  
-  .address {
-    font-size: 16px;
-    font-weight: bold;
-  }
-  
-  .cart-container {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-  }
-  
-  .cart-icon {
-    position: relative;
-    width: 40px;
-  }
-  
-  .cart-icon ion-icon {
-    font-size: 32px;
-    width: 32px;
-    height: 32px;
-  }
-  
-  .cart-count {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: red;
-    color: white;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.see-all {
+  font-size: 14px;
+  color: #007aff;
+  text-transform: none;
+}
 
-  /*List categoria*/
-  .categories-container {
-    background-color: #ffffff;
-    padding: 10px;
-  }
-  
-  .title {
-    font-weight: bold;
-    font-size: 18px;
-    color: #000;
-  }
-  
-  .see-all {
-    font-size: 14px;
-    color: #007aff;
-    text-transform: none;
-  }
-  
-  .categories-wrapper {
-    padding: 10px 0;
-    overflow-x: auto;
+.categories-wrapper {
+  padding: 10px 0;
+  overflow-x: auto;
+}
 
-  }
-  
-  .categories-grid {
-    padding: 10px;
-    max-width: 100%;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-    gap: 15px;
-    justify-content: center;
-    align-items: center;
-    padding-bottom: 10px;
-    scroll-snap-type: x mandatory;
-    white-space: nowrap;
-  }
-  
-  .category-card {
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 15px;
-    width: 110px;
-    height: 110px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out;
-    scroll-snap-align: center;
-  }
-  
-  .category-card:hover {
-    transform: scale(1.05);
-  }
-  
-  .category-icon {
-    font-size: 32px;
-    color: #007aff;
-  }
-  
-  .category-title {
-    font-size: 12px;
-    margin-top: 5px;
-    color: #333;
-  }
-  
-  /*Servicio*/
+.categories-grid {
+  padding: 10px;
+  max-width: 100%;
+  gap: 15px;
+  padding-bottom: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px; 
+  margin: 15px;
+  border: 2px solid #5e5c5c96;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  justify-content: center;
+  align-items: center;
+  scroll-snap-type: x mandatory;
+  white-space: nowrap;
+}
 
-  h2{
-    margin-left: 40px;
-    font-weight: bold;
-  }
+.category-card {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  border-radius: 12px;
+  padding: 15px;
+  width: 110px;
+  height: 110px;
+  min-height: 90px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+  scroll-snap-align: center;
+  white-space: normal;
+  overflow: hidden;
+}
 
-  .carousel-container {
-    overflow-x: auto;
-    white-space: nowrap;
-    display: flex;
-    gap: 15px;
-    padding: 10px;
-  }
+.category-card:hover {
+  transform: scale(1.05);
+}
 
-  .carousel {
-    display: flex;
-  }
+.category-icon {
+  font-size: 32px;
+  color: #007aff;
+}
 
-  .slide-content {
-    width: 260px;
-    text-align: center;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    background-color: white;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-  }
+.category-title {
+  font-size: 12px;
+  margin-top: 5px;
+  -webkit-line-clamp: 3;
+}
 
-  .slide-image {
-    height: auto;
-    width: 150px;
-    border-radius: 10px;
-  }
+h2 {
+  margin-left: 40px;
+  font-weight: bold;
+}
 
-  .slide-title {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin: 10px 0;
-  }
+.carousel-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  display: flex;
+  gap: 15px;
+  padding: 10px;
+  scroll-behavior: smooth; 
+}
 
-  .slide-description {
-    font-size: 0.9em;
-    color: #666;
-  }
+.carousel {
+  display: flex;
+}
 
-  .cote-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px;
-    width: 70%;
-    font-size: 1em;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 5px;
-  }
+.slide-content {
+  width: 260px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  min-height: 350px; 
+  flex-direction: column;
+  justify-content: space-between;
+  text-overflow: ellipsis;
+  white-space: normal;
+  overflow: hidden;
+}
 
-  div{
-    margin-bottom: 10px;
-  }
+.slide-image {
+  height: auto;
+  width: 150px;
+  border-radius: 10px;
+}
+
+.slide-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.slide-description {
+  height: 65px;;
+  font-size: 0.9em;
+  flex-grow: 1;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
+}
+
+.cote-button {
+  background: #FFC107 !important;
+  color: white !important;
+  font-weight: bold;
+  border: none;
+  background-hover: #d8a305 !important;
+  background-activated: #d8a305 !important;
+  background-focused: #d8a305 !important;
+  margin-bottom: 20px;  color: white;
+  padding: 10px;
+  width: 70%;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
+  margin-top: auto;
+}
+
+div {
+  margin-bottom: 10px;
+}

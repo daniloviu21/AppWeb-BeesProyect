@@ -2,6 +2,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { UsuariosService } from '../services/usuarios.service';
 import { Router } from '@angular/router';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-editar-perfil',
@@ -20,14 +21,44 @@ export class EditarPerfilPage {
 
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
 
-  constructor(private usuarioService: UsuariosService, private router: Router) {
+  constructor(
+    private usuarioService: UsuariosService,
+    private router: Router,
+    private alertController: AlertController
+  ) {
     const usuario = this.usuarioService.getUsuario();
     this.nombrePerfil = usuario?.user || 'Smith Johnson';
     this.apellidoPaterno = usuario?.apellidoPaterno || '';
     this.apellidoMaterno = usuario?.apellidoMaterno || '';
     this.telefonoPerfil = usuario?.telefono || '';
-    this.fotoPerfil = usuario?.user || 'https://th.bing.com/th/id/OIP.DkKTae6dc5RumN3Gk0efGgHaH2?w=161&h=180&c=7&r=0&o=5&pid=1.7';
+    this.fotoPerfil = usuario?.user || '/assets/icon/perfilvanguard.png';
     this.correoPerfil = usuario?.correo || '';
+  }
+
+  async mostrarOpcionesFoto() {
+    const alert = await this.alertController.create({
+      header: 'Editar Foto de Perfil',
+      buttons: [
+        {
+          text: 'Tomar Foto',
+          handler: () => {
+            this.tomarFoto();
+          }
+        },
+        {
+          text: 'Seleccionar de Galería',
+          handler: () => {
+            this.seleccionarImagen();
+          }
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   async tomarFoto() {

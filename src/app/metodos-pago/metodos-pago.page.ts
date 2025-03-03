@@ -10,7 +10,7 @@ import { ModalController } from '@ionic/angular';
 })
 export class MetodosPagoPage implements OnInit {
 
-  usuario: Usuario | null = null;
+  usuario!: Usuario | null;
 
   metodo: MetodosPago = {
     tipo: '',
@@ -22,6 +22,7 @@ export class MetodosPagoPage implements OnInit {
   constructor(private usuarioService: UsuariosService, private modalCtrl: ModalController) { }
 
   ngOnInit() {
+    this.usuario = this.usuarioService.getUsuario();
   }
 
   cerrarModal() {
@@ -29,7 +30,7 @@ export class MetodosPagoPage implements OnInit {
   }
 
   formatCaducidad(event: any) {
-    const value = event.target.value.replace(/\D/g, ''); // Solo acepta números
+    const value = event.target.value.replace(/\D/g, ''); // Solo acepta numeros
     if (value.length >= 2) {
       this.metodo.fechav = value.slice(0, 2) + '/' + value.slice(2, 4);
     } else {
@@ -37,17 +38,23 @@ export class MetodosPagoPage implements OnInit {
     }
   }
 
-  validateNumber(event: KeyboardEvent) {
-    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab'];
-    if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
-      event.preventDefault();
+  getCardImage(numero: string): string {
+    if (numero.startsWith('4')) {
+      return 'assets/img/visa.png';
+    } else {
+      return 'assets/img/mastercard.png';
     }
   }
 
-  validateFecha(fechav: string): boolean {
-    const regex = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
-    return regex.test(fechav);
+  validateNumber(event: KeyboardEvent) {
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab'];
+    const isNumber = /^[0-9]$/;
+  
+    if (!allowedKeys.includes(event.key) && !isNumber.test(event.key)) {
+      event.preventDefault();
+    }
   }
+  
 
   async agregarMetodoPago() {
     const { numero, fechav, cvv } = this.metodo;
@@ -56,7 +63,7 @@ export class MetodosPagoPage implements OnInit {
       alert('Ingrese un número de tarjeta válido (16 dígitos)');
       return;
     }
-    if (!fechav || !this.validateFecha(fechav)) {
+    if (!fechav || fechav.length !== 5) {
       alert('Ingrese una fecha de caducidad válida (MM/YY)');
       return;
     }
@@ -65,15 +72,17 @@ export class MetodosPagoPage implements OnInit {
       return;
     }
 
-    if (this.usuario) {
+    const usuario = this.usuarioService.getUsuario();
+    if (usuario) {
       this.metodo.tipo = numero.startsWith('4') ? 'Visa' : 'Mastercard';
-      this.usuario.metodospago.push({ ...this.metodo }); // Agregar el nuevo método de pago
-      await this.usuarioService.saveCurrentUser(); // Guardar cambios en el storage
+      usuario.metodospago.push({ ...this.metodo }); // Guardar método de pago en el usuario
+      await this.usuarioService.saveCurrentUser(); // Guardar usuario en el storage
       this.modalCtrl.dismiss();
       alert('Método de pago agregado exitosamente');
-      this.metodo = { tipo: '', numero: '', fechav: '', cvv: '' };
+      this.metodo = { tipo: 'Tarjeta', numero: '', fechav: '', cvv: '' };
     } else {
       alert('No hay usuario autenticado');
     }
   }
+
 }

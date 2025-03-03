@@ -13,12 +13,12 @@ import { UsuariosService } from '../services/usuarios.service';
 export class Tab4Page {
   editando = false;
   nombrePerfil = localStorage.getItem('nombrePerfil') || 'Smith Johnson';
-  fotoPerfil = localStorage.getItem('fotoPerfil') || 'https://th.bing.com/th/id/OIP.DkKTae6dc5RumN3Gk0efGgHaH2?w=161&h=180&c=7&r=0&o=5&pid=1.7';
+  fotoPerfil = localStorage.getItem('fotoPerfil') || '/assets/icon/perfilvanguard.png';
 
   constructor(public alertCtrl: AlertController, private router: Router, private usuarioService: UsuariosService) {
     const usuario = this.usuarioService.getUsuario();
     this.nombrePerfil = usuario?.user || 'Smith Johnson';
-    this.fotoPerfil = usuario?.user || 'https://th.bing.com/th/id/OIP.DkKTae6dc5RumN3Gk0efGgHaH2?w=161&h=180&c=7&r=0&o=5&pid=1.7';
+    this.fotoPerfil = usuario?.user || '/assets/icon/perfilvanguard.png';
   }
   
   editarPerfil() {
@@ -63,7 +63,6 @@ export class Tab4Page {
   terminosCondiciones() { this.router.navigate(['/terminos-condiciones']); }
   cerrarSesion() {
     this.usuarioService.setUsuario({
-      usuario: '',  // Agregar la propiedad faltante
       user: '',
       apellidoPaterno: '',
       apellidoMaterno: '',

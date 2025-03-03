@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 
 export interface Usuario {
-  usuario: string;
   user: string;
   apellidoPaterno: string;
   apellidoMaterno: string;
@@ -28,7 +27,6 @@ export interface Direccion {
   estado: string;
   ciudad: string;
   telefono: string;
-  correo: string;
   contrasenia?: string;
   
 }
@@ -40,7 +38,6 @@ export class UsuariosService {
   private _storage: Storage | null = null;
   private usuarios: Usuario[] = [
     {
-      usuario: 'ferleza', // Agregado porque en la interfaz Usuario está definido
       user: 'a',
       apellidoPaterno: 'b',
       apellidoMaterno: 'c',
@@ -54,8 +51,7 @@ export class UsuariosService {
           cp: '03100',
           estado: 'Ciudad de México',
           ciudad: 'Benito Juárez',
-          telefono: '5512345678',
-          correo: 'ferleza@gmail.com'
+          telefono: '5512345678'
         },
         {
           direccion: 'Calle 16 de Septiembre #45, Col. Centro',
@@ -63,8 +59,7 @@ export class UsuariosService {
           cp: '91700',
           estado: 'Veracruz',
           ciudad: 'Cordoba',
-          telefono: '2298765432',
-          correo: 'ferleza@gmail.com'
+          telefono: '2298765432'
         }
       ],
       metodospago: [
@@ -79,6 +74,72 @@ export class UsuariosService {
           numero: '4169141698432346',
           fechav: '01/2023',
           cvv: '168'
+        }
+      ]
+    },
+    {
+      user: 'juanperez',
+      apellidoPaterno: 'Pérez',
+      apellidoMaterno: 'Gómez',
+      telefono: '5551234567',
+      correo: "juanperez@gmail.com",
+      contrasenia: '654321',
+      direccion: [
+        {
+          direccion: 'Calle Reforma #789, Col. Juárez',
+          referencias: 'Cerca del monumento a la independencia',
+          cp: '06600',
+          estado: 'Ciudad de México',
+          ciudad: 'Cuauhtémoc',
+          telefono: '5559876543'
+        }
+      ],
+      metodospago: [
+        {
+          tipo: 'Visa',
+          numero: '4929123456789012',
+          fechav: '12/2025',
+          cvv: '123'
+        }
+      ]
+    },
+    {
+      user: 'mariagarcia',
+      apellidoPaterno: 'García',
+      apellidoMaterno: 'López',
+      telefono: '5558765432',
+      correo: "mariagarcia@gmail.com",
+      contrasenia: '987654',
+      direccion: [
+        {
+          direccion: 'Av. Hidalgo #456, Col. Centro',
+          referencias: 'Frente al teatro principal',
+          cp: '58000',
+          estado: 'Michoacán',
+          ciudad: 'Morelia',
+          telefono: '4431234567'
+        },
+        {
+          direccion: 'Calle Allende #321, Col. San Miguel',
+          referencias: 'Junto al mercado municipal',
+          cp: '58200',
+          estado: 'Michoacán',
+          ciudad: 'Morelia',
+          telefono: '4439876543'
+        }
+      ],
+      metodospago: [
+        {
+          tipo: 'American Express',
+          numero: '378282246310005',
+          fechav: '06/2026',
+          cvv: '4567'
+        },
+        {
+          tipo: 'Mastercard',
+          numero: '5555555555554444',
+          fechav: '09/2024',
+          cvv: '789'
         }
       ]
     }
