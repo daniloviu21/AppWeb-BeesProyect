@@ -25,30 +25,31 @@
 
   <div class="info-container">
     <ion-list>
-      <ion-item>
+      <ion-item [ngClass]="{'error-field': errores['nombre']}">
         <ion-label position="stacked">Nombre</ion-label>
         <ion-input [(ngModel)]="nombrePerfil" [disabled]="!modoEdicion"></ion-input>
       </ion-item>
-
-      <ion-item>
+      
+      <ion-item [ngClass]="{'error-field': errores['apellidoPaterno']}">
         <ion-label position="stacked">Apellido Paterno</ion-label>
         <ion-input [(ngModel)]="apellidoPaterno" [disabled]="!modoEdicion"></ion-input>
       </ion-item>
-
-      <ion-item>
+      
+      <ion-item [ngClass]="{'error-field': errores['apellidoMaterno']}">
         <ion-label position="stacked">Apellido Materno</ion-label>
         <ion-input [(ngModel)]="apellidoMaterno" [disabled]="!modoEdicion"></ion-input>
       </ion-item>
-
-      <ion-item>
+      
+      <ion-item [ngClass]="{'error-field': errores['telefono']}">
         <ion-label position="stacked">Teléfono</ion-label>
         <ion-input [(ngModel)]="telefonoPerfil" type="tel" [disabled]="!modoEdicion"></ion-input>
       </ion-item>
-
-      <ion-item>
+      
+      <ion-item [ngClass]="{'error-field': errores['correo']}">
         <ion-label position="stacked">Correo</ion-label>
         <ion-input [(ngModel)]="correoPerfil" type="email" [disabled]="!modoEdicion"></ion-input>
       </ion-item>
+      
     </ion-list>
   </div>
 
