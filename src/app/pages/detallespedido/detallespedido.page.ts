@@ -5,6 +5,7 @@ import { Pedido, PedidosService } from 'src/app/services/pedidos.service';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { jsPDF } from 'jspdf';
 import { AlertController, ToastController } from '@ionic/angular';
+import { Directory, Filesystem } from '@capacitor/filesystem';
 
 @Component({
   selector: 'app-detallespedido',
@@ -84,12 +85,38 @@ export class DetallespedidoPage implements OnInit {
     doc.text(`Método de Pago: ${this.pedido.metodoPago}`, 10, y + 20);
     doc.text('Gracias por tu compra en Vanguard. Vuelve pronto', 10, y + 40);
     
-    doc.save(`recibo_${this.pedido.id}.pdf`);
+    const pdfOutput = doc.output('blob');
+    this.savePDFToDevice(pdfOutput, `recibo_${this.pedido.id}.pdf`);
   }
 
-  async presentToast() {
+  async savePDFToDevice(pdfBlob: Blob, fileName: string) {
+    try {
+      const base64Data = await this.blobToBase64(pdfBlob);
+      await Filesystem.writeFile({
+        path: fileName,
+        data: base64Data,
+        directory: Directory.Documents,
+        recursive: true
+      });
+      this.presentToast('PDF guardado en la carpeta de documentos.');
+    } catch (error) {
+      console.error('Error al guardar el PDF', error);
+      this.presentToast('Error al guardar el PDF.');
+    }
+  }
+
+  async blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  async presentToast(message: string = 'PDF generado con éxito!') {
     const toast = await this.toastController.create({
-      message: 'PDF generado con exito!',
+      message: message,
       duration: 2400,
       position: 'bottom',
       color: 'success'
