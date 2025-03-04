@@ -1,0 +1,82 @@
+.shop-container {
+    padding: 16px;
+  }
+  
+  .cart-item {
+    margin-bottom: 12px;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .product-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+  
+  .product-description {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 4px;
+  }
+  
+  .product-price {
+    font-size: 16px;
+    color: #28a745;
+    font-weight: bold;
+  }
+  
+  .product-quantity {
+    font-size: 14px;
+    color: #444;
+  }
+  
+  .total-container {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 8px;
+  }
+  
+  .total-label {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .total-price {
+    font-size: 18px;
+    color: blue;
+    font-weight: bold;
+  }
+  
+  .button-container {
+
+    color: white;
+
+    width: 80%;
+    margin-left: 30px;
+    margin-top: 16px;
+    gap: 10px;
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .next-shop{
+
+    font-weight: 600;
+
+    --background: #FFC107 !important;
+    --background-hover: #d8a305 !important;
+    --background-activated: #d8a305 !important;
+    --background-focused: #d8a305 !important;
+  }
+  
+  .clean-car{
+
+    font-weight: 600;
+
+    --background: #142145 !important;
+    --background-hover: #121e3f !important;
+    --background-activated: #121e3f !important;
+    --background-focused: #121e3f !important;
+  }

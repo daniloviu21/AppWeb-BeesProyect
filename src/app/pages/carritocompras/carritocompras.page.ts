@@ -12,6 +12,8 @@ import { UsuariosService } from 'src/app/services/usuarios.service';
 })
 export class CarritocomprasPage {
 
+  alertButtons = ['Aceptar'];
+
   carrito: CarritoItem[] = [];
   usuarioActual: any;
   total: number = 0;
@@ -29,6 +31,14 @@ export class CarritocomprasPage {
       this.carrito = await this.carritoService.obtenerCarrito(this.usuarioActual.user);
       this.calcularTotal();
       this.actualizarEstadoCarrito();
+    }
+  }
+
+  async aumentarCantidad(producto: CarritoItem) {
+    if (this.usuarioActual) {
+      await this.carritoService.agregarProducto(this.usuarioActual.user, producto.producto);
+      this.carrito = await this.carritoService.obtenerCarrito(this.usuarioActual.user);
+      this.calcularTotal();
     }
   }
 

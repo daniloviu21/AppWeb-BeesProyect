@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Direccion, Usuario, UsuariosService } from '../services/usuarios.service';
-import { NavController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-cambiar-direccion',
@@ -13,7 +13,7 @@ export class CambiarDireccionPage implements OnInit {
   usuario!: Usuario | null;
   direccionSeleccionada!: Direccion;
 
-  constructor(private router: Router, private usuarioService: UsuariosService, private navCtrl: NavController) {}
+  constructor(private router: Router, private usuarioService: UsuariosService, private navCtrl: NavController, private toastController: ToastController) {}
 
   ngOnInit() {
     this.usuario = this.usuarioService.getUsuario();
@@ -39,6 +39,19 @@ export class CambiarDireccionPage implements OnInit {
     if (this.usuario) {
       this.usuarioService.actualizarDireccionPrincipal(this.usuario.user, this.direccionSeleccionada);
     }
+
+    this.presentToast();
+  }
+
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'Se cambió la dirección principal correctamente',
+      duration: 2400,
+      position: 'bottom',
+      color: 'success'
+    });
+
+    await toast.present();
   }
 
   regresar() {

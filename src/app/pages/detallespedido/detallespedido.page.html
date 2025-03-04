@@ -1,3 +1,4 @@
+
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
@@ -28,9 +29,10 @@
     </ion-list>
   </div>
 
-  <ion-button expand="full" color="primary" (click)="generarPDF()">Descargar Recibo PDF</ion-button>
+  <ion-button expand="block" (click)="pdf()">Descargar Recibo PDF</ion-button>
 
   <div *ngIf="!pedido">
     <p>No se encontró el pedido. Contacta a soporte</p>
   </div>
+
 </ion-content>

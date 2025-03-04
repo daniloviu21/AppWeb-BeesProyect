@@ -1,0 +1,35 @@
+.form-container {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .save-button {
+    margin-top: 20px;
+    border-radius: 8px;
+  }
+
+
+  .native-input{
+    margin-left: 10px;
+  }
+
+  ion-input {
+    --padding-start: 15px;
+    --border-color: rgba(68, 68, 68, 0.5);
+    --border-width: 2px; 
+    --border-radius: 25px;
+    border: var(--border-width) solid var(--border-color);
+    background: rgba(255, 255, 255, 0.05);
+    margin-bottom: 10px;
+    padding: 8px;
+    box-shadow: 3px 3px 6px rgba(68, 68, 68, 0.3);
+  }
+
+  .save-button{
+    width: 80%;
+    margin-left: 30px;
+    --background: #FFC107 !important;
+    --background-hover: #d8a305 !important;
+    --background-activated: #d8a305 !important;
+    --background-focused: #d8a305 !important;
+  }

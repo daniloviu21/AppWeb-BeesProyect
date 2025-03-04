@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MetodosPago, Usuario, UsuariosService } from '../services/usuarios.service';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-metodos-pago',
@@ -20,7 +20,7 @@ export class MetodosPagoPage implements OnInit {
     cvv: ''
   };
 
-  constructor(private usuarioService: UsuariosService, private modalCtrl: ModalController) { }
+  constructor(private usuarioService: UsuariosService, private modalCtrl: ModalController, private toastController: ToastController) { }
 
   ngOnInit() {
     this.usuario = this.usuarioService.getUsuario();
@@ -55,21 +55,43 @@ export class MetodosPagoPage implements OnInit {
       event.preventDefault();
     }
   }
+
+  isFechaValida(fechav: string): boolean {
+    const [mes, anio] = fechav.split('/');
+    const fechaActual = new Date();
+    const anioActual = fechaActual.getFullYear() % 100;
+    const mesActual = fechaActual.getMonth() + 1;
   
+    const mesTarjeta = parseInt(mes, 10);
+    const anioTarjeta = parseInt(anio, 10);
+  
+    if (anioTarjeta > anioActual) {
+      return true;
+    } else if (anioTarjeta === anioActual && mesTarjeta >= mesActual) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   async agregarMetodoPago() {
     const { numero, fechav, cvv } = this.metodo;
 
     if (!numero || numero.length !== 16) {
-      alert('Ingrese un número de tarjeta válido (16 dígitos)');
+      this.mostrarToast('Tarjeta invalida (16 dígitos)');
       return;
     }
     if (!fechav || fechav.length !== 5) {
-      alert('Ingrese una fecha de caducidad válida (MM/YY)');
+      this.mostrarToast('Fecha de caducidad inválida');
       return;
     }
     if (!cvv || cvv.length !== 3) {
-      alert('Ingrese un CVV válido (3 dígitos)');
+      this.mostrarToast('CVV inválido (3 dígitos)');
+      return;
+    }
+  
+    if (!this.isFechaValida(fechav)) {
+      this.mostrarToast('Fecha de caducidad inválida');
       return;
     }
 
@@ -79,7 +101,7 @@ export class MetodosPagoPage implements OnInit {
       usuario.metodospago.push({ ...this.metodo }); // Guardar método de pago en el usuario
       await this.usuarioService.saveCurrentUser(); // Guardar usuario en el storage
       this.modalCtrl.dismiss();
-      alert('Método de pago agregado exitosamente');
+      this.mostrarToast('Método de pago agregado exitosamente', 'success');
       this.metodo = { tipo: 'Tarjeta', numero: '', fechav: '', cvv: '' };
     } else {
       alert('No hay usuario autenticado');
@@ -89,7 +111,18 @@ export class MetodosPagoPage implements OnInit {
   guardarMetodoPrincipal() {
     if (this.usuario && this.metodoSeleccionado) {
       this.usuarioService.actualizarMetodoPagoPrincipal(this.usuario.user, this.metodoSeleccionado);
+      this.mostrarToast('Método de pago principal cambiado correctamente', 'success');
     }
+  }
+
+  async mostrarToast(mensaje: string, color: string = 'danger', duracion: number = 2000) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: duracion,
+      position: 'bottom',
+      color: color
+    });
+    await toast.present();
   }
 
 }

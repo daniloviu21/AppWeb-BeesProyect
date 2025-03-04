@@ -1,64 +1,87 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Editar Perfil</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div class="profile-container">
-    <ion-avatar class="profile-avatar">
+    <ion-avatar class="profile-avatar" (click)="mostrarOpcionesFoto()">
       <img [src]="fotoPerfil" alt="Foto de perfil">
+      <ion-icon class="edit-icon" name="create-outline"></ion-icon>
     </ion-avatar>
+    
+    <input type="file" #fileInput (change)="cargarImagen($event)" hidden>
 
-    <div class="button-container">
-      <ion-button expand="full" (click)="tomarFoto()" class="camera-button">
-        <ion-icon slot="start" name="camera-outline"></ion-icon>
-        Tomar Foto
-      </ion-button>
-
-      <ion-button expand="full" (click)="seleccionarImagen()" class="gallery-button">
-        <ion-icon slot="start" name="image-outline"></ion-icon>
-        Seleccionar de Galería
-      </ion-button>
-    </div>
-
-    <input type="file" (change)="cargarImagen($event)" accept="image/*" hidden #fileInput>
+    <div class="button-edit">
+    <ion-button expand="block" (click)="habilitarEdicion()" class="edit-button">
+      Editar Perfil
+    </ion-button>
+  </div>
   </div>
 
-  <ion-button expand="full" (click)="habilitarEdicion()" class="edit-button">Editar Perfil</ion-button>
+  <div class="info-container">
+    <ion-list>
 
-  <ion-list>
-    <ion-item>
-      <ion-label position="stacked">Nombre</ion-label>
-      <ion-input [(ngModel)]="nombrePerfil" [disabled]="!modoEdicion"></ion-input>
-    </ion-item>
+    <!-- Nombre -->
+<ion-item>
+  <ion-label position="stacked">Nombre</ion-label>
+  <ion-input 
+    [(ngModel)]="nombrePerfil" 
+    [disabled]="!modoEdicion" 
+    maxlength="15">
+  </ion-input>
+</ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Apellido Paterno</ion-label>
-      <ion-input [(ngModel)]="apellidoPaterno" [disabled]="!modoEdicion"></ion-input>
-    </ion-item>
+<!-- Apellido Paterno -->
+<ion-item>
+  <ion-label position="stacked">Apellido Paterno</ion-label>
+  <ion-input 
+    [(ngModel)]="apellidoPaterno" 
+    [disabled]="!modoEdicion" 
+    maxlength="15">
+  </ion-input>
+</ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Apellido Materno</ion-label>
-      <ion-input [(ngModel)]="apellidoMaterno" [disabled]="!modoEdicion"></ion-input>
-    </ion-item>
+<!-- Apellido Materno -->
+<ion-item>
+  <ion-label position="stacked">Apellido Materno</ion-label>
+  <ion-input 
+    [(ngModel)]="apellidoMaterno" 
+    [disabled]="!modoEdicion" 
+    maxlength="15">
+  </ion-input>
+</ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Teléfono</ion-label>
-      <ion-input [(ngModel)]="telefonoPerfil" type="tel" [disabled]="!modoEdicion"></ion-input>
-    </ion-item>
+<!-- Teléfono -->
+<ion-item>
+  <ion-label position="stacked">Teléfono</ion-label>
+  <ion-input 
+    [(ngModel)]="telefonoPerfil" 
+    [disabled]="!modoEdicion" 
+    maxlength="10"
+    pattern="[0-9]*"
+    inputmode="numeric"
+    (ionInput)="validarTelefono($event)">
+  </ion-input>
+</ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Correo</ion-label>
-      <ion-input [(ngModel)]="correoPerfil" type="email" [disabled]="!modoEdicion"></ion-input>
-    </ion-item>
-  </ion-list>
+      <ion-item [ngClass]="{'error-field': errores['correo']}">
+        <ion-label position="stacked">Correo</ion-label>
+        <ion-input [(ngModel)]="correoPerfil" type="email" [disabled]="!modoEdicion"></ion-input>
+      </ion-item>
 
-  <div class="button-container">
-    <ion-button expand="full" (click)="guardarPerfil()" [disabled]="!modoEdicion" class="save-button">
+    </ion-list>
+  </div>
+
+  <div class="button-group">
+    <ion-button expand="block" (click)="guardarPerfil()" [disabled]="!modoEdicion" class="save-button">
       Guardar Cambios
     </ion-button>
-    <ion-button expand="full" (click)="navigateToTab4()" class="cancel-button">
+    <ion-button expand="block" (click)="navigateToTab4()" class="cancel-button">
       Cancelar
     </ion-button>
   </div>

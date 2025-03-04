@@ -16,6 +16,9 @@
         <p><strong>{{ item.producto.precio | currency }}</strong></p>
         <p>Cantidad: {{ item.cantidad }}</p>
       </ion-label>
+      <ion-button fill="clear" (click)="aumentarCantidad(item)">
+        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+      </ion-button>
       <ion-button fill="clear" (click)="eliminarProducto(item)">
         <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
       </ion-button>

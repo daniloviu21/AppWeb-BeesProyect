@@ -61,7 +61,32 @@ export class Tab4Page {
   metodosPago() { this.router.navigate(['/metodos-pago']); }
   politicaPrivacidad() { this.router.navigate(['/politica-privacidad']); }
   terminosCondiciones() { this.router.navigate(['/terminos-condiciones']); }
-  cerrarSesion() {
+
+  async cerrarSesion() {
+    const alert = await this.alertCtrl.create({
+      header: 'Cerrar sesión',
+      message: '¿Estás seguro de cerrar sesión?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancelado');
+          }
+        },
+        {
+          text: 'Continuar',
+          handler: () => {
+            this.cerrarUser();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  cerrarUser() {
     this.usuarioService.setUsuario({
       user: '',
       apellidoPaterno: '',

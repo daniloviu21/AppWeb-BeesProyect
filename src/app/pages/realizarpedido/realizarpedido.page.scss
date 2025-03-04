@@ -1,11 +1,35 @@
-.label-title {
-    font-size: 16px;
-    font-weight: 500;
-    color: black;
-}
 
-.card-logo {
+.custom-card {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+
+  .pedido-item {
+    border-bottom: 1px solid #ddd;
+  }
+
+  ion-button {
+    margin-left: 100px;
+    margin-top: 20px;
+    font-size: 1.2em;
+    width: 50%;
+    font-weight: bold;
+    color: white;
+    --background: #FFC107 !important;
+    --background-hover: #d8a305 !important;
+    --background-activated: #d8a305 !important;
+    --background-focused: #d8a305 !important;
+  }
+
+  .card-logo {
     width: 40px;
     height: auto;
     margin-right: 10px;
-}
+  }
+
+  .pay-button {
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 8px;
+  }
+
