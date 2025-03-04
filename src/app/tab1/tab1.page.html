@@ -1,37 +1,46 @@
-
-<ion-content [fullscreen]="true">
+<header>
   <ion-toolbar>
     <div class="delivery">
-      <!-- <ion-icon name="location-outline"></ion-icon>
-      <div class="address-info">
-        <p class="title">Nuestra ubicación</p>
-        <p class="address">{{ address }}</p>
-        <ion-icon name="chevron-forward-outline" (click)="openMaps()"></ion-icon>
-      </div> -->
+      <div class="location-container">
+        <div class="location-icon">
+          <ion-icon name="location-outline"></ion-icon>
+        </div>
+        <div class="address-info">
+          <p class="title">Nuestra ubicación</p>
+          <div class="address-row">
+            <p class="address">{{ address }}</p>
+            <ion-icon name="chevron-forward-outline" (click)="openMaps()"></ion-icon>
+          </div>
+        </div>
+      </div>
       <div class="cart-icon">
         <ion-icon name="cart-outline" routerLink="/carritocompras"></ion-icon>
-        <!-- <span *ngIf="cartCount > 0" class="cart-count">{{ cartCount }}</span> -->
+        <span *ngIf="cartCount > 0" class="cart-count">{{ cartCount }}</span>
       </div>
     </div>
   </ion-toolbar>
-
+</header>
+<ion-content [fullscreen]="true">
   <!--Categorias (en pequeño)-->
   <ion-list class="categories-container">
     <ion-item lines="none">
-      <ion-label class="title">Todas las categorías</ion-label>
+      <ion-label class="title">Categorías favoritas</ion-label>
       <ion-button fill="clear" class="see-all" routerLink="/tabs/tab2">Ver todo</ion-button>
     </ion-item>
   
     <div class="categories-wrapper">
       <div class="categories-grid">
-        <div class="category-card" *ngFor="let category of categories">
+        <div 
+          class="category-card" 
+          *ngFor="let category of categories.slice(0,4);let i = index"
+          (click)="showAlert(category.nombre)">
           <ion-icon [name]="category.icon" class="category-icon"></ion-icon>
           <p class="category-title">{{ category.nombre }}</p>
         </div>
       </div>
     </div>
   </ion-list>
-
+  
   <div>
   <h2 class="categoria">Servicios</h2>
   <div class="carousel-container">

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Usuario } from '../services/usuarios.service';
-import { Platform } from '@ionic/angular';
+import { AlertController, Platform } from '@ionic/angular';
 import { CategoriasService } from '../services/productos.service';
 import { Categoria } from '../services/productos.service'; 
 
@@ -39,17 +39,27 @@ export class Tab1Page implements OnInit {
     this.currentIndexServ = (this.currentIndexServ + 1) % this.servicios.length;
   }
 
-  @Input() address: string = 'Cordoba Veracruz';
+  @Input() address: string = 'Córdoba Veracruz';
   @Input() cartCount: number = 0;
   categories: Categoria[] = [];
 
   constructor(
     private platform: Platform,
-    private categoriasService: CategoriasService
+    private categoriasService: CategoriasService,
+    private alertController: AlertController
   ) {}
 
   ngOnInit(): void {
     this.loadCategories();
+  }
+
+  async showAlert(categoryName: string) {
+    const alert = await this.alertController.create({
+      header: 'Atención',
+      message: `Para ver los productos de ${categoryName}, dirígete a la sección de "categorías".`,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 
   async loadCategories() {

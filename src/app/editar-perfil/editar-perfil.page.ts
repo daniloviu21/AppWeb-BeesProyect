@@ -1,8 +1,9 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { UsuariosService } from '../services/usuarios.service';
 import { Router } from '@angular/router';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { AlertController } from '@ionic/angular';
+import { Keyboard } from '@capacitor/keyboard';
 
 @Component({
   selector: 'app-editar-perfil',
@@ -10,7 +11,7 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./editar-perfil.page.scss'],
   standalone: false
 })
-export class EditarPerfilPage {
+export class EditarPerfilPage implements OnInit, OnDestroy {
   nombrePerfil: string = '';
   apellidoPaterno: string = '';
   apellidoMaterno: string = '';
@@ -19,7 +20,7 @@ export class EditarPerfilPage {
   correoPerfil: string = '';
   modoEdicion: boolean = false;
   errores: { [key: string]: boolean } = {};
-
+  tecladoActivo: boolean = false; // Nueva variable para controlar el teclado
 
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
 
@@ -35,6 +36,26 @@ export class EditarPerfilPage {
     this.telefonoPerfil = usuario?.telefono || '';
     this.fotoPerfil = usuario?.user || '/assets/icon/perfilvanguard.png';
     this.correoPerfil = usuario?.correo || '';
+  }
+
+  ngOnInit(): void {
+    Keyboard.addListener('keyboardWillShow', (info) => {
+      this.tecladoActivo = true;
+      document.body.classList.add('keyboard-active');
+  
+      setTimeout(() => {
+        window.scrollTo(0, document.body.scrollHeight);
+      }, 100);
+    });
+  
+    Keyboard.addListener('keyboardWillHide', () => {
+      this.tecladoActivo = false;
+      document.body.classList.remove('keyboard-active');
+    });
+  }  
+
+  ngOnDestroy(): void {
+    Keyboard.removeAllListeners();
   }
 
   async mostrarOpcionesFoto() {
@@ -96,13 +117,10 @@ export class EditarPerfilPage {
   }
 
   guardarPerfil() {
-    // Limpiar errores previos
     this.errores = { nombre: false, apellidoPaterno: false, apellidoMaterno: false, telefono: false, correo: false };
-  
-    // Expresión regular para validar el correo
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  
-    // Validaciones
+
     if (this.nombrePerfil.length > 15) {
       this.errores['nombre'] = true;
     }
@@ -118,14 +136,12 @@ export class EditarPerfilPage {
     if (!emailRegex.test(this.correoPerfil)) {
       this.errores['correo'] = true;
     }
-  
-    // Si hay algún error, mostrar alerta y salir
+
     if (Object.values(this.errores).includes(true)) {
       this.mostrarAlerta("Corrige los campos resaltados antes de continuar.");
       return;
     }
-  
-    // Guardar datos si todo es válido
+
     let usuario = this.usuarioService.getUsuario();
     if (usuario) {
       usuario.user = this.nombrePerfil;
@@ -140,8 +156,7 @@ export class EditarPerfilPage {
     this.modoEdicion = false;
     this.router.navigate(['/tabs/tab4']);
   }
-  
-  // Método para mostrar alerta
+
   async mostrarAlerta(mensaje: string) {
     const alert = await this.alertController.create({
       header: 'Error de validación',
@@ -150,21 +165,16 @@ export class EditarPerfilPage {
     });
     await alert.present();
   }
+
   validarTelefono(event: any) {
     let valor = event.detail.value;
-    
-    // Remover caracteres no numéricos
     valor = valor.replace(/\D/g, '');
-  
-    // Limitar a 10 caracteres
     if (valor.length > 10) {
       valor = valor.substring(0, 10);
     }
-  
     this.telefonoPerfil = valor;
   }
-  
-  
+
   navigateToTab4() {
     this.router.navigate(['/tabs/tab4']);
   }

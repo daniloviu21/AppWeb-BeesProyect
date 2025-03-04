@@ -6,8 +6,7 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
-<ion-content>
+<ion-content scroll-y="true" fullscreen="true" class="scroll-content" keyboard-scroll="true">
   <div class="profile-container">
     <ion-avatar class="profile-avatar" (click)="mostrarOpcionesFoto()">
       <img [src]="fotoPerfil" alt="Foto de perfil">
@@ -17,63 +16,38 @@
     <input type="file" #fileInput (change)="cargarImagen($event)" hidden>
 
     <div class="button-edit">
-    <ion-button expand="block" (click)="habilitarEdicion()" class="edit-button">
-      Editar Perfil
-    </ion-button>
-  </div>
+      <ion-button expand="block" (click)="habilitarEdicion()" class="edit-button">
+        Editar Perfil
+      </ion-button>
+    </div>
   </div>
 
   <div class="info-container">
     <ion-list>
+      <ion-item>
+        <ion-label position="stacked">Nombre</ion-label>
+        <ion-input [(ngModel)]="nombrePerfil" [disabled]="!modoEdicion" maxlength="15"></ion-input>
+      </ion-item>
 
-    <!-- Nombre -->
-<ion-item>
-  <ion-label position="stacked">Nombre</ion-label>
-  <ion-input 
-    [(ngModel)]="nombrePerfil" 
-    [disabled]="!modoEdicion" 
-    maxlength="15">
-  </ion-input>
-</ion-item>
+      <ion-item>
+        <ion-label position="stacked">Apellido Paterno</ion-label>
+        <ion-input [(ngModel)]="apellidoPaterno" [disabled]="!modoEdicion" maxlength="15"></ion-input>
+      </ion-item>
 
-<!-- Apellido Paterno -->
-<ion-item>
-  <ion-label position="stacked">Apellido Paterno</ion-label>
-  <ion-input 
-    [(ngModel)]="apellidoPaterno" 
-    [disabled]="!modoEdicion" 
-    maxlength="15">
-  </ion-input>
-</ion-item>
+      <ion-item>
+        <ion-label position="stacked">Apellido Materno</ion-label>
+        <ion-input [(ngModel)]="apellidoMaterno" [disabled]="!modoEdicion" maxlength="15"></ion-input>
+      </ion-item>
 
-<!-- Apellido Materno -->
-<ion-item>
-  <ion-label position="stacked">Apellido Materno</ion-label>
-  <ion-input 
-    [(ngModel)]="apellidoMaterno" 
-    [disabled]="!modoEdicion" 
-    maxlength="15">
-  </ion-input>
-</ion-item>
-
-<!-- Teléfono -->
-<ion-item>
-  <ion-label position="stacked">Teléfono</ion-label>
-  <ion-input 
-    [(ngModel)]="telefonoPerfil" 
-    [disabled]="!modoEdicion" 
-    maxlength="10"
-    pattern="[0-9]*"
-    inputmode="numeric"
-    (ionInput)="validarTelefono($event)">
-  </ion-input>
-</ion-item>
+      <ion-item>
+        <ion-label position="stacked">Teléfono</ion-label>
+        <ion-input [(ngModel)]="telefonoPerfil" [disabled]="!modoEdicion" maxlength="10" pattern="[0-9]*" inputmode="numeric" (ionInput)="validarTelefono($event)"></ion-input>
+      </ion-item>
 
       <ion-item [ngClass]="{'error-field': errores['correo']}">
         <ion-label position="stacked">Correo</ion-label>
         <ion-input [(ngModel)]="correoPerfil" type="email" [disabled]="!modoEdicion"></ion-input>
       </ion-item>
-
     </ion-list>
   </div>
 
