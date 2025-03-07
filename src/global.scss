@@ -36,7 +36,9 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
 
-.keyboard-open ion-content {
-    --padding-bottom: 300px; /* Ajusta según sea necesario */
-  }
-  
+ion-header {
+  padding-top: env(safe-area-inset-top);
+}
+ion-content {
+  padding-top: env(safe-area-inset-top);
+}

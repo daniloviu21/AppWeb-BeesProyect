@@ -1,10 +1,20 @@
 .delivery {
-  margin-top: 50px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+ion-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+ion-toolbar {
+  background: none;
 }
 
 .location-container {
@@ -84,6 +94,10 @@
   padding: 10px;
 }
 
+.list-md{
+  background: none;
+}
+
 .see-all {
   font-size: 14px;
   color: #007aff;
@@ -159,6 +173,7 @@
 h2 {
   margin-left: 40px;
   font-weight: bold;
+  font-size: 1.2em;
 }
 
 .carousel-container {
@@ -195,14 +210,14 @@ h2 {
 }
 
 .slide-title {
-  font-size: 1.2em;
+  font-size: 1.1em;
   font-weight: bold;
   margin: 10px 0;
 }
 
 .slide-description {
   height: 65px;;
-  font-size: 0.9em;
+  font-size: 12px;
   flex-grow: 1;
   -webkit-box-orient: vertical;
   display: -webkit-box;
