@@ -6,12 +6,14 @@
 }
 
 ion-img{
-    width: 70%; 
-    height: auto; 
+    width: 70%;
+    height: auto;
     display: block;
-    margin: 0 auto 15px; 
+    margin: 40px auto 15px; // Aumenta el margen superior
 }
-
+.spacer-row {
+    height: 50px;
+  }
 .register-container {
     height: 100%;
     display: flex;
