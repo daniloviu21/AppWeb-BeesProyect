@@ -8,6 +8,7 @@
 </ion-header>
 
 <ion-content>
+  <div class="details-sales">
   <ion-list>
     <ion-item *ngFor="let item of carrito">
       <ion-label>
@@ -24,13 +25,13 @@
       </ion-button>
     </ion-item>
   </ion-list>
-
+</div>
   <ion-item>
     <ion-label>Total:</ion-label>
     <ion-label slot="end">{{ total | currency }}</ion-label>
   </ion-item>
 
-  <ion-button expand="full" routerLink="/realizarpedido" [disabled]="!tienecarro">Continuar</ion-button>
+  <ion-button expand="block" routerLink="/realizarpedido" [disabled]="!tienecarro">Continuar</ion-button>
 
-  <ion-button expand="full" (click)="limpiarCarrito()" [disabled]="!tienecarro">Limpiar Carrito</ion-button>
+  <ion-button expand="block" (click)="limpiarCarrito()" [disabled]="!tienecarro">Limpiar Carrito</ion-button>
 </ion-content>

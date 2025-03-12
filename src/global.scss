@@ -35,10 +35,3 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
-
-ion-header {
-  padding-top: env(safe-area-inset-top);
-}
-ion-content {
-  padding-top: env(safe-area-inset-top);
-}
