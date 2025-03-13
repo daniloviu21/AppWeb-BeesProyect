@@ -36,12 +36,29 @@ export class ProductosPage implements OnInit {
   }
 
   async cargarProductos() {
-    const categorias: Categoria[] = await this.categoriasService.getCategorias();
-    const categoria = categorias.find((c: Categoria) => c.nombre === this.categoriaSeleccionada);
+    this.categoriasService.getProductos().subscribe(data => {
+      console.log('Productos recibidos:', data); // Verifica los datos recibidos
+      const idCategoria = this.obtenerIdCategoria(this.categoriaSeleccionada);
+      console.log('ID de la categoría seleccionada:', idCategoria); // Verifica el ID de la categoría
+      this.productos = data.filter((producto: Producto) => producto.idcategoria === idCategoria);
+      console.log('Productos filtrados:', this.productos); // Verifica los productos filtrados
+    });
+  }
 
-    if (categoria) {
-      this.productos = categoria.productos;
-    }
+  private obtenerIdCategoria(nombreCategoria: string): number {
+    const categorias = [
+      { id: 1, nombre: 'Sublimación' },
+      { id: 2, nombre: 'Anuncios' },
+      { id: 3, nombre: 'Impresiones' },
+      { id: 4, nombre: 'Tarjetas de Presentación' },
+      { id: 5, nombre: 'Rotulación' },
+      { id: 6, nombre: 'Playeras Personalizadas' },
+      { id: 7, nombre: 'Sellos' },
+      { id: 8, nombre: 'Lonas y Banners' },
+      { id: 9, nombre: 'Material Corporativo' }
+    ];
+    const categoria = categorias.find(c => c.nombre === nombreCategoria);
+    return categoria ? categoria.id : 0;
   }
 
   agregarAlCarrito(producto: Producto) {

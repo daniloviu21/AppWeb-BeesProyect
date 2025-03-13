@@ -13,7 +13,9 @@ export class CardCategoriesComponent  implements OnInit {
   constructor(private categoriasService: CategoriasService) {}
 
   async ngOnInit() {
-    this.categorias = await this.categoriasService.getCategorias();
+    this.categoriasService.getCategorias().subscribe(data => {
+      this.categorias = data;
+    });
   }
 
 }

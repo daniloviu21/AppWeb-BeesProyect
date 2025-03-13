@@ -25,10 +25,10 @@ export class CarritoService {
     let carrito: CarritoItem[] = await this._storage?.get(`carrito_${usuarioId}`) || [];
     console.log('Carrito antes de filtrar:', carrito);  // Depurar
   
-    carrito = carrito.filter(item => item && item.producto && item.producto.nombre);
+    carrito = carrito.filter(item => item && item.producto && item.producto.nombreproducto);
     console.log('Carrito después de filtrar:', carrito);  // Depurar
   
-    const itemIndex = carrito.findIndex(item => item.producto.nombre === producto.nombre);
+    const itemIndex = carrito.findIndex(item => item.producto.nombreproducto === producto.nombreproducto);
   
     if (itemIndex > -1) {
       carrito[itemIndex].cantidad += 1;
@@ -46,7 +46,7 @@ export class CarritoService {
 
   async eliminarProducto(usuarioId: string, producto: Producto) {
     let carrito: CarritoItem[] = await this._storage?.get(`carrito_${usuarioId}`) || [];
-    const itemIndex = carrito.findIndex(item => item.producto.nombre === producto.nombre);
+    const itemIndex = carrito.findIndex(item => item.producto.nombreproducto === producto.nombreproducto);
 
     if (itemIndex > -1) {
       if (carrito[itemIndex].cantidad > 1) {

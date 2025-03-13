@@ -63,7 +63,9 @@ export class Tab1Page implements OnInit {
   }
 
   async loadCategories() {
-    this.categories = await this.categoriasService.getCategorias();
+    this.categoriasService.getCategorias().subscribe(data => {
+      this.categories = data;
+    });
   }
 
   openMaps() {

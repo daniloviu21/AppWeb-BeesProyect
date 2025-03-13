@@ -10,11 +10,21 @@ import { Categoria, CategoriasService } from '../services/productos.service';
 export class Tab2Page implements OnInit{
 
   categorias: Categoria[] = [];
+  cargando: boolean = true;
 
   constructor(private categoriasService: CategoriasService) {}
 
-  async ngOnInit() {
-    this.categorias = await this.categoriasService.getCategorias();
+  ngOnInit() {
+    this.categoriasService.getCategorias().subscribe(
+      (data) => {
+        this.categorias = data;
+        this.cargando = false;
+      },
+      (error) => {
+        console.error('Error al cargar categorías', error);
+        this.cargando = false;
+      }
+    );
   }
 
 }
