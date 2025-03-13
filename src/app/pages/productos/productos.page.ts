@@ -16,6 +16,7 @@ export class ProductosPage implements OnInit {
   categoriaSeleccionada: string = '';
   productos: Producto[] = [];
   usuarioActual: any;
+  cargando: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -36,13 +37,22 @@ export class ProductosPage implements OnInit {
   }
 
   async cargarProductos() {
-    this.categoriasService.getProductos().subscribe(data => {
-      console.log('Productos recibidos:', data); // Verifica los datos recibidos
-      const idCategoria = this.obtenerIdCategoria(this.categoriaSeleccionada);
-      console.log('ID de la categoría seleccionada:', idCategoria); // Verifica el ID de la categoría
-      this.productos = data.filter((producto: Producto) => producto.idcategoria === idCategoria);
-      console.log('Productos filtrados:', this.productos); // Verifica los productos filtrados
-    });
+    this.cargando = true; // Activar el spinner
+  
+    this.categoriasService.getProductos().subscribe(
+      (data) => {
+        console.log('Productos recibidos:', data); // Verifica los datos recibidos
+        const idCategoria = this.obtenerIdCategoria(this.categoriaSeleccionada);
+        console.log('ID de la categoría seleccionada:', idCategoria); // Verifica el ID de la categoría
+        this.productos = data.filter((producto: Producto) => producto.idcategoria === idCategoria);
+        console.log('Productos filtrados:', this.productos); // Verifica los productos filtrados
+        this.cargando = false; // Desactivar el spinner cuando los datos estén listos
+      },
+      (error) => {
+        console.error('Error al cargar productos:', error);
+        this.cargando = false; // Desactivar el spinner en caso de error
+      }
+    );
   }
 
   private obtenerIdCategoria(nombreCategoria: string): number {
