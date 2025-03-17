@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage-angular';
+import { Observable } from 'rxjs';
 
 export interface Usuario {
+  id?: number;
   user: string;
   apellidoPaterno: string;
   apellidoMaterno: string;
@@ -14,13 +17,15 @@ export interface Usuario {
 }
 
 export interface MetodosPago {
+  id?: number; // Agrega esta línea
   tipo: string;
-  numero: string;
-  fechav: string;
+  numerotarjeta: string;
+  fechavencimiento: string;
   cvv: string;
 }
 
 export interface Direccion {
+  id?: number; // Agrega esta línea
   direccion: string;
   referencias: string;
   cp: string;
@@ -28,201 +33,125 @@ export interface Direccion {
   ciudad: string;
   telefono: string;
   contrasenia?: string;
-  
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsuariosService {
   private _storage: Storage | null = null;
-  private usuarios: Usuario[] = [
-    {
-      user: 'a',
-      apellidoPaterno: 'b',
-      apellidoMaterno: 'c',
-      telefono: '2711764235',
-      correo: 'ferleza@gmail.com',
-      contrasenia: '123456',
-      direccion: [
-        {
-          direccion: 'Av. Insurgentes Sur 1234, Col. Del Valle',
-          referencias: 'Frente a la plaza comercial, junto al banco',
-          cp: '03100',
-          estado: 'Ciudad de México',
-          ciudad: 'Benito Juárez',
-          telefono: '5512345678'
-        },
-        {
-          direccion: 'Calle 16 de Septiembre #45, Col. Centro',
-          referencias: 'A una cuadra del parque principal',
-          cp: '91700',
-          estado: 'Veracruz',
-          ciudad: 'Cordoba',
-          telefono: '2298765432'
-        }
-      ],
-      metodospago: [
-        {
-          tipo: 'Mastercard',
-          numero: '5446141698436543',
-          fechav: '01/2024',
-          cvv: '526'
-        },
-        {
-          tipo: 'Visa',
-          numero: '4169141698432346',
-          fechav: '01/2023',
-          cvv: '168'
-        }
-      ]
-    },
-    {
-      user: 'juanperez',
-      apellidoPaterno: 'Pérez',
-      apellidoMaterno: 'Gómez',
-      telefono: '5551234567',
-      correo: "juanperez@gmail.com",
-      contrasenia: '654321',
-      direccion: [
-        {
-          direccion: 'Calle Reforma #789, Col. Juárez',
-          referencias: 'Cerca del monumento a la independencia',
-          cp: '06600',
-          estado: 'Ciudad de México',
-          ciudad: 'Cuauhtémoc',
-          telefono: '5559876543'
-        }
-      ],
-      metodospago: [
-        {
-          tipo: 'Visa',
-          numero: '4929123456789012',
-          fechav: '12/2025',
-          cvv: '123'
-        }
-      ]
-    },
-    {
-      user: 'mariagarcia',
-      apellidoPaterno: 'García',
-      apellidoMaterno: 'López',
-      telefono: '5558765432',
-      correo: "mariagarcia@gmail.com",
-      contrasenia: '987654',
-      direccion: [
-        {
-          direccion: 'Av. Hidalgo #456, Col. Centro',
-          referencias: 'Frente al teatro principal',
-          cp: '58000',
-          estado: 'Michoacán',
-          ciudad: 'Morelia',
-          telefono: '4431234567'
-        },
-        {
-          direccion: 'Calle Allende #321, Col. San Miguel',
-          referencias: 'Junto al mercado municipal',
-          cp: '58200',
-          estado: 'Michoacán',
-          ciudad: 'Morelia',
-          telefono: '4439876543'
-        }
-      ],
-      metodospago: [
-        {
-          tipo: 'American Express',
-          numero: '378282246310005',
-          fechav: '06/2026',
-          cvv: '4567'
-        },
-        {
-          tipo: 'Mastercard',
-          numero: '5555555555554444',
-          fechav: '09/2024',
-          cvv: '789'
-        }
-      ]
-    }
-  ];
+  private apiUrl = 'http://82.29.197.167:3000/api'; // URL de la API
   private usuarioActual: Usuario | null = null;
 
-  constructor(private storage: Storage) {
+  constructor(private storage: Storage, private http: HttpClient) {
     this.init();
   }
 
   async init() {
     this._storage = await this.storage.create();
-    await this.loadInitialData();
+    await this.loadCurrentUser();
   }
 
-  async authenticate(username: string, password: string): Promise<Usuario | null> {
-    const user = this.usuarios.find(u => u.user === username && u.contrasenia === password);
-    if (user) {
-      this.setUsuario(user);
-      await this.saveCurrentUser();
-    }
-    return user || null;
+  // Obtener todos los usuarios
+  obtenerUsuarios(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(`${this.apiUrl}/usuarios`);
   }
 
+  // Crear un nuevo usuario
+  crearUsuario(usuario: Usuario): Observable<Usuario> {
+    return this.http.post<Usuario>(`${this.apiUrl}/usuarios`, usuario);
+  }
+
+  // Obtener un usuario por su ID
+  obtenerUsuarioPorId(id: number): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.apiUrl}/usuarios/${id}`);
+  }
+
+  // Actualizar un usuario por su ID
+  actualizarUsuario(id: number, usuario: Usuario): Observable<Usuario> {
+    return this.http.put<Usuario>(`${this.apiUrl}/usuarios/${id}`, usuario);
+  }
+
+  // Eliminar un usuario por su ID
+  eliminarUsuario(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/usuarios/${id}`);
+  }
+
+  // Iniciar sesión
+  login(username: string, password: string): Observable<{ message: string; usuario: Usuario }> {
+    return this.http.post<{ message: string; usuario: Usuario }>(`${this.apiUrl}/usuarios/login`, {
+      username,
+      password,
+    });
+  }
+
+  // Guardar el usuario actual en el almacenamiento local
+  async setUsuario(usuario: Usuario) {
+    this.usuarioActual = usuario;
+    await this.saveCurrentUser();
+  }
+
+  // Obtener el usuario actual
   getUsuario(): Usuario | null {
     return this.usuarioActual;
   }
 
-  setUsuario(usuario: Usuario) {
-    this.usuarioActual = usuario;
-  }
-
-  addUsuario(usuario: Usuario): void {
-    this.usuarios.push(usuario);
-    this.saveUsuarios(); // Guarda la lista de usuarios en el almacenamiento
-  }
-
-  async saveUsuarios(): Promise<void> {
-    if (this._storage) {
-      await this._storage.set('usuarios', this.usuarios);
-    }
-  }
-
-  async loadInitialData(): Promise<void> {
-    await this.loadUsuarios();
-    await this.loadCurrentUser();
-  }
-
-  async loadUsuarios(): Promise<void> {
-    if (!this._storage) return;
-    const storedUsers = await this._storage.get('usuarios');
-    if (storedUsers) {
-      this.usuarios = storedUsers;
-    }
-  }
-
+  // Cargar el usuario actual desde el almacenamiento local
   async loadCurrentUser(): Promise<void> {
     if (!this._storage) return;
     const user = await this._storage.get('currentUser');
-    this.usuarioActual = user ?? null; // Si no hay usuario guardado, deja `null`
+    this.usuarioActual = user ?? null;
   }
 
+  // Guardar el usuario actual en el almacenamiento local
   async saveCurrentUser(): Promise<void> {
     if (this._storage && this.usuarioActual) {
       await this._storage.set('currentUser', this.usuarioActual);
     }
   }
 
-  actualizarDireccionPrincipal(user: string, nuevaDireccion: Direccion): void {
-    const usuario = this.usuarios.find(u => u.user === user);
-    if (usuario) {
-      usuario.direccion = usuario.direccion.filter(d => d !== nuevaDireccion);
-      usuario.direccion.unshift(nuevaDireccion);
-      this.saveUsuarios();
-    }
+  // Agregar una dirección a un cliente
+  agregarDireccion(idCliente: number, direccion: Direccion): Observable<Direccion> {
+    return this.http.post<Direccion>(`${this.apiUrl}/clientes/${idCliente}/direcciones`, direccion);
   }
 
-  actualizarMetodoPagoPrincipal(user: string, metodo: MetodosPago): void {
-    const usuario = this.usuarios.find(u => u.user === user);
-    if (usuario) {
-      usuario.metodospago = usuario.metodospago.filter(mpago => mpago !== metodo);
-      usuario.metodospago.unshift(metodo);
-      this.saveUsuarios();
-    }
+  // Obtener las direcciones de un cliente
+  obtenerDirecciones(idCliente: number): Observable<Direccion[]> {
+    return this.http.get<Direccion[]>(`${this.apiUrl}/clientes/${idCliente}/direcciones`);
+  }
+
+  // Editar una dirección de un cliente
+  editarDireccion(idDireccion: number, direccion: Direccion): Observable<Direccion> {
+    return this.http.put<Direccion>(`${this.apiUrl}/direcciones/${idDireccion}`, direccion);
+  }
+
+  // Eliminar una dirección de un cliente
+  eliminarDireccion(idDireccion: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/direcciones/${idDireccion}`);
+  }
+
+  // Agregar un método de pago a un cliente
+  agregarMetodoPago(idCliente: number, metodoPago: MetodosPago): Observable<MetodosPago> {
+    return this.http.post<MetodosPago>(`${this.apiUrl}/clientes/${idCliente}/metodos-pago`, {
+      tipo: metodoPago.tipo,
+      numeroTarjeta: metodoPago.numerotarjeta,
+      fechaVencimiento: metodoPago.fechavencimiento,
+      cvv: metodoPago.cvv,
+    });
+  }
+
+  // Obtener los métodos de pago de un cliente
+  obtenerMetodosPago(idCliente: number): Observable<MetodosPago[]> {
+    return this.http.get<MetodosPago[]>(`${this.apiUrl}/clientes/${idCliente}/metodos-pago`);
+  }
+
+  // Editar un método de pago de un cliente
+  editarMetodoPago(idMetodoPago: number, metodoPago: MetodosPago): Observable<MetodosPago> {
+    return this.http.put<MetodosPago>(`${this.apiUrl}/metodos-pago/${idMetodoPago}`, metodoPago);
+  }
+
+  // Eliminar un método de pago de un cliente
+  eliminarMetodoPago(idMetodoPago: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/metodos-pago/${idMetodoPago}`);
   }
 }

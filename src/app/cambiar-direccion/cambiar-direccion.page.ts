@@ -36,11 +36,17 @@ export class CambiarDireccionPage implements OnInit {
   }
 
   guardarDireccionPrincipal() {
-    if (this.usuario) {
-      this.usuarioService.actualizarDireccionPrincipal(this.usuario.user, this.direccionSeleccionada);
+    if (this.usuario && this.direccionSeleccionada && this.direccionSeleccionada.id) {
+      this.usuarioService.editarDireccion(this.direccionSeleccionada.id, this.direccionSeleccionada).subscribe(
+        (direccionActualizada) => {
+          console.log('Dirección actualizada:', direccionActualizada);
+          this.presentToast();
+        },
+        (error) => {
+          console.error('Error al actualizar la dirección:', error);
+        }
+      );
     }
-
-    this.presentToast();
   }
 
   async presentToast() {

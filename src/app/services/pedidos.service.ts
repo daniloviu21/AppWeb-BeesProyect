@@ -6,7 +6,7 @@ export interface Pedido {
   id: string;
   usuarioId: string;
   fecha: Date;
-  productos: Array<{ nombre: string, cantidad: number, precio: number }>;
+  productos: Array<{ nombreproducto: string, cantidad: number, precio: number }>;
   total: number;
   direccion: string;
   metodoPago: string;

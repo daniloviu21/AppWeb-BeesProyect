@@ -6,24 +6,45 @@ import { ModalController, ToastController } from '@ionic/angular';
   selector: 'app-metodos-pago',
   templateUrl: './metodos-pago.page.html',
   styleUrls: ['./metodos-pago.page.scss'],
-  standalone: false
+  standalone: false,
 })
 export class MetodosPagoPage implements OnInit {
-
   usuario!: Usuario | null;
   metodoSeleccionado!: MetodosPago;
+  metodosPago: MetodosPago[] = []; // Lista de métodos de pago
 
   metodo: MetodosPago = {
     tipo: '',
-    numero: '',
-    fechav: '',
-    cvv: ''
+    numerotarjeta: '',
+    fechavencimiento: '',
+    cvv: '',
   };
 
-  constructor(private usuarioService: UsuariosService, private modalCtrl: ModalController, private toastController: ToastController) { }
+  constructor(
+    private usuarioService: UsuariosService,
+    private modalCtrl: ModalController,
+    private toastController: ToastController
+  ) {}
 
   ngOnInit() {
     this.usuario = this.usuarioService.getUsuario();
+    if (this.usuario?.id) {
+      this.cargarMetodosPago(this.usuario.id);
+    } else {
+      console.error('Usuario no autenticado o ID no definido');
+    }
+  }
+
+  cargarMetodosPago(idCliente: number) {
+    this.usuarioService.obtenerMetodosPago(idCliente).subscribe(
+      (metodosPago) => {
+        this.metodosPago = metodosPago;
+        console.log('Métodos de pago cargados:', this.metodosPago);  // Verifica los datos recibidos
+      },
+      (error) => {
+        console.error('Error al cargar métodos de pago:', error);
+      }
+    );
   }
 
   cerrarModal() {
@@ -31,16 +52,16 @@ export class MetodosPagoPage implements OnInit {
   }
 
   formatCaducidad(event: any) {
-    const value = event.target.value.replace(/\D/g, ''); // Solo acepta numeros
+    const value = event.target.value.replace(/\D/g, ''); // Solo acepta números
     if (value.length >= 2) {
-      this.metodo.fechav = value.slice(0, 2) + '/' + value.slice(2, 4);
+      this.metodo.fechavencimiento = value.slice(0, 2) + '/' + value.slice(2, 4);
     } else {
-      this.metodo.fechav = value;
+      this.metodo.fechavencimiento = value;
     }
   }
 
-  getCardImage(numero: string): string {
-    if (numero.startsWith('4')) {
+  getCardImage(tipo: string): string {
+    if (tipo.toLowerCase() === 'visa') {
       return 'assets/img/visa.png';
     } else {
       return 'assets/img/mastercard.png';
@@ -50,21 +71,21 @@ export class MetodosPagoPage implements OnInit {
   validateNumber(event: KeyboardEvent) {
     const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab'];
     const isNumber = /^[0-9]$/;
-  
+
     if (!allowedKeys.includes(event.key) && !isNumber.test(event.key)) {
       event.preventDefault();
     }
   }
 
-  isFechaValida(fechav: string): boolean {
-    const [mes, anio] = fechav.split('/');
+  isfechavencimientoalida(fechavencimiento: string): boolean {
+    const [mes, anio] = fechavencimiento.split('/');
     const fechaActual = new Date();
     const anioActual = fechaActual.getFullYear() % 100;
     const mesActual = fechaActual.getMonth() + 1;
-  
+
     const mesTarjeta = parseInt(mes, 10);
     const anioTarjeta = parseInt(anio, 10);
-  
+
     if (anioTarjeta > anioActual) {
       return true;
     } else if (anioTarjeta === anioActual && mesTarjeta >= mesActual) {
@@ -74,14 +95,14 @@ export class MetodosPagoPage implements OnInit {
     }
   }
 
-  async agregarMetodoPago() {
-    const { numero, fechav, cvv } = this.metodo;
-
-    if (!numero || numero.length !== 16) {
-      this.mostrarToast('Tarjeta invalida (16 dígitos)');
+  agregarMetodoPago() {
+    const { numerotarjeta, fechavencimiento, cvv } = this.metodo;
+  
+    if (!numerotarjeta || numerotarjeta.length !== 16) {
+      this.mostrarToast('Tarjeta inválida (16 dígitos)');
       return;
     }
-    if (!fechav || fechav.length !== 5) {
+    if (!fechavencimiento || fechavencimiento.length !== 5) {
       this.mostrarToast('Fecha de caducidad inválida');
       return;
     }
@@ -90,28 +111,44 @@ export class MetodosPagoPage implements OnInit {
       return;
     }
   
-    if (!this.isFechaValida(fechav)) {
+    if (!this.isfechavencimientoalida(fechavencimiento)) {
       this.mostrarToast('Fecha de caducidad inválida');
       return;
     }
-
+  
+    // Asignación del tipo de tarjeta
+    this.metodo.tipo = numerotarjeta.startsWith('4') ? 'Visa' : 'Mastercard';
+  
     const usuario = this.usuarioService.getUsuario();
-    if (usuario) {
-      this.metodo.tipo = numero.startsWith('4') ? 'Visa' : 'Mastercard';
-      usuario.metodospago.push({ ...this.metodo }); // Guardar método de pago en el usuario
-      await this.usuarioService.saveCurrentUser(); // Guardar usuario en el storage
-      this.modalCtrl.dismiss();
-      this.mostrarToast('Método de pago agregado exitosamente', 'success');
-      this.metodo = { tipo: 'Tarjeta', numero: '', fechav: '', cvv: '' };
+    if (usuario && usuario.id) {
+      this.usuarioService.agregarMetodoPago(usuario.id, this.metodo).subscribe(
+        (metodoPago) => {
+          this.metodosPago.push(metodoPago);
+          this.mostrarToast('Método de pago agregado exitosamente', 'success');
+          this.metodo = { tipo: '', numerotarjeta: '', fechavencimiento: '', cvv: '' }; // Limpiar formulario
+          this.modalCtrl.dismiss(); // Cerrar el modal
+        },
+        (error) => {
+          console.error('Error al agregar método de pago:', error);
+          this.mostrarToast('Error al agregar método de pago');
+        }
+      );
     } else {
-      alert('No hay usuario autenticado');
+      alert('No hay usuario autenticado o ID no definido');
     }
   }
 
   guardarMetodoPrincipal() {
-    if (this.usuario && this.metodoSeleccionado) {
-      this.usuarioService.actualizarMetodoPagoPrincipal(this.usuario.user, this.metodoSeleccionado);
-      this.mostrarToast('Método de pago principal cambiado correctamente', 'success');
+    if (this.usuario && this.metodoSeleccionado && this.metodoSeleccionado.id) {
+      this.usuarioService.editarMetodoPago(this.metodoSeleccionado.id, this.metodoSeleccionado).subscribe(
+        (metodoActualizado) => {
+          console.log('Método de pago actualizado:', metodoActualizado);
+          this.mostrarToast('Método de pago principal cambiado correctamente', 'success');
+        },
+        (error) => {
+          console.error('Error al actualizar el método de pago:', error);
+        }
+      );
     }
   }
 
@@ -120,9 +157,8 @@ export class MetodosPagoPage implements OnInit {
       message: mensaje,
       duration: duracion,
       position: 'bottom',
-      color: color
+      color: color,
     });
     await toast.present();
   }
-
 }

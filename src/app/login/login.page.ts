@@ -32,19 +32,18 @@ export class LoginPage {
       this.mostrarMensaje('Correo o Contraseña no válida');
       return;
     }
-
-    const user = await this.usuariosService.authenticate(this.username, this.password);
   
-    if (user) {
-      console.log('Inicio de sesión exitoso', user);
-      this.usuariosService.setUsuario(user);
-      this.router.navigate(['/tabs/tab1']);
-    } else {
-      console.log('Credenciales incorrectas');
-    }
-
-    // this.mostrarMensaje('Inicio de sesión exitoso');
-    // this.router.navigate(['/tabs/tab1']);
+    this.usuariosService.login(this.username, this.password).subscribe(
+      (response) => {
+        console.log('Inicio de sesión exitoso:', response);
+        this.usuariosService.setUsuario(response.usuario);
+        this.router.navigate(['/tabs/tab1']);
+      },
+      (error) => {
+        console.error('Error al iniciar sesión:', error);
+        this.mostrarMensaje('Credenciales incorrectas');
+      }
+    );
   }
 
   async mostrarMensaje(mensaje: string) {

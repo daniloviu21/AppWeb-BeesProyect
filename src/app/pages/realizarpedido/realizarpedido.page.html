@@ -17,7 +17,7 @@
       <ion-list>
         <ion-item *ngFor="let item of carrito">
           <ion-label>
-            <h2>{{ item.producto.nombre }}</h2>
+            <h2>{{ item.producto.nombreproducto }}</h2>
             <p>Cantidad: {{ item.cantidad }}</p>
             <p>Precio: {{ item.producto.precio | currency }}</p>
           </ion-label>
@@ -46,10 +46,10 @@
 
   <!-- Método de Pago -->
   <ion-item [routerLink]="['/metodos-pago']" detail="true" [button]="true">
-    <img *ngIf="tieneMetodosPago" [src]="getCardImage(metodoPagoSeleccionado.numero)" alt="Card Logo" class="card-logo" />
+    <img *ngIf="tieneMetodosPago" [src]="getCardImage(metodoPagoSeleccionado.numerotarjeta)" alt="Card Logo" class="card-logo" />
     <ion-label>
       <p *ngIf="tieneMetodosPago; else sinMetodoPago">
-        {{ metodoPagoSeleccionado.tipo }} <strong>•••• </strong>{{ metodoPagoSeleccionado.numero.substring(12, 16) }}
+        {{ metodoPagoSeleccionado.tipo }} <strong>•••• </strong>{{ metodoPagoSeleccionado.numerotarjeta.substring(12, 16) }}
       </p>
       <ng-template #sinMetodoPago>
         <p>Agregar método de pago</p>

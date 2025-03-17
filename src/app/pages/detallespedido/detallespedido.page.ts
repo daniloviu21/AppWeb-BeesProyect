@@ -77,7 +77,7 @@ export class DetallespedidoPage implements OnInit {
     
     let y = 60;
     this.pedido.productos.forEach((producto, index) => {
-      doc.text(`${index + 1}. ${producto.nombre} - ${producto.cantidad} x $${producto.precio}`, 10, y);
+      doc.text(`${index + 1}. ${producto.nombreproducto} - ${producto.cantidad} x $${producto.precio}`, 10, y);
       y += 10;
     });
     

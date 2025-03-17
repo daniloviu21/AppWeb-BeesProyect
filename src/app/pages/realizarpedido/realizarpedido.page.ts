@@ -106,13 +106,13 @@ export class RealizarpedidoPage implements OnInit {
       usuarioId: this.usuario.user, // Vincular el pedido al usuario actual
       fecha: new Date(),
       productos: this.carrito.map(item => ({
-        nombre: item.producto.nombre,
+        nombreproducto: item.producto.nombreproducto,
         cantidad: item.cantidad,
         precio: item.producto.precio
       })),
       total: this.total,
       direccion: this.direccionSeleccionada.direccion,
-      metodoPago: `${this.metodoPagoSeleccionado.tipo} (•••• ${this.metodoPagoSeleccionado.numero.substring(12, 16)})`,
+      metodoPago: `${this.metodoPagoSeleccionado.tipo} (•••• ${this.metodoPagoSeleccionado.numerotarjeta.substring(12, 16)})`,
       estado: 'En proceso'
     };
   

@@ -21,7 +21,7 @@
     <ion-list>
       <ion-item *ngFor="let producto of pedido.productos">
         <ion-label>
-          <h4>{{ producto.nombre }}</h4>
+          <h4>{{ producto.nombreproducto }}</h4>
           <p>Cantidad: {{ producto.cantidad }}</p>
           <p>Precio: {{ producto.precio | currency }}</p>
         </ion-label>
