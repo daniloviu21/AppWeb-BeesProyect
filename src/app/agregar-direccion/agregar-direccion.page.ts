@@ -1,34 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UsuariosService } from '../services/usuarios.service';
+import { UsuariosService, Direccion } from '../services/usuarios.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-agregar-direccion',
   templateUrl: './agregar-direccion.page.html',
   styleUrls: ['./agregar-direccion.page.scss'],
-  standalone: false
+  standalone: false,
 })
 export class AgregarDireccionPage implements OnInit {
-  direccion = {
-    direccion: '',
-    numInterior: '',
-    numExterior: '',
-    codigoPostal: '',
-    localidad: '',
-    telefono: '',
-    ordenesEntrega: '',
-    referencias: '',
-    cp: '',
-    estado: '',
+  direccion: Direccion = {
+    calle: '',
     ciudad: '',
-    correo: ''
+    estado: '',
+    codigopostal: '',
   };
 
   editando = false;
   errorCP: boolean = false;
   errorTelefono: boolean = false;
 
-  constructor(private router: Router, private usuariosService: UsuariosService) {}
+  constructor(
+    private router: Router,
+    private usuariosService: UsuariosService,
+    private toastController: ToastController
+  ) {}
 
   ngOnInit(): void {
     const direccionAEditar = localStorage.getItem('direccionAEditar');
@@ -51,47 +48,52 @@ export class AgregarDireccionPage implements OnInit {
     return /^\d{5}$/.test(cp);
   }
 
-  // Funciones de validación
-  validarTelefono() {
-    this.errorTelefono = !this.telefonoValido(this.direccion.telefono);
-  }
-
   validarCP() {
-    this.errorCP = !this.codigoPostalValido(this.direccion.cp);
+    this.errorCP = !this.codigoPostalValido(this.direccion.codigopostal);
   }
 
-  // Función para guardar la dirección
   async guardarDireccion() {
-    this.validarTelefono();
     this.validarCP();
 
     if (this.errorTelefono) {
-      alert('El teléfono debe contener exactamente 10 números.');
+      this.mostrarToast('El teléfono debe contener exactamente 10 números.', 'danger');
       return;
     }
 
     if (this.errorCP) {
-      alert('El código postal debe contener exactamente 5 números.');
+      this.mostrarToast('El código postal debe contener exactamente 5 números.', 'danger');
       return;
     }
 
-    let usuario = this.usuariosService.getUsuario();
-    if (usuario) {
-      usuario.direccion = usuario.direccion || [];
-
-      // Revisamos si estamos editando una dirección existente
-      const index = usuario.direccion.findIndex(dir => dir.direccion === this.direccion.direccion);
-      if (index !== -1) {
-        usuario.direccion[index] = { ...this.direccion };
-      } else {
-        usuario.direccion.push({ ...this.direccion });
+    const usuario = this.usuariosService.getUsuario();
+    if (usuario && usuario.id) {
+      try {
+        if (this.editando && this.direccion.id) {
+          // Editar dirección existente
+          await this.usuariosService.editarDireccion(this.direccion.id, this.direccion).toPromise();
+          this.mostrarToast('Dirección actualizada correctamente', 'success');
+        } else {
+          // Agregar nueva dirección
+          await this.usuariosService.agregarDireccion(usuario.id, this.direccion).toPromise();
+          this.mostrarToast('Dirección guardada correctamente', 'success');
+        }
+        this.router.navigate(['/cambiar-direccion']);
+      } catch (error) {
+        console.error('Error al guardar la dirección:', error);
+        this.mostrarToast('Error al guardar la dirección', 'danger');
       }
-
-      await this.usuariosService.saveCurrentUser();
-      alert(this.editando ? 'Dirección actualizada' : 'Dirección guardada');
-      this.router.navigate(['/cambiar-direccion']);
     } else {
-      alert('No hay usuario autenticado');
+      this.mostrarToast('No hay usuario autenticado', 'danger');
     }
+  }
+
+  async mostrarToast(mensaje: string, color: string = 'danger', duracion: number = 2000) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: duracion,
+      position: 'bottom',
+      color: color,
+    });
+    await toast.present();
   }
 }

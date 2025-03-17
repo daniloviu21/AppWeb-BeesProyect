@@ -36,7 +36,7 @@
     <ion-label>
       <p class="label-title">Envío a domicilio</p>
       <p *ngIf="tieneDirecciones; else sinDireccion" class="address-text">
-        {{ direccionSeleccionada.direccion.substring(0, 35) }}
+        {{ direccionSeleccionada.calle.substring(0, 35) }}
       </p>
       <ng-template #sinDireccion>
         <p class="address-text">Agregar dirección</p>

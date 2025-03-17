@@ -26,13 +26,10 @@ export interface MetodosPago {
 
 export interface Direccion {
   id?: number; // Agrega esta línea
-  direccion: string;
-  referencias: string;
-  cp: string;
-  estado: string;
+  calle: string;
   ciudad: string;
-  telefono: string;
-  contrasenia?: string;
+  estado: string;
+  codigopostal: string;
 }
 
 @Injectable({
@@ -112,7 +109,12 @@ export class UsuariosService {
 
   // Agregar una dirección a un cliente
   agregarDireccion(idCliente: number, direccion: Direccion): Observable<Direccion> {
-    return this.http.post<Direccion>(`${this.apiUrl}/clientes/${idCliente}/direcciones`, direccion);
+    return this.http.post<Direccion>(`${this.apiUrl}/clientes/${idCliente}/direcciones`, {
+      calle: direccion.calle,
+      ciudad: direccion.ciudad,
+      estado: direccion.estado,
+      codigoPostal: direccion.codigopostal,
+    });
   }
 
   // Obtener las direcciones de un cliente

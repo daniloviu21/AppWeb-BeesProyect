@@ -111,7 +111,7 @@ export class RealizarpedidoPage implements OnInit {
         precio: item.producto.precio
       })),
       total: this.total,
-      direccion: this.direccionSeleccionada.direccion,
+      direccion: this.direccionSeleccionada.calle,
       metodoPago: `${this.metodoPagoSeleccionado.tipo} (•••• ${this.metodoPagoSeleccionado.numerotarjeta.substring(12, 16)})`,
       estado: 'En proceso'
     };
