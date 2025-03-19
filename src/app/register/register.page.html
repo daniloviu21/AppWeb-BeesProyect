@@ -1,9 +1,8 @@
-
 <ion-content [fullscreen]="true" class="register-background">
   <ion-grid class="register-container">
     <ion-row class="ion-justify-content-center">
       <ion-col size-md="6" size-sm="12">
-          <ion-img src="assets/img/logovanguard.png" alt="Login Banner"></ion-img>
+        <ion-img src="assets/img/logovanguard.png" alt="Login Banner"></ion-img>
         <div class="register-box">
           <h2 class="title">Crear cuenta</h2>
           <p class="subtitle">Únete a Vanguard y conoce nuestros productos</p>
@@ -11,32 +10,44 @@
           <!-- Nombre -->
           <ion-item class="input-field">
             <ion-label position="floating">Nombre</ion-label>
-            <ion-input type="text" [(ngModel)]="firstName"></ion-input>
+            <ion-input type="text" [(ngModel)]="nombreCliente"></ion-input>
           </ion-item>
 
-          <!-- Apellido -->
+          <!-- Apellido Paterno -->
           <ion-item class="input-field">
-            <ion-label position="floating">Apellido</ion-label>
-            <ion-input type="text" [(ngModel)]="lastName"></ion-input>
+            <ion-label position="floating">Apellido Paterno</ion-label>
+            <ion-input type="text" [(ngModel)]="apellidoP"></ion-input>
+          </ion-item>
+
+          <!-- Apellido Materno -->
+          <ion-item class="input-field">
+            <ion-label position="floating">Apellido Materno</ion-label>
+            <ion-input type="text" [(ngModel)]="apellidoM"></ion-input>
           </ion-item>
 
           <!-- Teléfono -->
           <ion-item class="input-field">
             <ion-label position="floating">Teléfono</ion-label>
-            <ion-input type="tel" [(ngModel)]="phone"></ion-input>
+            <ion-input type="tel" [(ngModel)]="telefono"></ion-input>
           </ion-item>
 
           <!-- Email -->
           <ion-item class="input-field">
             <ion-label position="floating">Correo Electrónico</ion-label>
-            <ion-input type="email" [(ngModel)]="email" (ionBlur)="validarEmail()"></ion-input>
+            <ion-input type="email" [(ngModel)]="correo" (ionBlur)="validarEmail()"></ion-input>
           </ion-item>
           <p *ngIf="emailError" class="error-message">Ingresa un correo electrónico válido</p>
+
+          <!-- Usuario -->
+          <ion-item class="input-field">
+            <ion-label position="floating">Usuario</ion-label>
+            <ion-input type="text" [(ngModel)]="usuario"></ion-input>
+          </ion-item>
 
           <!-- Password -->
           <ion-item class="input-field">
             <ion-label position="floating">Contraseña</ion-label>
-            <ion-input type="password" [(ngModel)]="password" (ionBlur)="validarPassword()"></ion-input>
+            <ion-input type="password" [(ngModel)]="contrasenia" (ionBlur)="validarPassword()"></ion-input>
           </ion-item>
           <p *ngIf="passwordError" class="error-message">La contraseña debe tener al menos 6 caracteres</p>
 
@@ -51,11 +62,11 @@
             Crear cuenta
           </ion-button>
 
-        <div>
-          <p class="already-account">
-            ¿Ya tienes cuenta? <a routerLink="/login">Inicia Sesión</a>
-          </p>
-        </div>
+          <div>
+            <p class="already-account">
+              ¿Ya tienes cuenta? <a routerLink="/login">Inicia Sesión</a>
+            </p>
+          </div>
           <p class="or-continue">O ingresa con :</p>
           <div class="social-icons">
             <ion-icon name="logo-google"></ion-icon>

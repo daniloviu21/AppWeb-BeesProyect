@@ -12,15 +12,16 @@ import { Keyboard } from '@capacitor/keyboard';
   standalone: false
 })
 export class EditarPerfilPage implements OnInit, OnDestroy {
-  nombrePerfil: string = '';
-  apellidoPaterno: string = '';
-  apellidoMaterno: string = '';
-  telefonoPerfil: string = '';
+  usuario: string = '';
+  nombreCliente: string = '';
+  apellidoP: string = '';
+  apellidoM: string = '';
+  telefono: string = '';
   fotoPerfil: string = '';
-  correoPerfil: string = '';
+  correo: string = '';
   modoEdicion: boolean = false;
   errores: { [key: string]: boolean } = {};
-  tecladoActivo: boolean = false; // Nueva variable para controlar el teclado
+  tecladoActivo: boolean = false;
 
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
 
@@ -28,59 +29,40 @@ export class EditarPerfilPage implements OnInit, OnDestroy {
     private usuarioService: UsuariosService,
     private router: Router,
     private alertController: AlertController
-  ) {
-    const usuario = this.usuarioService.getUsuario();
-    this.nombrePerfil = usuario?.user || 'Smith Johnson';
-    this.apellidoPaterno = usuario?.apellidoPaterno || '';
-    this.apellidoMaterno = usuario?.apellidoMaterno || '';
-    this.telefonoPerfil = usuario?.telefono || '';
-    this.fotoPerfil = usuario?.user || '/assets/icon/perfilvanguard.png';
-    this.correoPerfil = usuario?.correo || '';
-  }
+  ) {}
 
   ngOnInit(): void {
-    Keyboard.addListener('keyboardWillShow', (info) => {
-      this.tecladoActivo = true;
-      document.body.classList.add('keyboard-active');
-  
-      setTimeout(() => {
-        window.scrollTo(0, document.body.scrollHeight);
-      }, 100);
-    });
-  
-    Keyboard.addListener('keyboardWillHide', () => {
-      this.tecladoActivo = false;
-      document.body.classList.remove('keyboard-active');
-    });
-  }  
+    this.cargarDatosUsuario();
+    Keyboard.addListener('keyboardWillShow', () => this.tecladoActivo = true);
+    Keyboard.addListener('keyboardWillHide', () => this.tecladoActivo = false);
+  }
 
   ngOnDestroy(): void {
     Keyboard.removeAllListeners();
+  }
+
+  cargarDatosUsuario(): void {
+    const usuario = this.usuarioService.getUsuario();
+    if (usuario) {
+      this.usuario = usuario.usuario || '';
+      this.nombreCliente = usuario.nombreCliente || '';
+      this.apellidoP = usuario.apellidoP || '';
+      this.apellidoM = usuario.apellidoM || '';
+      this.telefono = usuario.telefono || '';
+      this.fotoPerfil = usuario.fotoPerfil || '/assets/icon/perfilvanguard.png';
+      this.correo = usuario.correo || '';
+    }
   }
 
   async mostrarOpcionesFoto() {
     const alert = await this.alertController.create({
       header: 'Editar Foto de Perfil',
       buttons: [
-        {
-          text: 'Tomar Foto',
-          handler: () => {
-            this.tomarFoto();
-          }
-        },
-        {
-          text: 'Seleccionar de Galería',
-          handler: () => {
-            this.seleccionarImagen();
-          }
-        },
-        {
-          text: 'Cancelar',
-          role: 'cancel'
-        }
+        { text: 'Tomar Foto', handler: () => this.tomarFoto() },
+        { text: 'Seleccionar de Galería', handler: () => this.seleccionarImagen() },
+        { text: 'Cancelar', role: 'cancel' }
       ]
     });
-
     await alert.present();
   }
 
@@ -91,10 +73,7 @@ export class EditarPerfilPage implements OnInit, OnDestroy {
       resultType: CameraResultType.DataUrl,
       source: CameraSource.Camera
     });
-
-    if (image.dataUrl) {
-      this.fotoPerfil = image.dataUrl;
-    }
+    if (image.dataUrl) this.fotoPerfil = image.dataUrl;
   }
 
   seleccionarImagen() {
@@ -105,9 +84,7 @@ export class EditarPerfilPage implements OnInit, OnDestroy {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.fotoPerfil = e.target.result;
-      };
+      reader.onload = (e: any) => this.fotoPerfil = e.target.result;
       reader.readAsDataURL(file);
     }
   }
@@ -116,27 +93,8 @@ export class EditarPerfilPage implements OnInit, OnDestroy {
     this.modoEdicion = !this.modoEdicion;
   }
 
-  guardarPerfil() {
-    this.errores = { nombre: false, apellidoPaterno: false, apellidoMaterno: false, telefono: false, correo: false };
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (this.nombrePerfil.length > 15) {
-      this.errores['nombre'] = true;
-    }
-    if (this.apellidoPaterno.length > 15) {
-      this.errores['apellidoPaterno'] = true;
-    }
-    if (this.apellidoMaterno.length > 15) {
-      this.errores['apellidoMaterno'] = true;
-    }
-    if (!/^\d{1,10}$/.test(this.telefonoPerfil)) {
-      this.errores['telefono'] = true;
-    }
-    if (!emailRegex.test(this.correoPerfil)) {
-      this.errores['correo'] = true;
-    }
-
+  async guardarPerfil() {
+    this.validarCampos();
     if (Object.values(this.errores).includes(true)) {
       this.mostrarAlerta("Corrige los campos resaltados antes de continuar.");
       return;
@@ -144,17 +102,28 @@ export class EditarPerfilPage implements OnInit, OnDestroy {
 
     let usuario = this.usuarioService.getUsuario();
     if (usuario) {
-      usuario.user = this.nombrePerfil;
-      usuario.apellidoPaterno = this.apellidoPaterno;
-      usuario.apellidoMaterno = this.apellidoMaterno;
-      usuario.telefono = this.telefonoPerfil;
-      usuario.user = this.fotoPerfil;
-      usuario.correo = this.correoPerfil;
-      this.usuarioService.setUsuario(usuario);
-      this.usuarioService.saveCurrentUser();
+      usuario.usuario = this.usuario;
+      usuario.nombreCliente = this.nombreCliente;
+      usuario.apellidoP = this.apellidoP;
+      usuario.apellidoM = this.apellidoM;
+      usuario.telefono = this.telefono;
+      usuario.fotoPerfil = this.fotoPerfil;
+      usuario.correo = this.correo;
+      await this.usuarioService.setUsuario(usuario);
     }
     this.modoEdicion = false;
     this.router.navigate(['/tabs/tab4']);
+  }
+
+  validarCampos() {
+    this.errores = { nombre: false, apellidoP: false, apellidoM: false, telefono: false, correo: false };
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (this.usuario.length > 15) this.errores['nombre'] = true;
+    if (this.apellidoP.length > 15) this.errores['apellidoP'] = true;
+    if (this.apellidoM.length > 15) this.errores['apellidoM'] = true;
+    if (!/^[0-9]{1,10}$/.test(this.telefono)) this.errores['telefono'] = true;
+    if (!emailRegex.test(this.correo)) this.errores['correo'] = true;
   }
 
   async mostrarAlerta(mensaje: string) {
@@ -167,12 +136,8 @@ export class EditarPerfilPage implements OnInit, OnDestroy {
   }
 
   validarTelefono(event: any) {
-    let valor = event.detail.value;
-    valor = valor.replace(/\D/g, '');
-    if (valor.length > 10) {
-      valor = valor.substring(0, 10);
-    }
-    this.telefonoPerfil = valor;
+    let valor = event.detail.value.replace(/\D/g, '').substring(0, 10);
+    this.telefono = valor;
   }
 
   navigateToTab4() {

@@ -23,7 +23,7 @@ export class Tab3Page {
 
     if (this.usuario) {
       // Obtener los pedidos del usuario actual
-      this.pedidos = this.pedidosService.obtenerPedidosUsuario(this.usuario.user);
+      this.pedidos = this.pedidosService.obtenerPedidosUsuario(this.usuario.usuario);
     } else {
       console.error('Usuario no autenticado');
     }

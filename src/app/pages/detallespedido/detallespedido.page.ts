@@ -29,7 +29,7 @@ export class DetallespedidoPage implements OnInit {
     const usuario = this.usuariosService.getUsuario();
 
     if (pedidoId && usuario) {
-      const pedido = this.pedidosService.obtenerPedidoPorId(usuario.user, pedidoId);
+      const pedido = this.pedidosService.obtenerPedidoPorId(usuario.usuario, pedidoId);
       if (pedido) {
         this.pedido = pedido;
       } else {

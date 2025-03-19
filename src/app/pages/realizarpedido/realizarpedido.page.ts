@@ -31,7 +31,7 @@ export class RealizarpedidoPage implements OnInit {
   async ngOnInit() {
     this.usuario = this.usuariosService.getUsuario();
     if (this.usuario) {
-      this.carrito = await this.carritoService.obtenerCarrito(this.usuario.user);
+      this.carrito = await this.carritoService.obtenerCarrito(this.usuario.usuario);
       this.calcularTotal();
   
       // Verificar si el usuario tiene direcciones
@@ -103,7 +103,7 @@ export class RealizarpedidoPage implements OnInit {
     
     const nuevoPedido: Pedido = {
       id: Math.random().toString(36).substring(2), // Generar un ID único
-      usuarioId: this.usuario.user, // Vincular el pedido al usuario actual
+      usuarioId: this.usuario.usuario, // Vincular el pedido al usuario actual
       fecha: new Date(),
       productos: this.carrito.map(item => ({
         nombreproducto: item.producto.nombreproducto,
@@ -121,7 +121,7 @@ export class RealizarpedidoPage implements OnInit {
     this.router.navigate(['/tabs/tab3']);
 
     if (this.usuario) {
-      this.carritoService.limpiarCarrito(this.usuario.user);
+      this.carritoService.limpiarCarrito(this.usuario.usuario);
       this.carrito = [];
       this.total = 0;
     }

@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { UsuariosService } from '../services/usuarios.service';
-
+import { Usuario, UsuariosService } from '../services/usuarios.service';
 
 @Component({
   selector: 'app-tab4',
@@ -12,24 +11,22 @@ import { UsuariosService } from '../services/usuarios.service';
 })
 export class Tab4Page {
   editando = false;
-  nombrePerfil = localStorage.getItem('nombrePerfil') || 'Smith Johnson';
-  fotoPerfil = localStorage.getItem('fotoPerfil') || '/assets/icon/perfilvanguard.png';
+  nombrePerfil: string;
+  fotoPerfil: string;
 
   constructor(public alertCtrl: AlertController, private router: Router, private usuarioService: UsuariosService) {
-    const usuario = this.usuarioService.getUsuario();
-    this.nombrePerfil = usuario?.user || 'Smith Johnson';
-    this.fotoPerfil = usuario?.user || '/assets/icon/perfilvanguard.png';
+    const usuario = this.usuarioService.getUsuario() as Usuario | null;
+    this.nombrePerfil = usuario?.usuario || 'Smith Johnson';
+    this.fotoPerfil = usuario?.fotoPerfil || '/assets/icon/perfilvanguard.png';
   }
-  
+
   editarPerfil() {
     this.router.navigate(['/editar-perfil']);
   }
-  
-  
 
   async cambiarFoto() {
     if (!this.editando) return;
-  
+
     const alert = await this.alertCtrl.create({
       header: 'Cambiar Foto',
       inputs: [{ name: 'url', type: 'url', placeholder: 'Pega la URL de la nueva imagen' }],
@@ -40,9 +37,9 @@ export class Tab4Page {
           handler: (data) => {
             if (data.url) {
               this.fotoPerfil = data.url;
-              let usuario = this.usuarioService.getUsuario();
+              let usuario = this.usuarioService.getUsuario() as Usuario | null;
               if (usuario) {
-                usuario.direccion = data.url;
+                usuario.fotoPerfil = data.url; // Corregido: se guarda en fotoPerfil, no en direccion
                 this.usuarioService.setUsuario(usuario);
                 this.usuarioService.saveCurrentUser();
               }
@@ -53,14 +50,22 @@ export class Tab4Page {
     });
     await alert.present();
   }
- cambiarDireccion() { this.router.navigate(['/cambiar-direccion']); }
 
+  cambiarDireccion() {
+    this.router.navigate(['/cambiar-direccion']);
+  }
 
+  metodosPago() {
+    this.router.navigate(['/metodos-pago']);
+  }
 
+  politicaPrivacidad() {
+    this.router.navigate(['/politica-privacidad']);
+  }
 
-  metodosPago() { this.router.navigate(['/metodos-pago']); }
-  politicaPrivacidad() { this.router.navigate(['/politica-privacidad']); }
-  terminosCondiciones() { this.router.navigate(['/terminos-condiciones']); }
+  terminosCondiciones() {
+    this.router.navigate(['/terminos-condiciones']);
+  }
 
   async cerrarSesion() {
     const alert = await this.alertCtrl.create({
@@ -87,23 +92,21 @@ export class Tab4Page {
   }
 
   cerrarUser() {
-    this.usuarioService.setUsuario({
-      user: '',
-      apellidoPaterno: '',
-      apellidoMaterno: '',
+    const usuarioVacio: Usuario = {
+      nombreCliente: '',
+      apellidoP: '',
+      apellidoM: '',
       telefono: '',
-      direccion: [],
       correo: '',
+      usuario: '',
       contrasenia: '',
+      direccion: [],
       metodospago: [],
-      fotoPerfil: 'https://th.bing.com/th?q=Pepe+Foto+De+Perfil&w=120&h=120&c=1&rs=1&qlt=90&cb=1&pid=InlineBlock&mkt=es-MX&cc=MX&setlang=es&adlt=moderate&t=1&mw=247' // Agregar para evitar posibles errores
-    });
-  
-    this.usuarioService.saveCurrentUser(); // Guardar cambios en almacenamiento
+      fotoPerfil: 'https://th.bing.com/th?q=Pepe+Foto+De+Perfil&w=120&h=120&c=1&rs=1&qlt=90&cb=1&pid=InlineBlock&mkt=es-MX&cc=MX&setlang=es&adlt=moderate&t=1&mw=247'
+    };
+
+    this.usuarioService.setUsuario(usuarioVacio);
+    this.usuarioService.saveCurrentUser();
     this.router.navigate(['/login']);
   }
-  
-  
-  
-  
 }

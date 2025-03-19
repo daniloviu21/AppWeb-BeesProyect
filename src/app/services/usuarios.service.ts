@@ -5,13 +5,14 @@ import { Observable } from 'rxjs';
 
 export interface Usuario {
   id?: number;
-  user: string;
-  apellidoPaterno: string;
-  apellidoMaterno: string;
-  telefono: string;
-  direccion: Direccion[];
+  nombreCliente: string;
+  apellidoP: string;
+  apellidoM: string;
   correo: string;
+  telefono: string;
+  usuario: string;
   contrasenia: string;
+  direccion: Direccion[];
   metodospago: MetodosPago[];
   fotoPerfil?: string;
 }
@@ -55,9 +56,10 @@ export class UsuariosService {
   }
 
   // Crear un nuevo usuario
-  crearUsuario(usuario: Usuario): Observable<Usuario> {
-    return this.http.post<Usuario>(`${this.apiUrl}/usuarios`, usuario);
+  crearClienteYUsuario(requestBody: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/clientes`, requestBody);
   }
+  
 
   // Obtener un usuario por su ID
   obtenerUsuarioPorId(id: number): Observable<Usuario> {
