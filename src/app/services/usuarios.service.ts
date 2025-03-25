@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage-angular';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 export interface Usuario {
   id?: number;
@@ -38,7 +39,7 @@ export interface Direccion {
 })
 export class UsuariosService {
   private _storage: Storage | null = null;
-  private apiUrl = 'http://82.29.197.167:3000/api'; // URL de la API
+  private apiUrl = environment.apiUrl;
   private usuarioActual: Usuario | null = null;
 
   constructor(private storage: Storage, private http: HttpClient) {

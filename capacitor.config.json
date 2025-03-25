@@ -2,6 +2,23 @@
   "appId": "com.miapp.ionic",
   "appName": "Vanguard",
   "webDir": "www",
-  "bundledWebRuntime": false
+  "bundledWebRuntime": false,
+  "server": {
+    "cleartext": true,
+    "allowNavigation": [
+      "82.29.197.167",
+      "http://82.29.197.167:3000",
+      "localhost"
+    ]
+  },
+  "android": {
+    "allowMixedContent": true,
+    "webContentsDebuggingEnabled": true,
+    "overrideUserAgent": "Mozilla/5.0 VanguardApp"
+  },
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    }
+  }
 }
-                                                                                                                                                                                             
