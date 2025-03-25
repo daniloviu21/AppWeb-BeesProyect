@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content fullscreen="true">
   <ion-list *ngIf="pedidos.length > 0; else noPedidos">
     <ion-item *ngFor="let pedido of pedidos" [routerLink]="['/detallespedido', pedido.id]" detail="true" [button]="true">
       <ion-label>
