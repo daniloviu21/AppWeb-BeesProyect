@@ -12,11 +12,11 @@ import { Direccion, MetodosPago, Usuario, UsuariosService } from 'src/app/servic
   standalone: false
 })
 export class RealizarpedidoPage implements OnInit {
-  usuario!: Usuario | null;
+  usuario: Usuario | null = null;
   carrito: any[] = [];
   total: number = 0;
-  direccionSeleccionada!: Direccion;
-  metodoPagoSeleccionado!: MetodosPago;
+  direccionSeleccionada: Direccion | null = null;
+  metodoPagoSeleccionado: MetodosPago | null = null;
   tieneDirecciones: boolean = false;
   tieneMetodosPago: boolean = false;
 
@@ -29,31 +29,66 @@ export class RealizarpedidoPage implements OnInit {
   ) {}
 
   async ngOnInit() {
+    await this.loadData();
+  }
+
+  async ionViewWillEnter() {
+    await this.loadData();
+  }
+
+  async loadData() {
     this.usuario = this.usuariosService.getUsuario();
-    if (this.usuario) {
-      this.carrito = await this.carritoService.obtenerCarrito(Number(this.usuario.usuario));
+    
+    if (!this.usuario) {
+      console.error('Usuario no autenticado');
+      this.router.navigate(['/login']);
+      return;
+    }
+  
+    try {
+      // Cargar carrito
+      this.carrito = await this.carritoService.obtenerCarrito(Number(this.usuario.id));
       this.calcularTotal();
   
-      // Verificar si el usuario tiene direcciones
-      if (this.usuario.direccion && this.usuario.direccion.length > 0) {
-        this.tieneDirecciones = true;
-        this.direccionSeleccionada = this.usuario.direccion[0];
-      } else {
-        this.tieneDirecciones = false;
-      }
-  
-      // Verificar si el usuario tiene métodos de pago
-      if (this.usuario.metodospago && this.usuario.metodospago.length > 0) {
-        this.tieneMetodosPago = true;
-        this.metodoPagoSeleccionado = this.usuario.metodospago[0];
-      } else {
-        this.tieneMetodosPago = false;
-      }
+      // Cargar direcciones y métodos de pago actualizados
+      await this.cargarDireccionesYMetodos();
+    } catch (error) {
+      console.error('Error al cargar datos:', error);
     }
   }
 
-  ionViewWillEnter() {
-    this.ngOnInit();
+  async cargarDireccionesYMetodos() {
+    if (!this.usuario?.id) return;
+  
+    // Cargar direcciones actualizadas
+    this.usuariosService.obtenerDirecciones(this.usuario.id).subscribe(
+      (direcciones) => {
+        this.tieneDirecciones = direcciones.length > 0;
+        this.direccionSeleccionada = this.tieneDirecciones ? direcciones[0] : null;
+        
+        // Actualizar en el objeto usuario
+        if (this.usuario) {
+          this.usuario.direccion = direcciones;
+          this.usuariosService.setUsuario(this.usuario);
+        }
+      },
+      (error) => console.error('Error al cargar direcciones:', error)
+    );
+  
+    // Cargar métodos de pago actualizados
+    this.usuariosService.obtenerMetodosPago(this.usuario.id).subscribe(
+      (metodosPago) => {
+        this.tieneMetodosPago = metodosPago.length > 0;
+        this.metodoPagoSeleccionado = this.tieneMetodosPago ? metodosPago[0] : null;
+        
+        // Actualizar en el objeto usuario
+        if (this.usuario) {
+          this.usuario.metodospago = metodosPago;
+          this.usuariosService.setUsuario(this.usuario);
+        }
+      },
+      (error) => console.error('Error al cargar métodos de pago:', error)
+    );
   }
 
   calcularTotal() {
@@ -61,16 +96,19 @@ export class RealizarpedidoPage implements OnInit {
   }
 
   cambiarDireccion() {
-    console.log("Cambiar Dirección");
-    this.router.navigate(['/cambiar-direccion']); // Redirige a la página para agregar dirección
+    this.router.navigate(['/cambiar-direccion']);
   }
 
   cambiarTarjeta() {
-    console.log("Cambiar Tarjeta");
-    this.router.navigate(['/metodos-pago']); // Redirige a la página para agregar método de pago
+    this.router.navigate(['/metodos-pago']);
   }
 
   async pagar() {
+    if (!this.direccionSeleccionada || !this.metodoPagoSeleccionado) {
+      console.error('Dirección o método de pago no seleccionado');
+      return;
+    }
+
     const alert = await this.alertController.create({
       header: 'Confirmar Pedido',
       message: '¿Estás seguro de que deseas realizar este pedido?',
@@ -85,7 +123,6 @@ export class RealizarpedidoPage implements OnInit {
         {
           text: 'Continuar',
           handler: () => {
-            console.log('Pedido confirmado');
             this.generarPedido();
           }
         }
@@ -96,14 +133,14 @@ export class RealizarpedidoPage implements OnInit {
   }
 
   generarPedido() {
-    if (!this.usuario) {
-      console.error('Usuario no autenticado');
+    if (!this.usuario || !this.direccionSeleccionada || !this.metodoPagoSeleccionado) {
+      console.error('Datos incompletos para generar pedido');
       return;
     }
     
     const nuevoPedido: Pedido = {
-      id: Math.random().toString(36).substring(2), // Generar un ID único
-      usuarioId: this.usuario.usuario, // Vincular el pedido al usuario actual
+      id: Math.random().toString(36).substring(2),
+      usuarioId: Number(this.usuario.id).toString(), // Usar id en lugar de usuario
       fecha: new Date(),
       productos: this.carrito.map(item => ({
         nombreproducto: item.producto.nombreproducto,
@@ -116,22 +153,16 @@ export class RealizarpedidoPage implements OnInit {
       estado: 'En proceso'
     };
   
-    // Guardar el pedido usando el servicio
     this.pedidosService.agregarPedido(nuevoPedido);
     this.router.navigate(['/tabs/tab3']);
 
-    if (this.usuario) {
-      this.carritoService.limpiarCarrito(this.usuario.usuario);
-      this.carrito = [];
-      this.total = 0;
-    }
+    this.carritoService.limpiarCarrito(Number(this.usuario.id).toString());
+    this.carrito = [];
+    this.total = 0;
   }
 
-  getCardImage(numero: string): string {
-    if (numero.startsWith('4')) {
-      return 'assets/img/visa.png';
-    } else {
-      return 'assets/img/mastercard.png';
-    }
+  getCardImage(numero: string | undefined): string {
+    if (!numero) return 'assets/img/default-card.png';
+    return numero.startsWith('4') ? 'assets/img/visa.png' : 'assets/img/mastercard.png';
   }
 }
