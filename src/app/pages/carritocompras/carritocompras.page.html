@@ -8,30 +8,43 @@
 </ion-header>
 
 <ion-content>
-  <div class="details-sales">
-  <ion-list>
-    <ion-item *ngFor="let item of carrito">
-      <ion-label>
-        <h2>{{ item.producto.nombreproducto }}</h2>
-        <p>{{ item.producto.descripcion }}</p>
-        <p><strong>{{ item.producto.precio | currency }}</strong></p>
-        <p>Cantidad: {{ item.cantidad }}</p>
-      </ion-label>
-      <ion-button fill="clear" (click)="aumentarCantidad(item)">
-        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
-      </ion-button>
-      <ion-button fill="clear" (click)="eliminarProducto(item)">
-        <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
-      </ion-button>
+  <div *ngIf="tienecarro; else carritoVacio">
+    <div class="details-sales">
+      <ion-list>
+        <ion-item *ngFor="let item of carrito">
+          <ion-label>
+            <h2>{{ item.producto.nombreproducto }}</h2>
+            <p>{{ item.producto.descripcion }}</p>
+            <p><strong>{{ item.producto.precio | currency }}</strong></p>
+            <p>Cantidad: {{ item.cantidad }}</p>
+          </ion-label>
+          <ion-button fill="clear" (click)="aumentarCantidad(item)">
+            <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" (click)="eliminarProducto(item)">
+            <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </div>
+    
+    <ion-item>
+      <ion-label>Total:</ion-label>
+      <ion-label slot="end">{{ total | currency }}</ion-label>
     </ion-item>
-  </ion-list>
-</div>
-  <ion-item>
-    <ion-label>Total:</ion-label>
-    <ion-label slot="end">{{ total | currency }}</ion-label>
-  </ion-item>
 
-  <ion-button expand="block" routerLink="/realizarpedido" [disabled]="!tienecarro">Continuar</ion-button>
+    <ion-button expand="block" routerLink="/realizarpedido">Continuar</ion-button>
+    <ion-button expand="block" (click)="limpiarCarrito()" color="danger">Limpiar Carrito</ion-button>
+  </div>
 
-  <ion-button expand="block" (click)="limpiarCarrito()" [disabled]="!tienecarro">Limpiar Carrito</ion-button>
+  <ng-template #carritoVacio>
+    <div class="carrito-vacio">
+      <ion-icon name="cart-outline" class="icono"></ion-icon>
+      <p>Tu carrito está vacío</p>
+      <p>¡Agrega algunos productos!</p>
+      <ion-button expand="block" routerLink="/tabs/tab2" fill="outline">
+        Ver productos
+      </ion-button>
+    </div>
+  </ng-template>
 </ion-content>

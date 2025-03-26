@@ -31,7 +31,7 @@ export class RealizarpedidoPage implements OnInit {
   async ngOnInit() {
     this.usuario = this.usuariosService.getUsuario();
     if (this.usuario) {
-      this.carrito = await this.carritoService.obtenerCarrito(this.usuario.usuario);
+      this.carrito = await this.carritoService.obtenerCarrito(Number(this.usuario.usuario));
       this.calcularTotal();
   
       // Verificar si el usuario tiene direcciones

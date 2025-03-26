@@ -77,10 +77,8 @@ export class ProductosPage implements OnInit {
       return;
     }
   
-    console.log('Producto recibido en agregarAlCarrito:', producto);  // Depuración
-  
     if (this.usuarioActual) {
-      this.carritoService.agregarProducto(this.usuarioActual.user, producto)
+      this.carritoService.agregarProducto(this.usuarioActual.id, producto)
         .then(() => {
           console.log('Producto agregado al carrito:', producto);
         })
@@ -90,7 +88,7 @@ export class ProductosPage implements OnInit {
     } else {
       console.error('Usuario no autenticado');
     }
-
+  
     this.presentToast();
   }
 

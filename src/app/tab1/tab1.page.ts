@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Usuario } from '../services/usuarios.service';
+import { Usuario, UsuariosService } from '../services/usuarios.service';
 import { AlertController, Platform } from '@ionic/angular';
 import { CategoriasService } from '../services/productos.service';
 import { Categoria } from '../services/productos.service'; 
@@ -12,7 +12,7 @@ import { Categoria } from '../services/productos.service';
 })
 
 export class Tab1Page implements OnInit {
-
+  usuario: string = '';
   currentIndexServ: number = 0;
 
   productos = [
@@ -46,8 +46,12 @@ export class Tab1Page implements OnInit {
   constructor(
     private platform: Platform,
     private categoriasService: CategoriasService,
-    private alertController: AlertController
-  ) {}
+    private alertController: AlertController,
+    private usuarioService: UsuariosService
+  ) {
+    const usuario = this.usuarioService.getUsuario() as Usuario | null;
+    this.usuario = usuario?.usuario || '';
+  }
 
   ngOnInit(): void {
     this.loadCategories();

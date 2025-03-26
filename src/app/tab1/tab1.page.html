@@ -1,25 +1,15 @@
-<header>
+<ion-header>
   <ion-toolbar>
-    <div class="delivery">
-      <div class="location-container">
-        <div class="location-icon">
-          <ion-icon name="location-outline"></ion-icon>
-        </div>
-        <div class="address-info">
-          <p class="title">Nuestra ubicación</p>
-          <div class="address-row">
-            <p class="address">{{ address }}</p>
-            <ion-icon name="chevron-forward-outline" (click)="openMaps()"></ion-icon>
-          </div>
-        </div>
-      </div>
-      <div class="cart-icon">
-        <ion-icon name="cart-outline" routerLink="/carritocompras"></ion-icon>
-        <span *ngIf="cartCount > 0" class="cart-count">{{ cartCount }}</span>
-      </div>
+    <ion-title>
+      Bienvenido {{usuario}} ...
+    </ion-title>
+    <div slot="end" class="cart-icon">
+      <ion-icon name="cart-outline" routerLink="/carritocompras"></ion-icon>
+      <span *ngIf="cartCount > 0" class="cart-count">{{ cartCount }}</span>
     </div>
   </ion-toolbar>
-</header>
+</ion-header>
+
 <ion-content fullscreen="true">
   <!--Categorias (en pequeño)-->
   <ion-list class="categories-container">
