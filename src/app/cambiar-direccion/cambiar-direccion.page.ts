@@ -36,7 +36,7 @@ export class CambiarDireccionPage {
       (direcciones) => {
         this.direcciones = direcciones;
         if (direcciones.length > 0) {
-          this.direccionSeleccionada = direcciones[0]; // Selecciona la primera dirección por defecto
+          this.direccionSeleccionada = direcciones[direcciones.length-1]; // Selecciona la primera dirección por defecto
         }
         console.log('Direcciones cargadas:', this.direcciones); // Verifica los datos recibidos
       },

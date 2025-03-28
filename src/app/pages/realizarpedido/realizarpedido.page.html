@@ -44,12 +44,12 @@
 
   <ion-item [routerLink]="['/metodos-pago']" detail="true" [button]="true">
     <img *ngIf="tieneMetodosPago" 
-         [src]="getCardImage(metodoPagoSeleccionado!.numerotarjeta)" 
+         [src]="getCardImage(metodoPagoSeleccionado!.numeroTarjeta)" 
          alt="Card Logo" 
          class="card-logo" />
     <ion-label>
       <p *ngIf="tieneMetodosPago; else sinMetodoPago">
-        {{ metodoPagoSeleccionado!.tipo }} <strong>•••• </strong>{{ metodoPagoSeleccionado!.numerotarjeta.substring(12, 16) }}
+        {{ metodoPagoSeleccionado!.tipo }} <strong>•••• </strong>{{ metodoPagoSeleccionado!.numeroTarjeta.substring(12, 16) }}
       </p>
       <ng-template #sinMetodoPago>
         <p>Agregar método de pago</p>

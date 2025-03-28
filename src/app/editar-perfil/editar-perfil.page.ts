@@ -109,7 +109,7 @@ export class EditarPerfilPage implements OnInit, OnDestroy {
       usuario.telefono = this.telefono;
       usuario.fotoPerfil = this.fotoPerfil;
       usuario.correo = this.correo;
-      await this.usuarioService.setUsuario(usuario);
+      await this.usuarioService.actualizarUsuarioLocal(usuario);
     }
     this.modoEdicion = false;
     this.router.navigate(['/tabs/tab4']);

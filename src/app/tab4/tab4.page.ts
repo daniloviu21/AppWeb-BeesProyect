@@ -40,7 +40,7 @@ export class Tab4Page {
               let usuario = this.usuarioService.getUsuario() as Usuario | null;
               if (usuario) {
                 usuario.fotoPerfil = data.url; // Corregido: se guarda en fotoPerfil, no en direccion
-                this.usuarioService.setUsuario(usuario);
+                this.usuarioService.actualizarUsuarioLocal(usuario);
                 this.usuarioService.saveCurrentUser();
               }
             }
@@ -91,22 +91,8 @@ export class Tab4Page {
     await alert.present();
   }
 
-  cerrarUser() {
-    const usuarioVacio: Usuario = {
-      nombreCliente: '',
-      apellidoP: '',
-      apellidoM: '',
-      telefono: '',
-      correo: '',
-      usuario: '',
-      contrasenia: '',
-      direccion: [],
-      metodospago: [],
-      fotoPerfil: 'https://th.bing.com/th?q=Pepe+Foto+De+Perfil&w=120&h=120&c=1&rs=1&qlt=90&cb=1&pid=InlineBlock&mkt=es-MX&cc=MX&setlang=es&adlt=moderate&t=1&mw=247'
-    };
-
-    this.usuarioService.setUsuario(usuarioVacio);
-    this.usuarioService.saveCurrentUser();
+  async cerrarUser() {
+    await this.usuarioService.logout();
     this.router.navigate(['/login']);
   }
 }

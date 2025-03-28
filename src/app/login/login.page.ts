@@ -23,7 +23,7 @@ export class LoginPage {
     this.passwordError = this.password.length > 0 && this.password.length < 6;
   }
 
-  async login() {
+  login() {
     if (!this.username || !this.password) {
       this.mostrarMensaje('Todos los campos son obligatorios');
       return;
@@ -34,9 +34,12 @@ export class LoginPage {
     }
   
     this.usuariosService.login(this.username, this.password).subscribe(
-      (response) => {
+      async (response) => {
         console.log('Inicio de sesión exitoso:', response);
-        this.usuariosService.setUsuario(response.usuario);
+        await this.usuariosService.setUsuario({
+          usuario: response.usuario,
+          token: response.token
+        });
         this.router.navigate(['/tabs/tab1']);
       },
       (error) => {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage-angular';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 export interface Usuario {
@@ -21,8 +21,8 @@ export interface Usuario {
 export interface MetodosPago {
   id?: number; // Agrega esta línea
   tipo: string;
-  numerotarjeta: string;
-  fechavencimiento: string;
+  numeroTarjeta: string;
+  fechaVencimiento: string;
   cvv: string;
 }
 
@@ -31,7 +31,7 @@ export interface Direccion {
   calle: string;
   ciudad: string;
   estado: string;
-  codigopostal: string;
+  codigoPostal: string;
 }
 
 @Injectable({
@@ -41,6 +41,7 @@ export class UsuariosService {
   private _storage: Storage | null = null;
   private apiUrl = environment.apiUrl;
   private usuarioActual: Usuario | null = null;
+  private token: string | null = null;
 
   constructor(private storage: Storage, private http: HttpClient) {
     this.init();
@@ -49,6 +50,34 @@ export class UsuariosService {
   async init() {
     this._storage = await this.storage.create();
     await this.loadCurrentUser();
+    await this.loadToken();
+  }
+
+  async setToken(token: string): Promise<void> {
+    this.token = token;
+    if (this._storage) {
+      await this._storage.set('authToken', token);
+    }
+  }
+
+  async getToken(): Promise<string | null> {
+    if (!this.token && this._storage) {
+      this.token = await this._storage.get('authToken');
+    }
+    return this.token;
+  }
+
+  async removeToken(): Promise<void> {
+    this.token = null;
+    if (this._storage) {
+      await this._storage.remove('authToken');
+    }
+  }
+
+  async loadToken(): Promise<void> {
+    if (this._storage) {
+      this.token = await this._storage.get('authToken');
+    }
   }
 
   // Obtener todos los usuarios
@@ -78,15 +107,23 @@ export class UsuariosService {
   }
 
   // Iniciar sesión
-  login(username: string, password: string): Observable<{ message: string; usuario: Usuario }> {
-    return this.http.post<{ message: string; usuario: Usuario }>(`${this.apiUrl}/usuarios/login`, {
+  login(username: string, password: string): Observable<{ message: string; usuario: Usuario; token: string }> {
+    return this.http.post<{ message: string; usuario: Usuario; token: string }>(`${this.apiUrl}/usuarios/login`, {
       username,
       password,
     });
   }
 
   // Guardar el usuario actual en el almacenamiento local
-  async setUsuario(usuario: Usuario) {
+  async setUsuario(data: { usuario: Usuario; token?: string }): Promise<void> {
+    this.usuarioActual = data.usuario;
+    if (data.token) {
+      await this.setToken(data.token);
+    }
+    await this.saveCurrentUser();
+  }
+
+  async actualizarUsuarioLocal(usuario: Usuario): Promise<void> {
     this.usuarioActual = usuario;
     await this.saveCurrentUser();
   }
@@ -94,6 +131,23 @@ export class UsuariosService {
   // Obtener el usuario actual
   getUsuario(): Usuario | null {
     return this.usuarioActual;
+  }
+
+  // Modificar el logout
+  async logout(): Promise<void> {
+    this.usuarioActual = null;
+    await this.removeToken();
+    await this.saveCurrentUser();
+  }
+
+  // Método para verificar autenticación
+  isAuthenticated(): boolean {
+    return !!this.token;
+  }
+
+  // Interceptor para añadir el token a las peticiones
+  getAuthHeader(): { [header: string]: string } {
+    return this.token ? { Authorization: `Bearer ${this.token}` } : {};
   }
 
   // Cargar el usuario actual desde el almacenamiento local
@@ -116,7 +170,7 @@ export class UsuariosService {
       calle: direccion.calle,
       ciudad: direccion.ciudad,
       estado: direccion.estado,
-      codigoPostal: direccion.codigopostal,
+      codigoPostal: direccion.codigoPostal,
     });
   }
 
@@ -139,16 +193,24 @@ export class UsuariosService {
   agregarMetodoPago(idCliente: number, metodoPago: MetodosPago): Observable<MetodosPago> {
     return this.http.post<MetodosPago>(`${this.apiUrl}/clientes/${idCliente}/metodos-pago`, {
       tipo: metodoPago.tipo,
-      numeroTarjeta: metodoPago.numerotarjeta,
-      fechaVencimiento: metodoPago.fechavencimiento,
+      numeroTarjeta: metodoPago.numeroTarjeta,
+      fechaVencimiento: metodoPago.fechaVencimiento,
       cvv: metodoPago.cvv,
     });
   }
 
   // Obtener los métodos de pago de un cliente
-  obtenerMetodosPago(idCliente: number): Observable<MetodosPago[]> {
-    return this.http.get<MetodosPago[]>(`${this.apiUrl}/clientes/${idCliente}/metodos-pago`);
-  }
+  // En tu servicio
+obtenerMetodosPago(idCliente: number): Observable<MetodosPago[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/clientes/${idCliente}/metodos-pago`).pipe(
+    map(metodos => metodos.map(m => ({
+      id: m.id,
+      tipo: m.tipo,
+      numeroTarjeta: m.numerotarjeta,  // Transformar snake_case a camelCase
+      fechaVencimiento: m.fechavencimiento,
+      cvv: m.cvv
+    }))))
+  };
 
   // Editar un método de pago de un cliente
   editarMetodoPago(idMetodoPago: number, metodoPago: MetodosPago): Observable<MetodosPago> {

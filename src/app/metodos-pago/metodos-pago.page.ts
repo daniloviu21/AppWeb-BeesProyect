@@ -13,13 +13,6 @@ export class MetodosPagoPage implements OnInit {
   metodoSeleccionado!: MetodosPago;
   metodosPago: MetodosPago[] = []; // Lista de métodos de pago
 
-  metodo: MetodosPago = {
-    tipo: '',
-    numerotarjeta: '',
-    fechavencimiento: '',
-    cvv: '',
-  };
-
   constructor(
     private usuarioService: UsuariosService,
     private modalCtrl: ModalController,
@@ -39,7 +32,9 @@ export class MetodosPagoPage implements OnInit {
     this.usuarioService.obtenerMetodosPago(idCliente).subscribe(
       (metodosPago) => {
         this.metodosPago = metodosPago;
-        console.log('Métodos de pago cargados:', this.metodosPago);  // Verifica los datos recibidos
+        if (this.metodosPago.length > 0) {
+          this.metodoSeleccionado = this.metodosPago[metodosPago.length - 1];
+        }
       },
       (error) => {
         console.error('Error al cargar métodos de pago:', error);
@@ -54,9 +49,9 @@ export class MetodosPagoPage implements OnInit {
   formatCaducidad(event: any) {
     const value = event.target.value.replace(/\D/g, ''); // Solo acepta números
     if (value.length >= 2) {
-      this.metodo.fechavencimiento = value.slice(0, 2) + '/' + value.slice(2, 4);
+      this.metodoSeleccionado.fechaVencimiento = value.slice(0, 2) + '/' + value.slice(2, 4);
     } else {
-      this.metodo.fechavencimiento = value;
+      this.metodoSeleccionado.fechaVencimiento = value;
     }
   }
 
@@ -96,13 +91,13 @@ export class MetodosPagoPage implements OnInit {
   }
 
   agregarMetodoPago() {
-    const { numerotarjeta, fechavencimiento, cvv } = this.metodo;
+    const { numeroTarjeta, fechaVencimiento, cvv } = this.metodoSeleccionado;
   
-    if (!numerotarjeta || numerotarjeta.length !== 16) {
+    if (!numeroTarjeta || numeroTarjeta.length !== 16) {
       this.mostrarToast('Tarjeta inválida (16 dígitos)');
       return;
     }
-    if (!fechavencimiento || fechavencimiento.length !== 5) {
+    if (!fechaVencimiento || fechaVencimiento.length !== 5) {
       this.mostrarToast('Fecha de caducidad inválida');
       return;
     }
@@ -111,21 +106,21 @@ export class MetodosPagoPage implements OnInit {
       return;
     }
   
-    if (!this.isfechavencimientoalida(fechavencimiento)) {
+    if (!this.isfechavencimientoalida(fechaVencimiento)) {
       this.mostrarToast('Fecha de caducidad inválida');
       return;
     }
   
     // Asignación del tipo de tarjeta
-    this.metodo.tipo = numerotarjeta.startsWith('4') ? 'Visa' : 'Mastercard';
+    this.metodoSeleccionado.tipo = numeroTarjeta.startsWith('4') ? 'Visa' : 'Mastercard';
   
     const usuario = this.usuarioService.getUsuario();
     if (usuario && usuario.id) {
-      this.usuarioService.agregarMetodoPago(usuario.id, this.metodo).subscribe(
+      this.usuarioService.agregarMetodoPago(usuario.id, this.metodoSeleccionado).subscribe(
         (metodoPago) => {
           this.metodosPago.push(metodoPago);
           this.mostrarToast('Método de pago agregado exitosamente', 'success');
-          this.metodo = { tipo: '', numerotarjeta: '', fechavencimiento: '', cvv: '' }; // Limpiar formulario
+          this.metodoSeleccionado = { tipo: '', numeroTarjeta: '', fechaVencimiento: '', cvv: '' }; // Limpiar formulario
           this.modalCtrl.dismiss(); // Cerrar el modal
         },
         (error) => {
@@ -140,6 +135,15 @@ export class MetodosPagoPage implements OnInit {
 
   guardarMetodoPrincipal() {
     if (this.usuario && this.metodoSeleccionado && this.metodoSeleccionado.id) {
+      // Agregar un log para verificar los valores antes de la validación
+      console.log('Método de pago seleccionado:', this.metodoSeleccionado);
+      
+      // Verifica si los datos de metodoSeleccionado están completos
+      if (!this.metodoSeleccionado.numeroTarjeta || !this.metodoSeleccionado.fechaVencimiento || !this.metodoSeleccionado.cvv) {
+        this.mostrarToast('Por favor, complete todos los campos antes de guardar.', 'danger');
+        return;
+      }
+  
       this.usuarioService.editarMetodoPago(this.metodoSeleccionado.id, this.metodoSeleccionado).subscribe(
         (metodoActualizado) => {
           console.log('Método de pago actualizado:', metodoActualizado);

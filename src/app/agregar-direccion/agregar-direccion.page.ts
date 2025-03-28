@@ -14,7 +14,7 @@ export class AgregarDireccionPage implements OnInit {
     calle: '',
     ciudad: '',
     estado: '',
-    codigopostal: '',
+    codigoPostal: '',
   };
 
   editando = false;
@@ -49,7 +49,7 @@ export class AgregarDireccionPage implements OnInit {
   }
 
   validarCP() {
-    this.errorCP = !this.codigoPostalValido(this.direccion.codigopostal);
+    this.errorCP = !this.codigoPostalValido(this.direccion.codigoPostal);
   }
 
   async guardarDireccion() {

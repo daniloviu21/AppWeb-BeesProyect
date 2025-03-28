@@ -69,7 +69,7 @@ export class RealizarpedidoPage implements OnInit {
         // Actualizar en el objeto usuario
         if (this.usuario) {
           this.usuario.direccion = direcciones;
-          this.usuariosService.setUsuario(this.usuario);
+          this.usuariosService.actualizarUsuarioLocal(this.usuario);
         }
       },
       (error) => console.error('Error al cargar direcciones:', error)
@@ -84,7 +84,7 @@ export class RealizarpedidoPage implements OnInit {
         // Actualizar en el objeto usuario
         if (this.usuario) {
           this.usuario.metodospago = metodosPago;
-          this.usuariosService.setUsuario(this.usuario);
+          this.usuariosService.actualizarUsuarioLocal(this.usuario);
         }
       },
       (error) => console.error('Error al cargar métodos de pago:', error)
@@ -149,7 +149,7 @@ export class RealizarpedidoPage implements OnInit {
       })),
       total: this.total,
       direccion: this.direccionSeleccionada.calle,
-      metodoPago: `${this.metodoPagoSeleccionado.tipo} (•••• ${this.metodoPagoSeleccionado.numerotarjeta.substring(12, 16)})`,
+      metodoPago: `${this.metodoPagoSeleccionado.tipo} (•••• ${this.metodoPagoSeleccionado.numeroTarjeta.substring(12, 16)})`,
       estado: 'En proceso'
     };
   

@@ -12,8 +12,8 @@
   <ion-item>
     <ion-label>Seleccionar Método de Pago Principal</ion-label>
     <ion-select [(ngModel)]="metodoSeleccionado" (ionChange)="guardarMetodoPrincipal()">
-      <ion-select-option *ngFor="let mpago of metodosPago" [value]="mpago">
-        {{ mpago.tipo }} •••• {{ mpago.numerotarjeta ? mpago.numerotarjeta.substring(mpago.numerotarjeta.length - 4) : '****' }}
+      <ion-select-option *ngFor="let mpago of metodosPago" [value]="mpago" [disabled]="!mpago.numeroTarjeta">
+        {{ mpago.tipo }} •••• {{ mpago.numeroTarjeta ? mpago.numeroTarjeta.substring(mpago.numeroTarjeta.length - 4) : '****' }}
       </ion-select-option>
     </ion-select>
   </ion-item>
@@ -25,7 +25,7 @@
       <ion-label>{{ mpago.tipo }}</ion-label>
       <ion-label>
         <strong>•••• </strong>
-        {{ mpago.numerotarjeta.substring(mpago.numerotarjeta.length - 4) }}
+        {{ mpago.numeroTarjeta.substring(mpago.numeroTarjeta.length - 4) }}
       </ion-label>
     </ion-item>
   </ion-list>
@@ -43,7 +43,7 @@
         <ion-list>
           <ion-item>
             <ion-input
-              [(ngModel)]="metodo.numerotarjeta"
+              [(ngModel)]="metodoSeleccionado.numeroTarjeta"
               placeholder="Número de tarjeta*"
               maxlength="16"
               inputmode="numeric"
@@ -56,7 +56,7 @@
           <div class="flex-container">
             <ion-item class="half-width">
               <ion-input
-                [(ngModel)]="metodo.fechavencimiento"
+                [(ngModel)]="metodoSeleccionado.fechaVencimiento"
                 placeholder="MM/YY*"
                 maxlength="5"
                 inputmode="numeric"
@@ -69,7 +69,7 @@
 
             <ion-item class="half-width">
               <ion-input
-                [(ngModel)]="metodo.cvv"
+                [(ngModel)]="metodoSeleccionado.cvv"
                 placeholder="CVV*"
                 maxlength="3"
                 inputmode="numeric"
