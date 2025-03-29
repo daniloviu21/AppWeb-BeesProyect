@@ -25,6 +25,7 @@ export interface MetodosPago {
   numeroTarjeta: string;
   fechaVencimiento: string;
   cvv: string;
+  deleted_at?: string | null;
 }
 
 export interface Direccion {

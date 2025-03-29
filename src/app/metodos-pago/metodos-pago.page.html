@@ -20,13 +20,16 @@
 
   <!-- Lista de Métodos de Pago -->
   <ion-list [inset]="true">
-    <ion-item *ngFor="let mpago of metodosPago" detail="true" [button]="true">
+    <ion-item *ngFor="let mpago of metodosPago">
       <img [src]="getCardImage(mpago.tipo)" alt="Card Logo" class="card-logo" />
       <ion-label>{{ mpago.tipo }}</ion-label>
       <ion-label>
         <strong>•••• </strong>
         {{ mpago.numeroTarjeta.substring(mpago.numeroTarjeta.length - 4) }}
       </ion-label>
+      <ion-button fill="clear" slot="end" (click)="borrarMetodoPago(mpago)">
+        <ion-icon name="trash" color="danger"></ion-icon>
+      </ion-button>
     </ion-item>
   </ion-list>
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MetodosPago, Usuario, UsuariosService } from '../services/usuarios.service';
-import { ModalController, ToastController } from '@ionic/angular';
+import { AlertController, ModalController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-metodos-pago',
@@ -23,7 +23,8 @@ export class MetodosPagoPage implements OnInit {
   constructor(
     private usuarioService: UsuariosService,
     private modalCtrl: ModalController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private alertCtrl: AlertController
   ) {}
 
   ngOnInit() {
@@ -39,7 +40,7 @@ export class MetodosPagoPage implements OnInit {
   cargarMetodosPago(idCliente: number) {
     this.usuarioService.obtenerMetodosPago(idCliente).subscribe({
       next: (metodosPago) => {
-        this.metodosPago = metodosPago;
+        this.metodosPago = metodosPago.filter(m => m.deleted_at == null);
         if (this.metodosPago.length > 0) {
           this.metodoSeleccionado = {...this.metodosPago[this.metodosPago.length - 1]};
         }
@@ -48,6 +49,44 @@ export class MetodosPagoPage implements OnInit {
         console.error('Error al cargar métodos de pago:', error);
       }
     });
+  }
+
+  async borrarMetodoPago(metodo: MetodosPago) {
+    const alert = await this.alertCtrl.create({
+      header: 'Eliminar método de pago',
+      message: '¿Estás seguro de que quieres eliminar este método de pago?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancelado');
+          }
+        },
+        {
+          text: 'Eliminar',
+          handler: () => {
+            if (metodo.id) {
+              this.usuarioService.eliminarMetodoPago(metodo.id).subscribe(
+                () => {
+                  this.mostrarToast('Método de pago eliminado correctamente', 'success');
+                  // Recargar los métodos de pago después de eliminar
+                  if (this.usuario?.id) {
+                    this.cargarMetodosPago(this.usuario.id);
+                  }
+                },
+                (error) => {
+                  console.error('Error al eliminar el método de pago:', error);
+                  this.mostrarToast('Error al eliminar el método de pago', 'danger');
+                }
+              );
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   cerrarModal() {
