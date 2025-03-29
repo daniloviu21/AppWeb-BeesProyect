@@ -33,6 +33,7 @@ export interface Direccion {
   ciudad: string;
   estado: string;
   codigoPostal: string;
+  deleted_at?: string | null;
 }
 
 @Injectable({

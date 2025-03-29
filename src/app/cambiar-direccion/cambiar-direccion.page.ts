@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Direccion, Usuario, UsuariosService } from '../services/usuarios.service';
-import { NavController, ToastController } from '@ionic/angular';
+import { NavController, ToastController, AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-cambiar-direccion',
@@ -18,10 +18,10 @@ export class CambiarDireccionPage {
     private router: Router,
     private usuarioService: UsuariosService,
     private navCtrl: NavController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private alertCtrl: AlertController
   ) {}
 
-  // Este evento se ejecuta cada vez que la página está a punto de mostrarse
   ionViewWillEnter() {
     this.usuario = this.usuarioService.getUsuario();
     if (this.usuario?.id) {
@@ -34,11 +34,12 @@ export class CambiarDireccionPage {
   cargarDirecciones(idCliente: number) {
     this.usuarioService.obtenerDirecciones(idCliente).subscribe(
       (direcciones) => {
-        this.direcciones = direcciones;
-        if (direcciones.length > 0) {
-          this.direccionSeleccionada = direcciones[direcciones.length-1]; // Selecciona la primera dirección por defecto
+        // Filtrar solo direcciones con deleted_at null
+        this.direcciones = direcciones.filter(d => d.deleted_at === null);
+        if (this.direcciones.length > 0) {
+          this.direccionSeleccionada = this.direcciones[this.direcciones.length-1];
         }
-        console.log('Direcciones cargadas:', this.direcciones); // Verifica los datos recibidos
+        console.log('Direcciones cargadas:', this.direcciones);
       },
       (error) => {
         console.error('Error al cargar direcciones:', error);
@@ -57,6 +58,44 @@ export class CambiarDireccionPage {
   editarDireccion(direccion: Direccion) {
     localStorage.setItem('direccionAEditar', JSON.stringify(direccion));
     this.router.navigate(['/agregar-direccion']);
+  }
+
+  async borrarDireccion(direccion: Direccion) {
+    const alert = await this.alertCtrl.create({
+      header: 'Eliminar dirección',
+      message: '¿Estás seguro de que quieres eliminar esta dirección?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancelado');
+          }
+        },
+        {
+          text: 'Eliminar',
+          handler: () => {
+            if (direccion.id) {
+              this.usuarioService.eliminarDireccion(direccion.id).subscribe(
+                () => {
+                  this.mostrarToast('Dirección eliminada correctamente', 'success');
+                  // Recargar las direcciones después de eliminar
+                  if (this.usuario?.id) {
+                    this.cargarDirecciones(this.usuario.id);
+                  }
+                },
+                (error) => {
+                  console.error('Error al eliminar la dirección:', error);
+                  this.mostrarToast('Error al eliminar la dirección', 'danger');
+                }
+              );
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   guardarDireccionPrincipal() {

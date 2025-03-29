@@ -33,10 +33,13 @@
         </ion-card-header>
         <ion-card-content>
           <p><strong>Dirección:</strong> {{ direccion.calle }}</p>
-          <p><strong>CP:</strong> {{ direccion.codigoPostal }}</p>
+          <p><strong>Estado:</strong> {{ direccion.estado }}</p>
         </ion-card-content>
         <ion-button class="edit-direc" expand="full" (click)="editarDireccion(direccion)">
           Editar
+        </ion-button>
+        <ion-button color="danger" expand="full" (click)="borrarDireccion(direccion)">
+          Borrar
         </ion-button>
       </ion-card>
     </ion-list>
