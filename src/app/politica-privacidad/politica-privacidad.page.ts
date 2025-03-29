@@ -10,15 +10,7 @@ import { Usuario, UsuariosService } from '../services/usuarios.service';
 })
 export class PoliticaPrivacidadPage implements OnInit {
 
-  usuario!: Usuario | null;
-
-  constructor(private router: Router, private usuariosService: UsuariosService) {}
   ngOnInit() {
-    this.usuario = this.usuariosService.getUsuario();
   }
-
-  volverATab4() {
-    this.router.navigate(['/tabs/tab4']);
-  }
-
+  
 }

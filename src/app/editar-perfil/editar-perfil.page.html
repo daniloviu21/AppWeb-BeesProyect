@@ -8,47 +8,70 @@
 </ion-header>
 
 <ion-content scroll-y="true" fullscreen="true">
-  <div class="profile-container">
+  <div *ngIf="!cargando; else loading" class="profile-container">
     <ion-avatar class="profile-avatar" (click)="mostrarOpcionesFoto()">
       <img [src]="fotoPerfil" alt="Foto de perfil">
     </ion-avatar>
-    <input type="file" #fileInput (change)="cargarImagen($event)" hidden>
+    <input type="file" #fileInput (change)="cargarImagen($event)" hidden accept="image/*">
   </div>
 
-  <ion-list>
+  <ion-list *ngIf="!cargando">
     <ion-item>
-      <ion-label position="floating">Usuario</ion-label>
-      <ion-input [(ngModel)]="usuario" [disabled]="!modoEdicion"></ion-input>
-    </ion-item>
-
-    <ion-item [class.error-input]="errores['nombre']">
       <ion-label position="floating">Nombre</ion-label>
-      <ion-input [(ngModel)]="nombreCliente" [disabled]="!modoEdicion"></ion-input>
+      <ion-input 
+        [(ngModel)]="nombreCliente" 
+        (ionChange)="onInputChange()"
+        type="text"></ion-input>
     </ion-item>
 
-    <ion-item [class.error-input]="errores['apellidoP']">
+    <ion-item>
       <ion-label position="floating">Apellido Paterno</ion-label>
-      <ion-input [(ngModel)]="apellidoP" [disabled]="!modoEdicion"></ion-input>
+      <ion-input 
+        [(ngModel)]="apellidoP" 
+        (ionChange)="onInputChange()"
+        type="text"></ion-input>
     </ion-item>
 
-    <ion-item [class.error-input]="errores['apellidoM']">
+    <ion-item>
       <ion-label position="floating">Apellido Materno</ion-label>
-      <ion-input [(ngModel)]="apellidoM" [disabled]="!modoEdicion"></ion-input>
+      <ion-input 
+        [(ngModel)]="apellidoM" 
+        (ionChange)="onInputChange()"
+        type="text"></ion-input>
     </ion-item>
 
-    <ion-item [class.error-input]="errores['telefono']">
+    <ion-item>
       <ion-label position="floating">Teléfono</ion-label>
-      <ion-input [(ngModel)]="telefono" (ionInput)="validarTelefono($event)" [disabled]="!modoEdicion" type="tel"></ion-input>
+      <ion-input 
+        [(ngModel)]="telefono" 
+        (ionInput)="validarTelefono($event)"
+        (ionChange)="onInputChange()"
+        type="tel"></ion-input>
     </ion-item>
 
-    <ion-item [class.error-input]="errores['correo']">
+    <ion-item>
       <ion-label position="floating">Correo Electrónico</ion-label>
-      <ion-input [(ngModel)]="correo" [disabled]="!modoEdicion" type="email"></ion-input>
+      <ion-input 
+        [(ngModel)]="correo" 
+        (ionChange)="onInputChange()"
+        type="email"></ion-input>
     </ion-item>
   </ion-list>
 
-  <div class="button-group">
-    <ion-button expand="full" (click)="habilitarEdicion()" *ngIf="!modoEdicion">Editar</ion-button>
-    <ion-button expand="full" color="success" (click)="guardarPerfil()" *ngIf="modoEdicion">Guardar</ion-button>
+  <div *ngIf="!cargando" class="button-group">
+    <ion-button 
+      expand="full" 
+      color="success" 
+      (click)="guardarCambios()" 
+      [disabled]="!cambiosRealizados">
+      Guardar Cambios
+    </ion-button>
   </div>
+
+  <ng-template #loading>
+    <div class="loading-container">
+      <ion-spinner></ion-spinner>
+      <p>Cargando datos...</p>
+    </div>
+  </ng-template>
 </ion-content>

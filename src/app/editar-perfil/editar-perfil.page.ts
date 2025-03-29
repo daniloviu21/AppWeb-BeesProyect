@@ -1,9 +1,8 @@
-import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { UsuariosService } from '../services/usuarios.service';
 import { Router } from '@angular/router';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { AlertController } from '@ionic/angular';
-import { Keyboard } from '@capacitor/keyboard';
 
 @Component({
   selector: 'app-editar-perfil',
@@ -11,17 +10,16 @@ import { Keyboard } from '@capacitor/keyboard';
   styleUrls: ['./editar-perfil.page.scss'],
   standalone: false
 })
-export class EditarPerfilPage implements OnInit, OnDestroy {
-  usuario: string = '';
+export class EditarPerfilPage implements OnInit {
+  clienteId: number | null = null;
   nombreCliente: string = '';
   apellidoP: string = '';
   apellidoM: string = '';
   telefono: string = '';
-  fotoPerfil: string = '';
+  fotoPerfil: string = '/assets/icon/perfilvanguard.png';
   correo: string = '';
-  modoEdicion: boolean = false;
-  errores: { [key: string]: boolean } = {};
-  tecladoActivo: boolean = false;
+  cambiosRealizados: boolean = false;
+  cargando: boolean = true;
 
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
 
@@ -32,25 +30,34 @@ export class EditarPerfilPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.cargarDatosUsuario();
-    Keyboard.addListener('keyboardWillShow', () => this.tecladoActivo = true);
-    Keyboard.addListener('keyboardWillHide', () => this.tecladoActivo = false);
+    this.cargarDatosCliente();
   }
 
-  ngOnDestroy(): void {
-    Keyboard.removeAllListeners();
-  }
-
-  cargarDatosUsuario(): void {
-    const usuario = this.usuarioService.getUsuario();
-    if (usuario) {
-      this.usuario = usuario.usuario || '';
-      this.nombreCliente = usuario.nombreCliente || '';
-      this.apellidoP = usuario.apellidoP || '';
-      this.apellidoM = usuario.apellidoM || '';
-      this.telefono = usuario.telefono || '';
-      this.fotoPerfil = usuario.fotoPerfil || '/assets/icon/perfilvanguard.png';
-      this.correo = usuario.correo || '';
+  async cargarDatosCliente() {
+    this.cargando = true;
+    try {
+      const usuario = this.usuarioService.getUsuario();
+      if (usuario && usuario.id) {
+        // Obtener los datos del cliente usando el mismo ID
+        const cliente = await this.usuarioService.obtenerClientePorId(usuario.id).toPromise();
+        
+        if (cliente) {
+          this.clienteId = usuario.id;
+          this.nombreCliente = cliente.nombrecliente || '';
+          this.apellidoP = cliente.apellidop || '';
+          this.apellidoM = cliente.apellidom || '';
+          this.telefono = cliente.telefono || '';
+          this.correo = cliente.correo || '';
+          
+          // La foto de perfil sigue siendo del usuario (manejo local)
+          this.fotoPerfil = usuario.fotoPerfil || '/assets/icon/perfilvanguard.png';
+        }
+      }
+    } catch (error) {
+      console.error('Error al cargar cliente:', error);
+      this.mostrarAlerta('Error', 'No se pudieron cargar los datos del cliente');
+    } finally {
+      this.cargando = false;
     }
   }
 
@@ -73,7 +80,10 @@ export class EditarPerfilPage implements OnInit, OnDestroy {
       resultType: CameraResultType.DataUrl,
       source: CameraSource.Camera
     });
-    if (image.dataUrl) this.fotoPerfil = image.dataUrl;
+    if (image.dataUrl) {
+      this.fotoPerfil = image.dataUrl;
+      this.cambiosRealizados = true;
+    }
   }
 
   seleccionarImagen() {
@@ -84,51 +94,63 @@ export class EditarPerfilPage implements OnInit, OnDestroy {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e: any) => this.fotoPerfil = e.target.result;
+      reader.onload = (e: any) => {
+        this.fotoPerfil = e.target.result;
+        this.cambiosRealizados = true;
+      };
       reader.readAsDataURL(file);
     }
   }
 
-  habilitarEdicion() {
-    this.modoEdicion = !this.modoEdicion;
+  onInputChange() {
+    this.cambiosRealizados = true;
   }
 
-  async guardarPerfil() {
-    this.validarCampos();
-    if (Object.values(this.errores).includes(true)) {
-      this.mostrarAlerta("Corrige los campos resaltados antes de continuar.");
+  async guardarCambios() {
+    if (!this.clienteId) return;
+  
+    // Validar campos obligatorios
+    if (!this.nombreCliente || !this.apellidoP || !this.apellidoM) {
+      this.mostrarAlerta('Error', 'Nombre y apellidos son campos obligatorios');
       return;
     }
-
-    let usuario = this.usuarioService.getUsuario();
-    if (usuario) {
-      usuario.usuario = this.usuario;
-      usuario.nombreCliente = this.nombreCliente;
-      usuario.apellidoP = this.apellidoP;
-      usuario.apellidoM = this.apellidoM;
-      usuario.telefono = this.telefono;
-      usuario.fotoPerfil = this.fotoPerfil;
-      usuario.correo = this.correo;
-      await this.usuarioService.actualizarUsuarioLocal(usuario);
+  
+    const datosActualizados = {
+      nombreCliente: this.nombreCliente,
+      apellidoP: this.apellidoP,
+      apellidoM: this.apellidoM,
+      correo: this.correo,
+      telefono: this.telefono
+    };
+  
+    try {
+      // Usar el nuevo método con formato correcto
+      await this.usuarioService.actualizarClienteConFormatoCorrecto(this.clienteId, datosActualizados);
+      
+      // Actualizar datos locales
+      const usuario = this.usuarioService.getUsuario();
+      if (usuario) {
+        usuario.nombreCliente = this.nombreCliente;
+        usuario.apellidoP = this.apellidoP;
+        usuario.apellidoM = this.apellidoM;
+        usuario.telefono = this.telefono;
+        usuario.correo = this.correo;
+        usuario.fotoPerfil = this.fotoPerfil;
+        
+        await this.usuarioService.actualizarUsuarioLocal(usuario);
+      }
+  
+      this.mostrarAlerta('Éxito', 'Los cambios se guardaron correctamente');
+      this.cambiosRealizados = false;
+    } catch (error) {
+      console.error('Error al actualizar:', error);
+      this.mostrarAlerta('Error', (error as any).message || 'No se pudieron guardar los cambios');
     }
-    this.modoEdicion = false;
-    this.router.navigate(['/tabs/tab4']);
   }
 
-  validarCampos() {
-    this.errores = { nombre: false, apellidoP: false, apellidoM: false, telefono: false, correo: false };
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (this.usuario.length > 15) this.errores['nombre'] = true;
-    if (this.apellidoP.length > 15) this.errores['apellidoP'] = true;
-    if (this.apellidoM.length > 15) this.errores['apellidoM'] = true;
-    if (!/^[0-9]{1,10}$/.test(this.telefono)) this.errores['telefono'] = true;
-    if (!emailRegex.test(this.correo)) this.errores['correo'] = true;
-  }
-
-  async mostrarAlerta(mensaje: string) {
+  async mostrarAlerta(titulo: string, mensaje: string) {
     const alert = await this.alertController.create({
-      header: 'Error de validación',
+      header: titulo,
       message: mensaje,
       buttons: ['OK']
     });
@@ -138,9 +160,6 @@ export class EditarPerfilPage implements OnInit, OnDestroy {
   validarTelefono(event: any) {
     let valor = event.detail.value.replace(/\D/g, '').substring(0, 10);
     this.telefono = valor;
-  }
-
-  navigateToTab4() {
-    this.router.navigate(['/tabs/tab4']);
+    this.onInputChange();
   }
 }

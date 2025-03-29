@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage-angular';
 import { map, Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.prod';
 
 export interface Usuario {
   id?: number;
@@ -13,6 +13,7 @@ export interface Usuario {
   telefono: string;
   usuario: string;
   contrasenia: string;
+  idRol?: number;
   direccion: Direccion[];
   metodospago: MetodosPago[];
   fotoPerfil?: string;
@@ -42,6 +43,7 @@ export class UsuariosService {
   private apiUrl = environment.apiUrl;
   private usuarioActual: Usuario | null = null;
   private token: string | null = null;
+  private contraseniaTemporal: string | null = null;
 
   constructor(private storage: Storage, private http: HttpClient) {
     this.init();
@@ -220,5 +222,74 @@ obtenerMetodosPago(idCliente: number): Observable<MetodosPago[]> {
   // Eliminar un método de pago de un cliente
   eliminarMetodoPago(idMetodoPago: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/metodos-pago/${idMetodoPago}`);
+  }
+
+  obtenerClientePorId(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/clientes/${id}`);
+  }
+
+  async actualizarCliente(idCliente: number, datosCliente: any): Promise<any> {
+    const usuarioActual = this.getUsuario();
+    if (!usuarioActual) {
+      throw new Error('No hay usuario autenticado');
+    }
+  
+    // Estructura que espera el backend
+    const requestBody = {
+      cliente: {
+        ...datosCliente,
+        idUsuario: usuarioActual.id
+      },
+      usuario: {
+        usuario: usuarioActual.usuario // Campo requerido
+        // Puedes agregar otros campos necesarios
+      }
+    };
+  
+    return this.http.put(`${this.apiUrl}/clientes/${idCliente}`, requestBody, {
+      headers: this.getAuthHeader()
+    }).toPromise();
+  }
+
+  async actualizarClienteConFormatoCorrecto(idCliente: number, datosCliente: any): Promise<any> {
+    const usuarioActual = this.getUsuario();
+    if (!usuarioActual) {
+      throw new Error('No hay usuario autenticado');
+    }
+  
+    // Validar campos obligatorios del cliente
+    if (!datosCliente.nombreCliente || !datosCliente.apellidoP || !datosCliente.apellidoM) {
+      throw new Error('Nombre y apellidos son campos obligatorios');
+    }
+  
+    // Preparar payload con el formato exacto que espera el backend
+    const payload = {
+      cliente: {
+        nombreCliente: datosCliente.nombreCliente,
+        apellidoP: datosCliente.apellidoP,
+        apellidoM: datosCliente.apellidoM,
+        correo: datosCliente.correo || null, // Permitir nulo si no se envía
+        telefono: datosCliente.telefono || null, // Permitir nulo si no se envía
+        idUsuario: usuarioActual.id
+      },
+      usuario: {
+        usuario: usuarioActual.usuario, // Mantener el actual
+        contrasenia: usuarioActual.contrasenia, // Mantener la actual
+        idRol: (usuarioActual as any).idRol // Mantener el actual (usamos 'as any' temporalmente)
+      }
+    };
+  
+    console.log('Payload enviado:', JSON.stringify(payload, null, 2));
+  
+    try {
+      const response = await this.http.put(`${this.apiUrl}/clientes/${idCliente}`, payload, {
+        headers: this.getAuthHeader()
+      }).toPromise();
+      
+      return response;
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+      throw new Error((error as any).error?.message || 'Error al actualizar el cliente');
+    }
   }
 }
