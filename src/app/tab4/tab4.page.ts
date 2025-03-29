@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Usuario, UsuariosService } from '../services/usuarios.service';
@@ -9,7 +9,7 @@ import { Usuario, UsuariosService } from '../services/usuarios.service';
   styleUrls: ['./tab4.page.scss'],
   standalone: false
 })
-export class Tab4Page {
+export class Tab4Page implements OnInit{
   editando = false;
   nombrePerfil: string;
   fotoPerfil: string;
@@ -20,35 +20,27 @@ export class Tab4Page {
     this.fotoPerfil = usuario?.fotoPerfil || '/assets/icon/perfilvanguard.png';
   }
 
-  editarPerfil() {
-    this.router.navigate(['/editar-perfil']);
+  async ngOnInit() {
+    await this.cargarDatosUsuario();
   }
 
-  async cambiarFoto() {
-    if (!this.editando) return;
+  async ionViewWillEnter() {
+    await this.cargarDatosUsuario();
+  }
 
-    const alert = await this.alertCtrl.create({
-      header: 'Cambiar Foto',
-      inputs: [{ name: 'url', type: 'url', placeholder: 'Pega la URL de la nueva imagen' }],
-      buttons: [
-        { text: 'Cancelar', role: 'cancel' },
-        {
-          text: 'Guardar',
-          handler: (data) => {
-            if (data.url) {
-              this.fotoPerfil = data.url;
-              let usuario = this.usuarioService.getUsuario() as Usuario | null;
-              if (usuario) {
-                usuario.fotoPerfil = data.url; // Corregido: se guarda en fotoPerfil, no en direccion
-                this.usuarioService.actualizarUsuarioLocal(usuario);
-                this.usuarioService.saveCurrentUser();
-              }
-            }
-          }
-        }
-      ]
-    });
-    await alert.present();
+  async cargarDatosUsuario() {
+    const usuario = await this.usuarioService.getUsuario();
+    if (usuario) {
+      this.nombrePerfil = usuario.nombreCliente || usuario.usuario || 'Usuario';
+      this.fotoPerfil = usuario.fotoPerfil || '/assets/icon/perfilvanguard.png';
+    } else {
+      this.nombrePerfil = 'Usuario';
+      this.fotoPerfil = '/assets/icon/perfilvanguard.png';
+    }
+  }
+
+  editarPerfil() {
+    this.router.navigate(['/editar-perfil']);
   }
 
   cambiarDireccion() {

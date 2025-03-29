@@ -78,15 +78,16 @@ export class EditarPerfilPage implements OnInit {
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: true,
-      resultType: CameraResultType.DataUrl,
+      resultType: CameraResultType.Base64, // Cambiamos a Base64 para almacenamiento local
       source: CameraSource.Camera
     });
-    if (image.dataUrl) {
-      this.fotoPerfil = image.dataUrl;
+    
+    if (image.base64String) {
+      this.fotoPerfil = `data:image/jpeg;base64,${image.base64String}`;
       this.cambiosRealizados = true;
     }
   }
-
+  
   seleccionarImagen() {
     this.fileInput.nativeElement.click();
   }
@@ -123,6 +124,7 @@ export class EditarPerfilPage implements OnInit {
       const loading = await this.mostrarLoading('Guardando cambios...');
       
       try {
+        // Solo envía datos básicos al backend (sin la foto)
         const datosActualizados = {
           nombreCliente: this.nombreCliente.trim(),
           apellidoP: this.apellidoP.trim(),
@@ -133,7 +135,7 @@ export class EditarPerfilPage implements OnInit {
   
         await this.usuarioService.actualizarSoloCliente(this.clienteId, datosActualizados);
         
-        // Actualizar datos locales
+        // Actualizar datos locales incluyendo la foto (solo en localStorage)
         const usuario = this.usuarioService.getUsuario();
         if (usuario) {
           usuario.nombreCliente = datosActualizados.nombreCliente;
@@ -141,7 +143,7 @@ export class EditarPerfilPage implements OnInit {
           usuario.apellidoM = datosActualizados.apellidoM;
           usuario.telefono = datosActualizados.telefono;
           usuario.correo = datosActualizados.correo;
-          usuario.fotoPerfil = this.fotoPerfil;
+          usuario.fotoPerfil = this.fotoPerfil; // Guardamos la foto solo localmente
           
           await this.usuarioService.actualizarUsuarioLocal(usuario);
         }
@@ -149,6 +151,7 @@ export class EditarPerfilPage implements OnInit {
         await loading.dismiss();
         this.mostrarAlerta('Éxito', 'Perfil actualizado correctamente');
         this.cambiosRealizados = false;
+        this.router.navigate(['/tabs/tab4']);
   
       } catch (error) {
         await loading.dismiss();
