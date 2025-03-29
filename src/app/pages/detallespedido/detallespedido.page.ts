@@ -1,34 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PedidosService } from 'src/app/services/pedidos.service';
-import { UsuariosService } from 'src/app/services/usuarios.service';
+import { Direccion, MetodosPago, UsuariosService } from 'src/app/services/usuarios.service';
 import { jsPDF } from 'jspdf';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { forkJoin } from 'rxjs';
 
 interface ProductoPedido {
-  id?: number;
-  idPedido: number;
-  idProducto: number;
+  id: number;
+  idpedido: number;
+  idproducto: number;
   cantidad: number;
-  precioUnitario: number;
-  subtotal?: number;
-  nombreproducto?: string;
+  preciounitario: string;
+  subtotal: string;
+  nombreproducto: string;
   descripcion?: string;
 }
 
 interface PedidoCompleto {
   id: number;
-  total: number;
-  fecha: string | Date;
+  total: string;
+  fecha: string;
   estado: string;
-  idCliente: number;
-  idDireccion: number;
-  idMetodoPago: number;
+  idcliente: number;
+  iddireccion: number;
+  idmetodopago: number;
+  detalles: ProductoPedido[];
   direccion?: string;
   metodoPago?: string;
-  productos: ProductoPedido[];
 }
 
 @Component({
@@ -66,15 +66,23 @@ export class DetallespedidoPage implements OnInit {
       this.usuariosService.obtenerMetodosPago(this.usuariosService.getUsuario()?.id || 0)
     ]).subscribe(
       ([pedido, direcciones, metodosPago]) => {
-        // Encontrar la dirección y método de pago específicos
-        const direccion = direcciones.find(d => d.id === pedido.idDireccion);
-        const metodoPago = metodosPago.find(m => m.id === pedido.idMetodoPago);
+        // Encontrar la dirección específica
+        const direccion = direcciones.find((d: Direccion) => d.id === pedido.iddireccion);
+        
+        // Encontrar el método de pago específico
+        const metodoPago = metodosPago.find((m: MetodosPago) => m.id === pedido.idmetodopago);
+        
+        // Formatear el método de pago para mostrar solo los últimos 4 dígitos
+        const metodoPagoFormateado = metodoPago 
+          ? `${metodoPago.tipo} •••• ${metodoPago.numeroTarjeta.slice(-4)}` 
+          : 'Método no disponible';
 
         this.pedido = {
           ...pedido,
-          direccion: direccion ? `${direccion.calle}, ${direccion.ciudad}, ${direccion.estado}` : 'Dirección no disponible',
-          metodoPago: metodoPago ? `${metodoPago.tipo} •••• ${metodoPago.numeroTarjeta?.slice(-4) || ''}` : 'Método no disponible',
-          productos: pedido.productos || []
+          direccion: direccion 
+            ? `${direccion.calle}, ${direccion.ciudad}, ${direccion.estado}` 
+            : 'Dirección no disponible',
+          metodoPago: metodoPagoFormateado
         };
         
         this.cargando = false;
@@ -132,16 +140,16 @@ export class DetallespedidoPage implements OnInit {
     doc.text('Productos:', 10, 80);
     
     let y = 90;
-    this.pedido.productos.forEach((producto: ProductoPedido, index: number) => {
-      doc.text(`${index + 1}. ${producto.nombreproducto || 'Producto'}`, 15, y);
+    this.pedido.detalles.forEach((producto: ProductoPedido, index: number) => {
+      doc.text(`${index + 1}. ${producto.nombreproducto}`, 15, y);
       doc.text(`Cantidad: ${producto.cantidad}`, 15, y + 5);
-      doc.text(`Precio unitario: ${producto.precioUnitario.toFixed(2)}`, 15, y + 10);
-      doc.text(`Subtotal: ${((producto.cantidad || 0) * (producto.precioUnitario || 0)).toFixed(2)}`, 15, y + 15);
+      doc.text(`Precio unitario: ${producto.preciounitario}`, 15, y + 10);
+      doc.text(`Subtotal: ${producto.subtotal}`, 15, y + 15);
       y += 25;
     });
     
     // Total
-    doc.text(`Total: ${this.pedido.total.toFixed(2)}`, 10, y + 10);
+    doc.text(`Total: ${this.pedido.total}`, 10, y + 10);
     
     // Pie de página
     doc.text('Gracias por tu compra en Vanguard. Vuelve pronto', 10, y + 30);

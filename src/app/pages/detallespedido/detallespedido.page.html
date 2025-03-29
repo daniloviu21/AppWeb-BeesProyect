@@ -18,12 +18,12 @@
 
     <h3>Productos:</h3>
     <ion-list>
-      <ion-item *ngFor="let producto of pedido.productos">
+      <ion-item *ngFor="let producto of pedido.detalles">
         <ion-label>
-          <h4>{{ producto.nombreproducto || 'Producto' }}</h4>
+          <h4>{{ producto.nombreproducto }}</h4>
           <p>Cantidad: {{ producto.cantidad }}</p>
-          <p>Precio unitario: {{ producto.precioUnitario | currency }}</p>
-          <p>Subtotal: {{ (producto.cantidad * producto.precioUnitario) | currency }}</p>
+          <p>Precio unitario: {{ producto.preciounitario | currency }}</p>
+          <p>Subtotal: {{ producto.subtotal | currency }}</p>
         </ion-label>
       </ion-item>
     </ion-list>

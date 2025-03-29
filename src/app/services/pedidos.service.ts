@@ -105,18 +105,8 @@ agregarDetallePedido(idPedido: number, detalle: any): Observable<any> {
     return this.obtenerPedidosPorCliente(idCliente);
   }
 
-  obtenerPedidoPorId(id: number): Observable<Pedido> {
-    return forkJoin([
-      this.http.get<Pedido>(`${this.apiUrl}/pedidos/${id}`),
-      this.http.get<DetallePedido[]>(`${this.apiUrl}/pedidos/${id}/detalles`)
-    ]).pipe(
-      map(([pedido, detalles]) => {
-        return {
-          ...pedido,
-          productos: detalles
-        };
-      })
-    );
+  obtenerPedidoPorId(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/pedidos/${id}`);
   }
 
   obtenerDetallesPedido(idPedido: number): Observable<DetallePedido[]> {
