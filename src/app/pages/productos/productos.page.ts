@@ -37,22 +37,35 @@ export class ProductosPage implements OnInit {
   }
 
   async cargarProductos() {
-    this.cargando = true; // Activar el spinner
+    this.cargando = true;
+    
+    // Primero obtenemos la categoría por nombre
+    this.categoriasService.getCategoriaPorNombre(this.categoriaSeleccionada).subscribe({
+      next: (categoria) => {
+        if (!categoria) {
+          console.error('Categoría no encontrada');
+          this.cargando = false;
+          return;
+        }
   
-    this.categoriasService.getProductos().subscribe(
-      (data) => {
-        console.log('Productos recibidos:', data); // Verifica los datos recibidos
-        const idCategoria = this.obtenerIdCategoria(this.categoriaSeleccionada);
-        console.log('ID de la categoría seleccionada:', idCategoria); // Verifica el ID de la categoría
-        this.productos = data.filter((producto: Producto) => producto.idcategoria === idCategoria);
-        console.log('Productos filtrados:', this.productos); // Verifica los productos filtrados
-        this.cargando = false; // Desactivar el spinner cuando los datos estén listos
+        // Luego obtenemos los productos filtrados por idcategoria
+        this.categoriasService.getProductos().subscribe({
+          next: (productos) => {
+            this.productos = productos.filter(p => p.idcategoria === categoria.id && p.deleted_at === null);
+            console.log('Productos filtrados:', this.productos);
+            this.cargando = false;
+          },
+          error: (error) => {
+            console.error('Error al cargar productos:', error);
+            this.cargando = false;
+          }
+        });
       },
-      (error) => {
-        console.error('Error al cargar productos:', error);
-        this.cargando = false; // Desactivar el spinner en caso de error
+      error: (error) => {
+        console.error('Error al buscar categoría:', error);
+        this.cargando = false;
       }
-    );
+    });
   }
 
   private obtenerIdCategoria(nombreCategoria: string): number {

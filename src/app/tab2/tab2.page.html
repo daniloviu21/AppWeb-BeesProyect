@@ -1,24 +1,31 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Categorías
-
-    </ion-title>
+    <ion-title>Categorías</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen="true">
-  <div *ngIf="cargando">
+  <div *ngIf="cargando" class="loading-container">
     <ion-spinner name="crescent"></ion-spinner>
     <p>Cargando categorías...</p>
   </div>
 
   <div *ngIf="!cargando">
-    <ion-list [inset]="true" *ngFor="let categoria of categorias">
-      <ion-item [routerLink]="['/productos', categoria.nombre]" detail="true" [button]="true">
+    <ion-list [inset]="true">
+      <ion-item 
+        *ngFor="let categoria of categorias; trackBy: trackByCategoria"
+        [routerLink]="['/productos', categoria.nombre]" 
+        detail="true" 
+        [button]="true"
+      >
         <ion-icon slot="start" [name]="categoria.icon" size="large"></ion-icon>
         <ion-label>{{categoria.nombre}}</ion-label>
       </ion-item>
     </ion-list>
+
+    <div *ngIf="categorias.length === 0" class="empty-state">
+      <ion-icon name="alert-circle-outline" size="large"></ion-icon>
+      <p>No hay categorías disponibles</p>
+    </div>
   </div>
 </ion-content>

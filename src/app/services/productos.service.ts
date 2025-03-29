@@ -3,9 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 export interface Categoria {
+  id: number;
   nombre: string;
   descripcion: string;
-  icon: string;
+  icon?: string;
+  created_at?: string;
+  updated_at?: string | null;
+  deleted_at?: string | null;
 }
 
 export interface Producto {
@@ -16,6 +20,7 @@ export interface Producto {
   stock: number;
   idMarca: number;
   idcategoria: number;
+  deleted_at?: string | null;
 }
 
 @Injectable({
@@ -31,11 +36,21 @@ export class CategoriasService {
     return this.http.get<any[]>(`${this.apiUrl}/categorias`).pipe(
       map((data) => {
         return data.map((item) => ({
-          nombre: item.nombrecategoria, // Mapea 'nombrecategoria' a 'nombre'
-          descripcion: item.descripcion, // Mapea 'descripcion' a 'descripcion'
-          icon: this.getIconByCategory(item.nombrecategoria), // Asigna un ícono basado en la categoría
+          id: item.id,
+          nombre: item.nombrecategoria,
+          descripcion: item.descripcion,
+          icon: this.getIconByCategory(item.nombrecategoria),
+          created_at: item.created_at,
+          updated_at: item.updated_at,
+          deleted_at: item.deleted_at // Incluye el campo deleted_at
         }));
       })
+    );
+  }
+
+  getCategoriaPorNombre(nombre: string): Observable<Categoria | undefined> {
+    return this.getCategorias().pipe(
+      map(categorias => categorias.find(c => c.nombre.toLowerCase() === nombre.toLowerCase()))
     );
   }
 

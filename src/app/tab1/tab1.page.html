@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Bienvenido {{usuario}} ...
+      Bienvenido a Vanguard ...
     </ion-title>
     <div slot="end" class="cart-icon">
       <ion-icon name="cart-outline" routerLink="/carritocompras"></ion-icon>
@@ -10,53 +10,42 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen="true">
-  <!--Categorias (en pequeño)-->
-  <ion-list class="categories-container">
-    <ion-item lines="none">
-      <ion-label class="title">Categorías favoritas</ion-label>
-      <ion-button fill="clear" class="see-all" routerLink="/tabs/tab2">Ver todo</ion-button>
-    </ion-item>
-  
-    <div class="categories-wrapper">
-      <div class="categories-grid">
-        <div 
-          class="category-card" 
-          *ngFor="let category of categories.slice(0,4);let i = index"
-          (click)="showAlert(category.nombre)">
-          <ion-icon [name]="category.icon" class="category-icon"></ion-icon>
-          <p class="category-title">{{ category.nombre }}</p>
-        </div>
-      </div>
-    </div>
-  </ion-list>
-  
-  <div>
-  <h2 class="categoria">Servicios</h2>
-  <div class="carousel-container">
-    <div class="carousel">
-      <div class="slide-content" *ngFor="let servicio of servicios">
-        <img [src]="servicio.image" class="slide-image" alt="{{ servicio.title }}" />
-        <p class="slide-title">{{ servicio.title }}</p>
-        <p class="slide-description">{{ servicio.description }}</p>
-        <button class="cote-button">Cotizar</button>
-      </div>
-    </div>
-  </div>
-  </div>
+<ion-content class="ion-padding" scroll-y="false">
+  <div class="welcome-container">
+    <ion-icon name="cube-outline" class="main-icon"></ion-icon>
+    <h1>Bienvenido a Vanguard</h1>
+    
+      <ion-card-header>
+        <ion-card-title>Acerca de Nosotros</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Vanguard es una plataforma innovadora creada para simplificar tus compras de productos personalizados.</p>
+        <p>Con más de 10 años en el mercado, ofrecemos calidad y servicio excepcional.</p>
+      </ion-card-content>
 
-  <div>
-    <h2 class="categoria">Productos</h2>
-  <div class="carousel-container">
-    <div class="carousel">
-      <div class="slide-content" *ngFor="let producto of productos">
-        <img [src]="producto.image" class="slide-image" alt="{{ producto.title}}" />
-        <p class="slide-title">{{ producto.title }}</p>
-        <p class="slide-description">{{ producto.description }}</p>
-        <button class="cote-button">Cotizar</button>
-      </div>
+      <ion-card-header>
+        <ion-card-title>Nuestro Propósito</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Esta aplicación te permite:</p>
+        <ul>
+          <li>Explorar nuestro catálogo de productos</li>
+          <li>Realizar pedidos fácilmente</li>
+          <li>Seguir tus compras</li>
+          <li>Administrar tus direcciones</li>
+        </ul>
+      </ion-card-content>
+
+    <div class="action-buttons">
+      <ion-button expand="block" routerLink="/login" *ngIf="!usuario">
+        Iniciar Sesión
+      </ion-button>
+      <ion-button expand="block" routerLink="/registro" *ngIf="!usuario">
+        Registrarse
+      </ion-button>
+      <ion-button color="warning" expand="block" routerLink="/tabs/tab2" *ngIf="usuario">
+        Ver Categorías
+      </ion-button>
     </div>
   </div>
-  </div>
-
 </ion-content>

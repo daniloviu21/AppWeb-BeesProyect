@@ -15,16 +15,23 @@ export class Tab2Page implements OnInit{
   constructor(private categoriasService: CategoriasService) {}
 
   ngOnInit() {
-    this.categoriasService.getCategorias().subscribe(
-      (data) => {
-        this.categorias = data;
+    this.cargarCategorias();
+  }
+
+  cargarCategorias() {
+    this.categoriasService.getCategorias().subscribe({
+      next: (data) => {
+        this.categorias = data.filter(categoria => categoria.deleted_at === null);
         this.cargando = false;
       },
-      (error) => {
+      error: (error) => {
         console.error('Error al cargar categorías', error);
         this.cargando = false;
       }
-    );
+    });
+  }
+  trackByCategoria(index: number, categoria: Categoria): number {
+    return categoria.id;
   }
 
 }
