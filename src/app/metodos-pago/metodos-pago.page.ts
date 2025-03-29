@@ -13,6 +13,13 @@ export class MetodosPagoPage implements OnInit {
   metodoSeleccionado!: MetodosPago;
   metodosPago: MetodosPago[] = []; // Lista de métodos de pago
 
+  nuevoMetodoPago: MetodosPago = {
+    tipo: '',
+    numeroTarjeta: '',
+    fechaVencimiento: '',
+    cvv: ''
+  };
+
   constructor(
     private usuarioService: UsuariosService,
     private modalCtrl: ModalController,
@@ -21,6 +28,7 @@ export class MetodosPagoPage implements OnInit {
 
   ngOnInit() {
     this.usuario = this.usuarioService.getUsuario();
+    this.metodoSeleccionado = {} as MetodosPago;
     if (this.usuario?.id) {
       this.cargarMetodosPago(this.usuario.id);
     } else {
@@ -29,17 +37,17 @@ export class MetodosPagoPage implements OnInit {
   }
 
   cargarMetodosPago(idCliente: number) {
-    this.usuarioService.obtenerMetodosPago(idCliente).subscribe(
-      (metodosPago) => {
+    this.usuarioService.obtenerMetodosPago(idCliente).subscribe({
+      next: (metodosPago) => {
         this.metodosPago = metodosPago;
         if (this.metodosPago.length > 0) {
-          this.metodoSeleccionado = this.metodosPago[metodosPago.length - 1];
+          this.metodoSeleccionado = {...this.metodosPago[this.metodosPago.length - 1]};
         }
       },
-      (error) => {
+      error: (error) => {
         console.error('Error al cargar métodos de pago:', error);
       }
-    );
+    });
   }
 
   cerrarModal() {
@@ -47,12 +55,20 @@ export class MetodosPagoPage implements OnInit {
   }
 
   formatCaducidad(event: any) {
-    const value = event.target.value.replace(/\D/g, ''); // Solo acepta números
-    if (value.length >= 2) {
-      this.metodoSeleccionado.fechaVencimiento = value.slice(0, 2) + '/' + value.slice(2, 4);
-    } else {
-      this.metodoSeleccionado.fechaVencimiento = value;
+    let input = event.target;
+    let value = input.value.replace(/\D/g, '');
+    
+    if (value.length > 2) {
+      value = value.substring(0, 2) + '/' + value.substring(2, 4);
+      
+      const month = parseInt(value.substring(0, 2), 10);
+      if (month > 12) {
+        value = '12/' + value.substring(3, 5);
+      }
     }
+    
+    this.nuevoMetodoPago.fechaVencimiento = value;
+    input.value = value;
   }
 
   getCardImage(tipo: string): string {
@@ -91,7 +107,7 @@ export class MetodosPagoPage implements OnInit {
   }
 
   agregarMetodoPago() {
-    const { numeroTarjeta, fechaVencimiento, cvv } = this.metodoSeleccionado;
+    const { numeroTarjeta, fechaVencimiento, cvv } = this.nuevoMetodoPago;
   
     if (!numeroTarjeta || numeroTarjeta.length !== 16) {
       this.mostrarToast('Tarjeta inválida (16 dígitos)');
@@ -112,16 +128,17 @@ export class MetodosPagoPage implements OnInit {
     }
   
     // Asignación del tipo de tarjeta
-    this.metodoSeleccionado.tipo = numeroTarjeta.startsWith('4') ? 'Visa' : 'Mastercard';
+    this.nuevoMetodoPago.tipo = numeroTarjeta.startsWith('4') ? 'Visa' : 'Mastercard';
   
-    const usuario = this.usuarioService.getUsuario();
-    if (usuario && usuario.id) {
-      this.usuarioService.agregarMetodoPago(usuario.id, this.metodoSeleccionado).subscribe(
+    if (this.usuario?.id) {
+      const userId = this.usuario.id; // Store the id in a local variable
+      this.usuarioService.agregarMetodoPago(userId, this.nuevoMetodoPago).subscribe(
         (metodoPago) => {
-          this.metodosPago.push(metodoPago);
-          this.mostrarToast('Método de pago agregado exitosamente', 'success');
-          this.metodoSeleccionado = { tipo: '', numeroTarjeta: '', fechaVencimiento: '', cvv: '' }; // Limpiar formulario
-          this.modalCtrl.dismiss(); // Cerrar el modal
+          this.modalCtrl.dismiss().then(() => {
+            this.cargarMetodosPago(userId); // Use the local variable
+            this.mostrarToast('Método de pago agregado exitosamente', 'success');
+            this.nuevoMetodoPago = { tipo: '', numeroTarjeta: '', fechaVencimiento: '', cvv: '' };
+          });
         },
         (error) => {
           console.error('Error al agregar método de pago:', error);
@@ -129,7 +146,7 @@ export class MetodosPagoPage implements OnInit {
         }
       );
     } else {
-      alert('No hay usuario autenticado o ID no definido');
+      this.mostrarToast('No hay usuario autenticado o ID no definido');
     }
   }
 
@@ -154,6 +171,15 @@ export class MetodosPagoPage implements OnInit {
         }
       );
     }
+  }
+
+  async abrirModalAgregar() {
+    this.nuevoMetodoPago = {
+      tipo: '',
+      numeroTarjeta: '',
+      fechaVencimiento: '',
+      cvv: ''
+    };
   }
 
   async mostrarToast(mensaje: string, color: string = 'danger', duracion: number = 2000) {

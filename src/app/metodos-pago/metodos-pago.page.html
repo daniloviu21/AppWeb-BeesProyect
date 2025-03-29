@@ -43,7 +43,7 @@
         <ion-list>
           <ion-item>
             <ion-input
-              [(ngModel)]="metodoSeleccionado.numeroTarjeta"
+              [(ngModel)]="nuevoMetodoPago.numeroTarjeta"
               placeholder="Número de tarjeta*"
               maxlength="16"
               inputmode="numeric"
@@ -52,24 +52,24 @@
               required
             ></ion-input>
           </ion-item>
-
+  
           <div class="flex-container">
             <ion-item class="half-width">
               <ion-input
-                [(ngModel)]="metodoSeleccionado.fechaVencimiento"
+                [(ngModel)]="nuevoMetodoPago.fechaVencimiento"
                 placeholder="MM/YY*"
                 maxlength="5"
                 inputmode="numeric"
                 (keydown)="validateNumber($event)"
-                (input)="formatCaducidad($event)"
+                (ionInput)="formatCaducidad($event)"
                 class="custom-input"
                 required
               ></ion-input>
             </ion-item>
-
+  
             <ion-item class="half-width">
               <ion-input
-                [(ngModel)]="metodoSeleccionado.cvv"
+                [(ngModel)]="nuevoMetodoPago.cvv"
                 placeholder="CVV*"
                 maxlength="3"
                 inputmode="numeric"
@@ -80,7 +80,7 @@
             </ion-item>
           </div>
         </ion-list>
-
+  
         <ion-button expand="block" color="warning" (click)="agregarMetodoPago()">Agregar</ion-button>
       </ion-content>
     </ng-template>
