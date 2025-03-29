@@ -251,6 +251,65 @@ obtenerMetodosPago(idCliente: number): Observable<MetodosPago[]> {
     }).toPromise();
   }
 
+  async actualizarSoloCliente(idCliente: number, datosCliente: {
+    nombreCliente: string;
+    apellidoP: string;
+    apellidoM: string;
+    correo: string;
+    telefono: string;
+  }): Promise<any> {
+    // 1. Obtener usuario actual para el idUsuario
+    const usuarioActual = this.getUsuario();
+    if (!usuarioActual || !usuarioActual.id) {
+      throw new Error('No hay usuario autenticado');
+    }
+  
+    // 2. Validación de campos obligatorios
+    if (!datosCliente.nombreCliente || !datosCliente.apellidoP || !datosCliente.apellidoM) {
+      throw new Error('Faltan campos requeridos: nombreCliente, apellidoP, apellidoM');
+    }
+  
+    // 3. Preparar payload con idUsuario
+    const payload = {
+      cliente: {
+        nombreCliente: datosCliente.nombreCliente,
+        apellidoP: datosCliente.apellidoP,
+        apellidoM: datosCliente.apellidoM,
+        correo: datosCliente.correo || null,
+        telefono: datosCliente.telefono || null,
+        idUsuario: usuarioActual.id // Añadir idUsuario aquí
+      }
+    };
+  
+    try {
+      const response = await this.http.put(
+        `${this.apiUrl}/clientes/${idCliente}/solo`,
+        payload,
+        { 
+          headers: this.getAuthHeader(),
+          observe: 'response'
+        }
+      ).toPromise();
+  
+      if (response?.status === 200) {
+        return response.body;
+      }
+      throw new Error('Error al actualizar cliente');
+  
+    } catch (error) {
+      console.error('Error en actualizarSoloCliente:', error);
+      
+      let errorMessage = 'Error al actualizar el cliente';
+      if ((error as any).error) {
+        errorMessage = (error as any).error.message || JSON.stringify((error as any).error);
+      } else if ((error as any).message) {
+        errorMessage = (error as any).message;
+      }
+      
+      throw new Error(errorMessage);
+    }
+  }
+
   async actualizarClienteConFormatoCorrecto(idCliente: number, datosCliente: any): Promise<any> {
     const usuarioActual = this.getUsuario();
     if (!usuarioActual) {

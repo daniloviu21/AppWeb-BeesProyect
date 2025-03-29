@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { UsuariosService } from '../services/usuarios.service';
 import { Router } from '@angular/router';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-editar-perfil',
@@ -26,7 +26,8 @@ export class EditarPerfilPage implements OnInit {
   constructor(
     private usuarioService: UsuariosService,
     private router: Router,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private loadingController: LoadingController
   ) {}
 
   ngOnInit(): void {
@@ -107,45 +108,68 @@ export class EditarPerfilPage implements OnInit {
   }
 
   async guardarCambios() {
-    if (!this.clienteId) return;
-  
-    // Validar campos obligatorios
-    if (!this.nombreCliente || !this.apellidoP || !this.apellidoM) {
-      this.mostrarAlerta('Error', 'Nombre y apellidos son campos obligatorios');
+    if (!this.clienteId) {
+      this.mostrarAlerta('Error', 'No se ha identificado el cliente');
       return;
     }
   
-    const datosActualizados = {
-      nombreCliente: this.nombreCliente,
-      apellidoP: this.apellidoP,
-      apellidoM: this.apellidoM,
-      correo: this.correo,
-      telefono: this.telefono
-    };
-  
     try {
-      // Usar el nuevo método con formato correcto
-      await this.usuarioService.actualizarClienteConFormatoCorrecto(this.clienteId, datosActualizados);
-      
-      // Actualizar datos locales
-      const usuario = this.usuarioService.getUsuario();
-      if (usuario) {
-        usuario.nombreCliente = this.nombreCliente;
-        usuario.apellidoP = this.apellidoP;
-        usuario.apellidoM = this.apellidoM;
-        usuario.telefono = this.telefono;
-        usuario.correo = this.correo;
-        usuario.fotoPerfil = this.fotoPerfil;
-        
-        await this.usuarioService.actualizarUsuarioLocal(usuario);
+      // Validación de campos
+      if (!this.nombreCliente.trim() || !this.apellidoP.trim() || !this.apellidoM.trim()) {
+        this.mostrarAlerta('Error', 'Nombre y apellidos son obligatorios');
+        return;
       }
   
-      this.mostrarAlerta('Éxito', 'Los cambios se guardaron correctamente');
-      this.cambiosRealizados = false;
+      const loading = await this.mostrarLoading('Guardando cambios...');
+      
+      try {
+        const datosActualizados = {
+          nombreCliente: this.nombreCliente.trim(),
+          apellidoP: this.apellidoP.trim(),
+          apellidoM: this.apellidoM.trim(),
+          correo: this.correo.trim() || '',
+          telefono: this.telefono.trim() || ''
+        };
+  
+        await this.usuarioService.actualizarSoloCliente(this.clienteId, datosActualizados);
+        
+        // Actualizar datos locales
+        const usuario = this.usuarioService.getUsuario();
+        if (usuario) {
+          usuario.nombreCliente = datosActualizados.nombreCliente;
+          usuario.apellidoP = datosActualizados.apellidoP;
+          usuario.apellidoM = datosActualizados.apellidoM;
+          usuario.telefono = datosActualizados.telefono;
+          usuario.correo = datosActualizados.correo;
+          usuario.fotoPerfil = this.fotoPerfil;
+          
+          await this.usuarioService.actualizarUsuarioLocal(usuario);
+        }
+  
+        await loading.dismiss();
+        this.mostrarAlerta('Éxito', 'Perfil actualizado correctamente');
+        this.cambiosRealizados = false;
+  
+      } catch (error) {
+        await loading.dismiss();
+        throw error;
+      }
+  
     } catch (error) {
-      console.error('Error al actualizar:', error);
-      this.mostrarAlerta('Error', (error as any).message || 'No se pudieron guardar los cambios');
+      console.error('Error al guardar cambios:', error);
+      this.mostrarAlerta('Error', (error as Error).message || 'Error al actualizar el perfil');
     }
+  }
+
+  async mostrarLoading(mensaje: string): Promise<HTMLIonLoadingElement> {
+    const loading = await this.loadingController.create({
+      message: mensaje,
+      spinner: 'crescent',
+      translucent: true,
+      backdropDismiss: false
+    });
+    await loading.present();
+    return loading;
   }
 
   async mostrarAlerta(titulo: string, mensaje: string) {
