@@ -1,5 +1,4 @@
-
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
@@ -8,8 +7,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div *ngIf="pedido" class="recibo">
+<ion-content [fullscreen]="true">
+  <div *ngIf="!cargando && pedido" class="recibo">
     <h2>Recibo del Pedido #{{ pedido.id }}</h2>
     <p><strong>Fecha:</strong> {{ pedido.fecha | date:'medium' }}</p>
     <p><strong>Total:</strong> {{ pedido.total | currency }}</p>
@@ -21,18 +20,23 @@
     <ion-list>
       <ion-item *ngFor="let producto of pedido.productos">
         <ion-label>
-          <h4>{{ producto.nombreproducto }}</h4>
+          <h4>{{ producto.nombreproducto || 'Producto' }}</h4>
           <p>Cantidad: {{ producto.cantidad }}</p>
-          <p>Precio: {{ producto.precio | currency }}</p>
+          <p>Precio unitario: {{ producto.precioUnitario | currency }}</p>
+          <p>Subtotal: {{ (producto.cantidad * producto.precioUnitario) | currency }}</p>
         </ion-label>
       </ion-item>
     </ion-list>
   </div>
 
-  <ion-button expand="block" (click)="pdf()">Descargar Recibo PDF</ion-button>
+  <div *ngIf="cargando" class="cargando">
+    <ion-spinner></ion-spinner>
+    <p>Cargando detalles del pedido...</p>
+  </div>
 
-  <div *ngIf="!pedido">
+  <div *ngIf="!cargando && !pedido">
     <p>No se encontró el pedido. Contacta a soporte</p>
   </div>
 
+  <ion-button *ngIf="pedido" expand="block" (click)="pdf()">Descargar Recibo PDF</ion-button>
 </ion-content>

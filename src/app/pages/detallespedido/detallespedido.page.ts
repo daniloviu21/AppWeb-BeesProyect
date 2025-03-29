@@ -1,11 +1,35 @@
-
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Pedido, PedidosService } from 'src/app/services/pedidos.service';
+import { PedidosService } from 'src/app/services/pedidos.service';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { jsPDF } from 'jspdf';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Directory, Filesystem } from '@capacitor/filesystem';
+import { forkJoin } from 'rxjs';
+
+interface ProductoPedido {
+  id?: number;
+  idPedido: number;
+  idProducto: number;
+  cantidad: number;
+  precioUnitario: number;
+  subtotal?: number;
+  nombreproducto?: string;
+  descripcion?: string;
+}
+
+interface PedidoCompleto {
+  id: number;
+  total: number;
+  fecha: string | Date;
+  estado: string;
+  idCliente: number;
+  idDireccion: number;
+  idMetodoPago: number;
+  direccion?: string;
+  metodoPago?: string;
+  productos: ProductoPedido[];
+}
 
 @Component({
   selector: 'app-detallespedido',
@@ -14,7 +38,8 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
   standalone: false
 })
 export class DetallespedidoPage implements OnInit {
-  pedido: Pedido | null = null;
+  pedido: PedidoCompleto | null = null;
+  cargando = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,18 +51,39 @@ export class DetallespedidoPage implements OnInit {
 
   ngOnInit() {
     const pedidoId = this.route.snapshot.paramMap.get('id');
-    const usuario = this.usuariosService.getUsuario();
-
-    if (pedidoId && usuario) {
-      const pedido = this.pedidosService.obtenerPedidoPorId(usuario.usuario, pedidoId);
-      if (pedido) {
-        this.pedido = pedido;
-      } else {
-        console.error('Pedido no encontrado');
-      }
-    } else {
-      console.error('Usuario no autenticado o ID de pedido no proporcionado');
+    
+    if (pedidoId) {
+      this.cargarPedidoCompleto(+pedidoId);
     }
+  }
+
+  cargarPedidoCompleto(pedidoId: number) {
+    this.cargando = true;
+    
+    forkJoin([
+      this.pedidosService.obtenerPedidoPorId(pedidoId),
+      this.usuariosService.obtenerDirecciones(this.usuariosService.getUsuario()?.id || 0),
+      this.usuariosService.obtenerMetodosPago(this.usuariosService.getUsuario()?.id || 0)
+    ]).subscribe(
+      ([pedido, direcciones, metodosPago]) => {
+        // Encontrar la dirección y método de pago específicos
+        const direccion = direcciones.find(d => d.id === pedido.idDireccion);
+        const metodoPago = metodosPago.find(m => m.id === pedido.idMetodoPago);
+
+        this.pedido = {
+          ...pedido,
+          direccion: direccion ? `${direccion.calle}, ${direccion.ciudad}, ${direccion.estado}` : 'Dirección no disponible',
+          metodoPago: metodoPago ? `${metodoPago.tipo} •••• ${metodoPago.numeroTarjeta?.slice(-4) || ''}` : 'Método no disponible',
+          productos: pedido.productos || []
+        };
+        
+        this.cargando = false;
+      },
+      (error) => {
+        console.error('Error al cargar el pedido:', error);
+        this.cargando = false;
+      }
+    );
   }
 
   async pdf() {
@@ -69,21 +115,36 @@ export class DetallespedidoPage implements OnInit {
     if (!this.pedido) return;
     
     const doc = new jsPDF();
-    doc.text('Vanguard - Recibo de Compra', 10, 10);
-    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 20);
-    doc.text(`Pedido ID: ${this.pedido.id}`, 10, 30);
-    doc.text(`Cliente: ${this.pedido.usuarioId}`, 10, 40);
-    doc.text(`Dirección de entrega: ${this.pedido.direccion}`, 10, 50);
     
-    let y = 60;
-    this.pedido.productos.forEach((producto, index) => {
-      doc.text(`${index + 1}. ${producto.nombreproducto} - ${producto.cantidad} x $${producto.precio}`, 10, y);
-      y += 10;
+    // Encabezado
+    doc.setFontSize(18);
+    doc.text('Vanguard - Recibo de Compra', 10, 10);
+    doc.setFontSize(12);
+    
+    // Información del pedido
+    doc.text(`Pedido ID: ${this.pedido.id}`, 10, 20);
+    doc.text(`Fecha: ${new Date(this.pedido.fecha).toLocaleDateString()}`, 10, 30);
+    doc.text(`Estado: ${this.pedido.estado}`, 10, 40);
+    doc.text(`Dirección de entrega: ${this.pedido.direccion}`, 10, 50);
+    doc.text(`Método de pago: ${this.pedido.metodoPago}`, 10, 60);
+    
+    // Productos
+    doc.text('Productos:', 10, 80);
+    
+    let y = 90;
+    this.pedido.productos.forEach((producto: ProductoPedido, index: number) => {
+      doc.text(`${index + 1}. ${producto.nombreproducto || 'Producto'}`, 15, y);
+      doc.text(`Cantidad: ${producto.cantidad}`, 15, y + 5);
+      doc.text(`Precio unitario: ${producto.precioUnitario.toFixed(2)}`, 15, y + 10);
+      doc.text(`Subtotal: ${((producto.cantidad || 0) * (producto.precioUnitario || 0)).toFixed(2)}`, 15, y + 15);
+      y += 25;
     });
     
-    doc.text(`Subtotal: $${this.pedido.total}`, 10, y + 10);
-    doc.text(`Método de Pago: ${this.pedido.metodoPago}`, 10, y + 20);
-    doc.text('Gracias por tu compra en Vanguard. Vuelve pronto', 10, y + 40);
+    // Total
+    doc.text(`Total: ${this.pedido.total.toFixed(2)}`, 10, y + 10);
+    
+    // Pie de página
+    doc.text('Gracias por tu compra en Vanguard. Vuelve pronto', 10, y + 30);
     
     const pdfOutput = doc.output('blob');
     this.savePDFToDevice(pdfOutput, `recibo_${this.pedido.id}.pdf`);

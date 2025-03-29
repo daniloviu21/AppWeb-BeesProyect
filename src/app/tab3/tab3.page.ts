@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Usuario, UsuariosService } from '../services/usuarios.service';
-import { Pedido, PedidosService } from '../services/pedidos.service';
+import { PedidosService } from '../services/pedidos.service';
 
 @Component({
   selector: 'app-tab3',
@@ -8,8 +8,8 @@ import { Pedido, PedidosService } from '../services/pedidos.service';
   styleUrls: ['tab3.page.scss'],
   standalone: false,
 })
-export class Tab3Page {
-  pedidos: Pedido[] = [];
+export class Tab3Page implements OnInit {
+  pedidos: any[] = []; // Cambiado a any[] temporalmente
   usuario!: Usuario | null;
 
   constructor(
@@ -18,12 +18,17 @@ export class Tab3Page {
   ) {}
 
   ngOnInit() {
-    // Obtener el usuario actual
     this.usuario = this.usuariosService.getUsuario();
 
-    if (this.usuario) {
-      // Obtener los pedidos del usuario actual
-      this.pedidos = this.pedidosService.obtenerPedidosUsuario(this.usuario.usuario);
+    if (this.usuario?.id) { // Usamos id en lugar de usuario
+      this.pedidosService.obtenerPedidosUsuario(this.usuario.id).subscribe(
+        (pedidos: any[]) => {
+          this.pedidos = pedidos;
+        },
+        (error) => {
+          console.error('Error al cargar pedidos:', error);
+        }
+      );
     } else {
       console.error('Usuario no autenticado');
     }

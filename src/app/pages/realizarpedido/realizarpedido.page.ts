@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { CarritoService } from 'src/app/services/carrito.service';
 import { Pedido, PedidosService } from 'src/app/services/pedidos.service';
 import { Direccion, MetodosPago, Usuario, UsuariosService } from 'src/app/services/usuarios.service';
@@ -25,7 +25,8 @@ export class RealizarpedidoPage implements OnInit {
     private usuariosService: UsuariosService,
     private router: Router,
     private alertController: AlertController,
-    private pedidosService: PedidosService
+    private pedidosService: PedidosService,
+    private loadingController: LoadingController
   ) {}
 
   async ngOnInit() {
@@ -64,7 +65,7 @@ export class RealizarpedidoPage implements OnInit {
     this.usuariosService.obtenerDirecciones(this.usuario.id).subscribe(
       (direcciones) => {
         this.tieneDirecciones = direcciones.length > 0;
-        this.direccionSeleccionada = this.tieneDirecciones ? direcciones[0] : null;
+        this.direccionSeleccionada = this.tieneDirecciones ? direcciones[direcciones.length-1] : null;
         
         // Actualizar en el objeto usuario
         if (this.usuario) {
@@ -79,7 +80,7 @@ export class RealizarpedidoPage implements OnInit {
     this.usuariosService.obtenerMetodosPago(this.usuario.id).subscribe(
       (metodosPago) => {
         this.tieneMetodosPago = metodosPago.length > 0;
-        this.metodoPagoSeleccionado = this.tieneMetodosPago ? metodosPago[0] : null;
+        this.metodoPagoSeleccionado = this.tieneMetodosPago ? metodosPago[metodosPago.length-1] : null;
         
         // Actualizar en el objeto usuario
         if (this.usuario) {
@@ -132,37 +133,67 @@ export class RealizarpedidoPage implements OnInit {
     await alert.present();
   }
 
-  generarPedido() {
-    if (!this.usuario || !this.direccionSeleccionada || !this.metodoPagoSeleccionado) {
+  async generarPedido() {
+    if (!this.usuario?.id || !this.direccionSeleccionada?.id || !this.metodoPagoSeleccionado?.id) {
       console.error('Datos incompletos para generar pedido');
       return;
     }
-    
-    const nuevoPedido: Pedido = {
-      id: Math.random().toString(36).substring(2),
-      usuarioId: Number(this.usuario.id).toString(), // Usar id en lugar de usuario
-      fecha: new Date(),
-      productos: this.carrito.map(item => ({
-        nombreproducto: item.producto.nombreproducto,
-        cantidad: item.cantidad,
-        precio: item.producto.precio
-      })),
-      total: this.total,
-      direccion: this.direccionSeleccionada.calle,
-      metodoPago: `${this.metodoPagoSeleccionado.tipo} (•••• ${this.metodoPagoSeleccionado.numeroTarjeta.substring(12, 16)})`,
-      estado: 'En proceso'
-    };
   
-    this.pedidosService.agregarPedido(nuevoPedido);
-    this.router.navigate(['/tabs/tab3']);
-
-    this.carritoService.limpiarCarrito(Number(this.usuario.id).toString());
-    this.carrito = [];
-    this.total = 0;
+    const productosParaAPI = this.carrito.map(item => ({
+      idProducto: item.producto.id,
+      cantidad: item.cantidad,
+      precioUnitario: item.producto.precio
+    }));
+  
+    const loading = await this.mostrarLoading();
+  
+    this.pedidosService.crearPedidoConDetalles({
+      idCliente: this.usuario.id,
+      idDireccion: this.direccionSeleccionada.id,
+      idMetodoPago: this.metodoPagoSeleccionado.id,
+      productos: productosParaAPI
+    }).subscribe({
+      next: async (pedidoCreado) => {
+        await loading.dismiss();
+        console.log('Pedido y detalles creados:', pedidoCreado);
+        if (this.usuario && this.usuario.id) {
+          await this.carritoService.limpiarCarrito(this.usuario.id.toString());
+        }
+        this.carrito = [];
+        this.total = 0;
+        this.router.navigate(['/tabs/tab3']);
+      },
+      error: async (error) => {
+        await loading.dismiss();
+        console.error('Error al crear pedido:', error);
+        await this.mostrarError('Error al crear el pedido. Por favor, inténtalo de nuevo.');
+      }
+    });
   }
 
-  getCardImage(numero: string | undefined): string {
-    if (!numero) return 'assets/img/default-card.png';
-    return numero.startsWith('4') ? 'assets/img/visa.png' : 'assets/img/mastercard.png';
+  async mostrarLoading() {
+    const loading = await this.loadingController.create({
+      message: 'Procesando pedido...',
+      spinner: 'crescent'
+    });
+    await loading.present();
+    return loading;
+  }
+
+  async mostrarError(mensaje: string) {
+    const alert = await this.alertController.create({
+      header: 'Error',
+      message: mensaje,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+
+  getCardImage(tipo: string): string {
+    if (tipo.toLowerCase() === 'visa') {
+      return 'assets/img/visa.png';
+    } else {
+      return 'assets/img/mastercard.png';
+    }
   }
 }
